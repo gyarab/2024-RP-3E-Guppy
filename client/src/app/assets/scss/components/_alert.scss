@@ -1,0 +1,36 @@
+@use "../abstract" as *;
+
+.alert {
+  @extend %alert-base;
+
+  &__icon {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    img {
+      width: 1.5rem;
+      height: 1.5rem;
+    }   
+  }
+
+  &.alert-success {
+    @extend %alert-success;
+  }
+
+  &.alert-error {
+    @extend %alert-error;
+  }
+
+  &.alert-warning {
+    @extend %alert-warning;
+  }
+
+  &.alert-info {
+    @extend %alert-info;
+  }
+
+  &--invisible {
+    display: none;
+  }
+
+}

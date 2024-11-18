@@ -1,0 +1,10 @@
+/*
+This file is used to contain all component imports.
+Files inside this folder can contain specific element styles and layout. 
+*/
+
+//Import Layout files
+@forward "header";
+@forward "footer";
+@forward "not-found";
+@forward "home";

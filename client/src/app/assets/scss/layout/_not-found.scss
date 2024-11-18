@@ -1,0 +1,21 @@
+@use "../abstract" as *;
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__container {
+    text-align: center;
+
+    .section-text {
+      font-size: 1.125rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-link {
+      font-size: 1.125rem;
+    }
+  }
+}

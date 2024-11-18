@@ -1,0 +1,56 @@
+@use "../abstract" as *;
+
+body {
+  font-family: $font-family-poppins;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.section__title {
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.section__subtitle {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.section__text {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.section__link {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: $secondary-color;
+}
+
+// .section__link:hover {
+//   text-decoration: underline;
+//   color: $hover-color;
+// }
+
+// .section__link:focus {
+//   text-decoration: underline;
+//   color: $hover-color;
+// }
+
+// .section__link:active {
+//   text-decoration: underline;
+//   color: $active-color;
+// }
+
+// .section__link:visited {
+//   text-decoration: none;
+//   color: $active-color;
+// }

@@ -1,0 +1,45 @@
+@use "./variables" as *;
+
+@mixin background($img-path,$position:0 0,$repeat: no-repeat,$size:cover) {
+  background: {
+    image: url($img-path);
+    position: $position;
+    repeat: $repeat;
+    size: $size;
+  }
+}
+
+@mixin flex-center($justify-content:center,$align-items:center) {
+  display: flex;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+@mixin flex-column-center($justify-content:center,$align-items:center) {
+  @include flex-center($justify-content,$align-items);
+  flex-direction: column;
+}
+
+@mixin xs {
+  @media #{inspect(map-get($breakpoints, xs))} {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media #{inspect(map-get($breakpoints, sm))} {
+    @content;
+  }
+}
+
+@mixin md {
+  @media #{inspect(map-get($breakpoints, md))} {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media #{inspect(map-get($breakpoints, lg))} {
+    @content;
+  }
+}

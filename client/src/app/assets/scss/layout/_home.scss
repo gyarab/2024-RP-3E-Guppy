@@ -1,0 +1,39 @@
+@use '../abstract' as *;
+
+.home-container {
+  display: flex;
+  gap: 2rem;
+
+  .main {
+    flex: 1;
+  }
+
+  .aside {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.aside {
+  padding: 1rem;
+  background-color: $text-light-color;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba($text-dark-color, 0.1);
+  margin-bottom: 1rem;
+
+  .aside__title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .aside__item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .aside__item:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}

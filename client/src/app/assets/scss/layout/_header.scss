@@ -1,0 +1,17 @@
+@use "../abstract" as *;
+
+.header {
+  padding: 1.5rem 0;
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}

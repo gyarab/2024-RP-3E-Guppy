@@ -1,0 +1,47 @@
+@use "./variables" as *;
+
+%alert-base {
+  width: 100%;
+  margin: 0 0 1rem;
+  padding: $alert-padding;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+%alert-success {
+  @extend %alert-base;
+  color: $alert-success-text;
+  border-color: $alert-success-border;
+  background-color: $alert-success-bg;
+}
+
+%alert-error {
+  @extend %alert-base;
+  color: $alert-error-text;
+  border-color: $alert-error-border;
+  background-color: $alert-error-bg;
+}
+
+%alert-warning {
+  @extend %alert-base;
+  color: $alert-warning-text;
+  border-color: $alert-warning-border;
+  background-color: $alert-warning-bg;
+}
+
+%alert-info {
+  @extend %alert-base;
+  color: $alert-info-text;
+  border-color: $alert-info-border;
+  background-color: $alert-info-bg;
+}
+
+%btn-reset {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}

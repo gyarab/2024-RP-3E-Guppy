@@ -1,0 +1,17 @@
+@use "../abstract" as *;
+
+.nav {
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+  }
+
+  &__item {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
