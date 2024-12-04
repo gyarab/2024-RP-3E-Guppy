@@ -8,9 +8,9 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 
 ## Technologie
 <p align="center">
-<img src="docs/nestjs.svg" alt="Nest JS" width="200"/>
-<img src="docs/reactjs.png" alt="React JS" width="200"/>
-<img src="docs/postgresql.png" alt="Postgresql" width="200"/>
+<img src="docs/nestjs.svg" alt="Nest JS" height="200"/>
+<img src="docs/reactjs.png" alt="React JS" height="200"/>
+<img src="docs/postgresql.png" alt="Postgresql" height="200"/>
 </p>
 
 ## Autoři
