@@ -1,6 +1,6 @@
 # Guppy - Sociální síť pro organizace
 <p align="center">
-<img src="docs/guppy.png" alt="Guppy logo" width="200"/>
+<img src="docs/guppy.png" alt="Guppy logo" width="250"/>
 </p>
 
 # Ročníková práce 3.E 2024/25
@@ -14,6 +14,8 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 <img src="docs/reactjs.png" alt="React JS" height="100"/>
 <img src="docs/postgresql.png" alt="Postgresql" height="100"/>
 </p>
+
+## [Google slides prezentace](https://docs.google.com/presentation/d/1WO7o9d8nuaDlQJwYxuhdWE-_Z83ZtpZJ_-LlbMAXY2E/edit?usp=sharing)
 
 ## Autoři
 - Jakub Hanslík
