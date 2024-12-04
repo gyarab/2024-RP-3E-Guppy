@@ -1,5 +1,5 @@
 # Guppy - Sociální síť pro organizace
-<img src="dpcs/guppy.png" alt="Guppy logo" width="200"/>
+<img src="docs/guppy.png" alt="Guppy logo" width="200"/>
 
 ## Autoři
 - Jakub Hanslík
