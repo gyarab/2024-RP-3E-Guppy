@@ -1,5 +1,4 @@
-# Guppy - Ročníková práce 3.E 2024/25
-Neformální sociální síť, určená pro jednoduchou komunikaci v organizacích
+# Guppy - Sociální síť pro organizace
 
 ## Autoři
 - Jakub Hanslík
