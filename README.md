@@ -5,10 +5,10 @@
 
 # Ročníková práce 3.E 2024/25
 
-# Zadání
+## Zadání
 Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizacích. 
 
-# Technologie
+## Technologie
 <p align="center">
 <img src="docs/nestjs.svg" alt="Nest JS" height="100"/>
 <img src="docs/reactjs.png" alt="React JS" height="100"/>
