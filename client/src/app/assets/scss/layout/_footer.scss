@@ -1,13 +1,17 @@
 @use '../abstract' as *;
 
+.footer {
+  padding-top: 4rem;
+}
+
 .footer__upper {
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
 }
 
 .footer__lower {
   padding: 1em 0;
   text-align: center;
-  background-color: #f0f0f0;
+  background-color: var(--background-color);
 }
 
 .copyright-title {
@@ -16,14 +20,14 @@
   line-height: 2rem;
   margin: 0;
   letter-spacing: 0.2px;
-  color: $secondary-color;
+  color: var(--text-color);
 }
 
 .footer__list {
   display: grid;
   justify-content: space-between;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6rem;
+  gap: 5rem;
 }
 
 .footer__item {
@@ -32,27 +36,27 @@
 }
 
 .footer__item__title {
-  font-size: 1.667rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  line-height: 2.5rem;
-  margin: 0 0 1.667rem;
+  line-height: 2rem;
+  margin: 0 0 1.25rem;
 }
 
 .footer__item__link {
   line-height: 150%;
   margin-bottom: 0.833rem;
   transition: color ease-in-out .3s;
-  color: $secondary-color;
+  color: var(--text-color);
 
   &:hover {
-    color: $secondary-color;
+    color: var(--accent-color);
   }
 }
 
 .footer__item__text {
   line-height: 150%;
   margin-bottom: 0.833rem;
-  color: $secondary-color;
+  color: var(--text-color);
 }
 
 .footer__social {
