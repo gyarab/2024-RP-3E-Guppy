@@ -24,6 +24,6 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 
 ## Autoři
 - Jakub Hanslík
-- Ilja Novák
 - Bruno Chvalkovský
+- Ilja Novák
 - Milan Tuček
