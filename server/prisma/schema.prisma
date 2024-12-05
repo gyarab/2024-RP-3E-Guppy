@@ -26,7 +26,6 @@ model User {
   comments      Comment[]
   likes         Like[]
   organizations Organization[]
-  adminOrgs     Organization[]  @relation("AdminOrganizations")
   memberOrgs    Organization[]  @relation("MemberOrganizations")
   tokenVersion  Int             @default(0)
 }
@@ -38,7 +37,8 @@ model Post {
   published Boolean   @default(false)
   author    User      @relation(fields: [authorId], references: [id])
   authorId  String
-  Organization Organization[]
+  Organization Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
   comments  Comment[]
   likes     Like[]
   tags      Tag[]
@@ -85,7 +85,6 @@ model Organization {
   name      String
   creator   User    @relation(fields: [creatorId], references: [id])
   creatorId    String
-  admins    User[]  @relation("AdminOrganizations")
   users     User[]  @relation("MemberOrganizations")
   posts     Post[]
   createdAt DateTime  @default(now())
