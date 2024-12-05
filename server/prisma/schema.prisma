@@ -38,7 +38,7 @@ model Role {
   userOrganizations UserOrganization[]
 }
 
-// Tahle tabluka slouzi junction table, ktera umoznuje vytvorit  
+// Tahle tabluka slouzi jako junction table, ktera umoznuje vytvorit  
 // many-to-many relaci mezi tabulkami User a Organization.
 // Krome propojeni uzivatele s organizaci tato tabulka 
 // umoznuje pridat dalsi informace, coz v nasem pripade 
