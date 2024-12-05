@@ -15,6 +15,11 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 <img src="docs/postgresql.png" alt="Postgresql" height="100"/>
 </p>
 
+## Základní wireframe
+<p align="center">
+<img src="docs/image.png" alt="Wireframe" width="500"/>
+</p>
+
 ## [Google slides prezentace](https://docs.google.com/presentation/d/1WO7o9d8nuaDlQJwYxuhdWE-_Z83ZtpZJ_-LlbMAXY2E/edit?usp=sharing)
 
 ## Autoři
