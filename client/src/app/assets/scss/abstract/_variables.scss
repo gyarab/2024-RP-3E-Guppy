@@ -4,10 +4,6 @@ $secondary-color: #ffd49c;
 $text-light-color: #fff;
 $text-dark-color: #101111;
 $bg-dark-color: #101111;
-$linear-gradient: linear-gradient(120deg, $primary-color 0%, $secondary-color 100%);
-$reverse-linear-gradient: linear-gradient(120deg, $secondary-color 0%, $primary-color 100%);
-$nav-bg: #1c1c1c;
-$nav-hightlight-color: #292929;
 $grid-color: rgba(255, 255, 255, 0.2);
 $danger-color: #ff4d4f;
 
@@ -15,9 +11,7 @@ $danger-color: #ff4d4f;
 $font-family-poppins: "Poppins", sans-serif;
 $letter-spacing: 0;
 
-// Alert
-$alert-padding: 1rem;
-
+// Alerts
 $alert-success-bg: #d4edda;
 $alert-success-border: #c3e6cb;
 $alert-success-text: #155724;
@@ -58,10 +52,8 @@ $box-shadow-heavy: 0 10px 20px rgba(0, 0, 0, 0.2);
 
 $border-thickness: 1px;
 $border-style: solid;
-
-// Button Styles
-$button-padding: 0.75rem 1.5rem;
-$button-border-radius: 0.375rem;
+$border-color: #e0e0e0;
+$default-border: $border-thickness $border-style $border-color;
 
 // Font Sizes and Line Heights
 $font-size-small: 0.875rem;
@@ -72,7 +64,7 @@ $line-height-small: 1.4;
 $line-height-normal: 1.6;
 
 // Transition and Animation
-$transition-duration: 0.3s;
+$transition-duration: 0.2s;
 $transition-ease: ease-in-out;
 
 // Z-Index Values

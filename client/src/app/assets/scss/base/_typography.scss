@@ -5,6 +5,7 @@ body {
   font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
+  color: var(--text-color);
 }
 
 .section__title {
@@ -32,25 +33,12 @@ body {
   margin-bottom: 1.5rem;
   cursor: pointer;
   text-decoration: none;
-  color: $secondary-color;
 }
 
-// .section__link:hover {
-//   text-decoration: underline;
-//   color: $hover-color;
-// }
-
-// .section__link:focus {
-//   text-decoration: underline;
-//   color: $hover-color;
-// }
-
-// .section__link:active {
-//   text-decoration: underline;
-//   color: $active-color;
-// }
-
-// .section__link:visited {
-//   text-decoration: none;
-//   color: $active-color;
-// }
+.section__image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
