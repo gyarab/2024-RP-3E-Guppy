@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,71 +7,97 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
-  MODERATOR
-  OBSERVER
+model Organization {
+  id        Int                @id @default(autoincrement())
+  name      String             @unique
+  creator   User               @relation(fields: [creatorId], references: [id])
+  creatorId Int
+  users     UserOrganization[]
+  posts     Post[]
+  createdAt DateTime           @default(now())
 }
 
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  password     String
-  name         String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  posts        Post[]
-  comments     Comment[]
-  likes        Like[]
-  // roles        Role[]    @default([USER])
-  tokenVersion Int       @default(0)
+  id                   Int                @id @default(autoincrement())
+  email                String             @unique
+  password             String
+  name                 String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  posts                Post[]
+  comments             Comment[]
+  likes                Like[]
+  organizations        UserOrganization[]
+  createdOrganizations Organization[]
+  tokenVersion         Int                @default(0)
+}
+
+model Role {
+  id                Int                @id @default(autoincrement())
+  name              String             @unique
+  userOrganizations UserOrganization[]
+}
+
+// Tahle tabluka slouzi junction table, ktera umoznuje vytvorit  
+// many-to-many relaci mezi tabulkami User a Organization.
+// Krome propojeni uzivatele s organizaci tato tabulka 
+// umoznuje pridat dalsi informace, coz v nasem pripade 
+// je role usera v dane organizaci.
+model UserOrganization {
+  id             Int          @id @default(autoincrement())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+  role           Role         @relation(fields: [roleId], references: [id])
+  roleId         Int
+
+  @@unique([userId, organizationId]) // Zajistuje, ze uzivatel nemuze byt ve stejne organizaci vicekrat
 }
 
 model Post {
-  id        String    @id @default(cuid())
-  title     String
-  content   String
-  published Boolean   @default(false)
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String
-  comments  Comment[]
-  likes     Like[]
-  tags      Tag[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id             Int          @id @default(autoincrement())
+  title          String
+  content        String
+  published      Boolean      @default(false)
+  author         User         @relation(fields: [authorId], references: [id])
+  authorId       Int
+  comments       Comment[]
+  likes          Like[]
+  tags           Tag[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
 }
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   content   String
   post      Post     @relation(fields: [postId], references: [id])
-  postId    String
+  postId    Int
   author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
+  authorId  Int
   likes     Like[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Like {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  userId    Int
   post      Post?    @relation(fields: [postId], references: [id])
-  postId    String?
+  postId    Int? // Optional: Umoznuje tomuto likeu patrit k postu nebo ne
   comment   Comment? @relation(fields: [commentId], references: [id])
-  commentId String?
+  commentId Int? // Optional: Umoznuje tomuto likeu patrit k komentari nebo ne
   createdAt DateTime @default(now())
 
-  @@unique([userId, postId], name: "unique_user_post_like")
-  @@unique([userId, commentId], name: "unique_user_comment_like")
+  @@unique([userId, postId]) // Zajistuje, ze uzivatel muze likeovat post jen jednou
+  @@unique([userId, commentId]) // Zajistuje, ze uzivatel muze likeovat komentar jen jednou
 }
 
 model Tag {
-  id        String   @id @default(cuid())
-  name      String
-  posts     Post[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
 }
