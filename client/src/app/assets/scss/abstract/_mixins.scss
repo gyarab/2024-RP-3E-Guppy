@@ -15,11 +15,6 @@
   align-items: $align-items;
 }
 
-@mixin flex-column-center($justify-content:center,$align-items:center) {
-  @include flex-center($justify-content,$align-items);
-  flex-direction: column;
-}
-
 @mixin xs {
   @media #{inspect(map-get($breakpoints, xs))} {
     @content;
@@ -41,5 +36,11 @@
 @mixin lg {
   @media #{inspect(map-get($breakpoints, lg))} {
     @content;
+  }
+}
+
+@mixin theme-to-css($theme) {
+  @each $key, $value in $theme {
+    --#{$key}-color: #{$value};
   }
 }

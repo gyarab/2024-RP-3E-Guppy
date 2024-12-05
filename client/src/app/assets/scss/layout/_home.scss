@@ -12,14 +12,18 @@
     width: 100%;
     max-width: 350px;
   }
+
+  .section__image {
+    height: 300px;
+    object-fit: cover;
+  }
 }
 
 .aside {
   padding: 1rem;
-  background-color: $text-light-color;
+  background-color: var(--background-color);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba($text-dark-color, 0.1);
-  margin-bottom: 1rem;
+  max-height: fit-content;
 
   .aside__title {
     font-size: 1.2rem;
@@ -27,13 +31,13 @@
     margin-bottom: 1rem;
   }
 
-  .aside__item {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
   .aside__item:not(:last-child) {
     margin-bottom: 1rem;
+  }
+
+  .aside__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 }

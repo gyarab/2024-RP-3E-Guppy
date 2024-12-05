@@ -2,63 +2,64 @@
 
 .btn {
   @extend %btn-reset;
-  border: 1px solid #111;
-  border-radius: 2.5rem;
-  padding: 8px 16px;
+  border-radius: $border-radius;
+  transition-property: color, background-color, border-color;
+  transition-timing-function: $transition-ease;
+  transition-duration: $transition-duration;
+  color: var(--text-color);
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
 
-  &.filled {
-    color: $text-light-color;
-    background-color: $secondary-color;
+  &--primary {
+    background-color: var(--primary-color);
   
     &:hover {
-      color: $secondary-color;
-      border-color: $secondary-color;
-      background-color: $text-light-color;
+      background-color: var(--accent-color);
     }
   }
 
-  &.outlined {
-    border-color: $secondary-color;
+  &--secondary {
+    background-color: var(--secondary-color);
 
     &:hover {
-      color: $text-light-color;
-      background-color: $secondary-color;
+      background-color: var(--primary-color);      
     }
   }
 
-  &.danger {
-    color: $text-light-color;
-    background-color: $primary-color;
+  &--danger {
+    color: var(--background-color);
+    background-color: var(--primary-color);
   
     &:hover {
-      color: $primary-color;
-      border-color: $primary-color;
-      background-color: $text-light-color;
+      color: var(--primary-color);
+      background-color: var(--background-color);
     }
   }
 
-  &.success {
-    color: $text-light-color;
+  &--success {
+    color: var(--background-color);
     background-color: $alert-success-text;
   
     &:hover {
       color: $alert-success-text;
-      border-color: $alert-success-text;
-      background-color: $text-light-color;
+      background-color: var(--background-color);
     }
   }
 
-  &.small {
+  &--small {
     font-size: 0.875rem;
     padding: 0.5rem 0.75rem;
   }
 
-  &.large {
+  &--medium {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  &--large {
     font-size: 1.125rem;
     padding: 0.875rem 1.25rem;
   }

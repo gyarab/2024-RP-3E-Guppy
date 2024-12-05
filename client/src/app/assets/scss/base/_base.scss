@@ -1,9 +1,14 @@
 @use "../abstract" as *;
+@use "../themes" as *;
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
 }
 
 a {
@@ -17,12 +22,6 @@ ul {
   list-style: none;
 }
 
-// body {
-//   color: $text-light-color;
-//   background-color: $bg-dark-color;
-// }
-
-
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
@@ -35,4 +34,12 @@ p {
   max-width: 1170px;
   margin: 0 auto;
   padding: 0 2rem;
+}
+
+html[data-theme="light"] {
+  @include theme-to-css(map-get($themes, light));
+}
+
+html[data-theme="dark"] {
+  @include theme-to-css(map-get($themes, dark));
 }

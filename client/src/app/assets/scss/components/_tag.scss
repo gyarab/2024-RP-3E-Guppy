@@ -5,7 +5,7 @@
     margin-bottom: 1rem;
 
     .tag--selected:hover {
-      background: #f91423;
+      background: var(--accent-color);
     }
   }
   
@@ -31,7 +31,8 @@
 
   &__placeholder {
     font-style: italic;
-    color: #666;
+    color: var(--text-color);
+    opacity: 0.6;
   }
 
   &__tags {
@@ -50,15 +51,15 @@
 
 .tag {
   padding: 0.3rem 0.6rem;
-  background: #ddd;
+  background: var(--secondary-color);
   border-radius: 12px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: background 0.25s ease;
 
   &--selected {
-    background: #4caf50;
-    color: white;
+    background: var(--primary-color);
+    color: var(--text-color);
   }
 
   &__remove-icon {
