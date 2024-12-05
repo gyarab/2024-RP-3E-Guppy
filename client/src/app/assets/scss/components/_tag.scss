@@ -3,6 +3,10 @@
 .tag-list {
   &__selected {
     margin-bottom: 1rem;
+
+    .tag--selected:hover {
+      background: #f91423;
+    }
   }
   
   &__content {
@@ -36,6 +40,12 @@
     align-items: center;
     flex-wrap: wrap;
   }
+
+  &__btn {
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
 }
 
 .tag {
@@ -44,7 +54,7 @@
   border-radius: 12px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background 0.3s ease;
+  transition: background 0.25s ease;
 
   &--selected {
     background: #4caf50;

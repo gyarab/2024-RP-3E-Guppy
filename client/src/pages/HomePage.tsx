@@ -1,3 +1,4 @@
+import Dropdown from "../shared/ui/Dropdown";
 import TagList from "../shared/ui/TagList";
 
 function HomePage() {
@@ -17,6 +18,9 @@ function HomePage() {
             ultricies tincidunt, nisl elit luctus purus, nec tristique eros
             felis et sapien.
           </p>
+          <Dropdown
+            items={["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]}
+          />
         </section>
       </main>
       <aside className="aside">

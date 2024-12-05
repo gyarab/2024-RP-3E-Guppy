@@ -12,23 +12,33 @@ function TagList({ tags }: { tags: string[] }) {
     }
   };
 
+  const handleClearAll = () => {
+    setSelectedTags([]);
+  };
+
   return (
     <div className="tag-list">
       <section className="tag-list__selected">
         <h4 className="tag-list__title">Selected Tags:</h4>
+
         <div className="tag-list__content tag-list__content--selected">
           {selectedTags.length ? (
-            <div className="tag-list__tags tag-list__tags--selected">
-              {selectedTags.map((tag, index) => (
-                <Tag
-                  key={index}
-                  value={tag}
-                  onClick={() => handleTagClick(tag)}
-                  isSelected
-                  showRemoveIcon
-                />
-              ))}
-            </div>
+            <>
+              <div className="tag-list__tags tag-list__tags--selected">
+                {selectedTags.map((tag, index) => (
+                  <Tag
+                    key={index}
+                    value={tag}
+                    onClick={() => handleTagClick(tag)}
+                    isSelected
+                    showRemoveIcon
+                  />
+                ))}
+                <button className="btn tag-list__btn" onClick={handleClearAll}>
+                  Clear all
+                </button>
+              </div>
+            </>
           ) : (
             <p className="tag-list__placeholder">No tags selected</p>
           )}
