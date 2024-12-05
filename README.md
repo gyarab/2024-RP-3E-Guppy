@@ -12,7 +12,7 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 <p align="center">
 <img src="docs/nestjs.svg" alt="Nest JS" height="100"/>
 <img src="docs/reactjs.png" alt="React JS" height="100"/>
-<img src="docs/postgresql.png" alt="Postgresql" height="100"/>
+<img src="docs/mysql.png" alt="MySQL" height="100"/>
 </p>
 
 ## Základní wireframe
