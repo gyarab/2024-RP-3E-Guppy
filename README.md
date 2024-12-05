@@ -17,7 +17,7 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 
 ## Základní wireframe
 <p align="center">
-<img src="docs/image.png" alt="Wireframe" width="500"/>
+<a href="https://www.figma.com/design/LImyai58ZDJzPZBCGm7vol/Rocnikovka-1?node-id=0-1&t=JWsrBlChejYTvJ5R-1" target="_blank">Wireframe na Figmě</a>
 </p>
 
 ## [Google slides prezentace](https://docs.google.com/presentation/d/1WO7o9d8nuaDlQJwYxuhdWE-_Z83ZtpZJ_-LlbMAXY2E/edit?usp=sharing)
