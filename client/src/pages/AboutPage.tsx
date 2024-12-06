@@ -1,30 +1,20 @@
 import Button from "../shared/ui/Button";
 import TagList from "../shared/ui/TagList";
 
-import heroImage from "../app/assets/images/top-section-bg.jpeg";
-
-function HomePage() {
+function AboutPage() {
   return (
     <div className="container home-container">
       <main className="main">
-        <section className="section hero">
-          <h2 className="section__title">Hero Section</h2>
+        <section className="section">
+          <h2 className="section__title">About Page</h2>
           <p className="section__text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
             suscipit, enim nec posuere luctus, metus nisl tincidunt magna, ac
             ultricies turpis nunc id velit. Nullam auctor, libero et ultricies
             tincidunt, nisl elit luctus purus, nec tristique eros felis et
             sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Nullam suscipit, enim nec posuere luctus, met
           </p>
-          <img className="section__image" src={heroImage} alt="Hero Image" />
-          <p className="section__text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            suscipit, enim nec posuere luctus, metus nisl tincidunt magna, ac
-            ultricies turpis nunc id velit. Nullam auctor, libero et ultricies
-            tincidunt, nisl elit luctus purus, nec tristique eros felis et
-            sapien.
-          </p>
-          <Button>Learn More</Button>
         </section>
       </main>
       <aside className="aside">
@@ -67,4 +57,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default AboutPage;

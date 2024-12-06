@@ -1,5 +1,7 @@
+import AboutPage from "../../pages/AboutPage";
 import HomePage from "../../pages/HomePage";
 import LoginPage from "../../pages/LoginPage";
+import ServicesPage from "../../pages/ServicesPage";
 
 interface Route {
   path: string;
@@ -9,6 +11,8 @@ interface Route {
 export const publicRoutes: Route[] = [
   { path: "/", component: HomePage },
   { path: "/login", component: LoginPage },
+  { path: "/about", component: AboutPage },
+  { path: "/services", component: ServicesPage },
 ];
 
 export const privateRoutes: Route[] = [
