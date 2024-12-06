@@ -25,7 +25,11 @@ export class PostController {
   @Post()
   async create(@Body() data: Prisma.PostCreateInput, @Request() req) {
     const user = req.user as UserWithoutPassword;
-    return this.postService.create(data, user.id);
+
+    // TODO get organizationId from user
+
+    const organizationId = 1;
+    return this.postService.create(data, user.id, organizationId);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -36,19 +40,19 @@ export class PostController {
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async getOne(@Param('id') id: string) {
+  async getOne(@Param('id') id: number) {
     return this.postService.post({ id });
   }
 
   @HttpCode(HttpStatus.OK)
   @Put(':id')
-  async update(@Param('id') id: string, @Body() data: Prisma.PostUpdateInput) {
+  async update(@Param('id') id: number, @Body() data: Prisma.PostUpdateInput) {
     return this.postService.update({ where: { id }, data });
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: number) {
     return this.postService.delete({ id });
   }
 }

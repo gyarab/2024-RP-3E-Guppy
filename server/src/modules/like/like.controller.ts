@@ -17,7 +17,7 @@ export class LikeController {
   constructor(private likeService: LikeService) {}
 
   @Post('post/:postId')
-  async likePost(@Param('postId') postId: string, @Request() req) {
+  async likePost(@Param('postId') postId: number, @Request() req) {
     const user = req.user as UserWithoutPassword;
 
     return this.likeService.likePost(user.id, postId);
@@ -25,35 +25,35 @@ export class LikeController {
 
   @Post('comment/:commentId')
   async likeComment(
-    @Param('commentId') commentId: string,
-    @Param('userId') userId: string,
+    @Param('commentId') commentId: number,
+    @Param('userId') userId: number,
   ) {
     return this.likeService.likeComment(userId, commentId);
   }
 
   @Delete('post/:postId')
   async unlikePost(
-    @Param('postId') postId: string,
-    @Param('userId') userId: string,
+    @Param('postId') postId: number,
+    @Param('userId') userId: number,
   ) {
     return this.likeService.unlikePost(userId, postId);
   }
 
   @Delete('comment/:commentId')
   async unlikeComment(
-    @Param('commentId') commentId: string,
-    @Param('userId') userId: string,
+    @Param('commentId') commentId: number,
+    @Param('userId') userId: number,
   ) {
     return this.likeService.unlikeComment(userId, commentId);
   }
 
   @Get('post/:postId/count')
-  async countPostLikes(@Param('postId') postId: string) {
+  async countPostLikes(@Param('postId') postId: number) {
     return this.likeService.countPostLikes(postId);
   }
 
   @Get('comment/:commentId/count')
-  async countCommentLikes(@Param('commentId') commentId: string) {
+  async countCommentLikes(@Param('commentId') commentId: number) {
     return this.likeService.countCommentLikes(commentId);
   }
 }

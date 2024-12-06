@@ -7,7 +7,6 @@ import { UserModule } from './modules/user/user.module';
 import { PostModule } from './modules/post/post.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeModule } from './modules/like/like.module';
-import { OrganizationModule } from './organization/organization.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 
 @Module({

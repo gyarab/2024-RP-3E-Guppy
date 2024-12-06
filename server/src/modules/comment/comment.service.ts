@@ -33,8 +33,8 @@ export class CommentService {
 
   async create(
     data: Prisma.CommentCreateInput,
-    postId: string,
-    authorId: string,
+    postId: number,
+    authorId: number,
   ): Promise<Comment> {
     return this.prisma.comment.create({
       data: {

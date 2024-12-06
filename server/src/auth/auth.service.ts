@@ -73,7 +73,7 @@ export class AuthService {
     return await this.tokenService.generateTokens(userData);
   }
 
-  async logout(userId: string): Promise<void> {
+  async logout(userId: number): Promise<void> {
     await this.userService.update({
       where: { id: userId },
       data: { tokenVersion: { increment: 1 } },

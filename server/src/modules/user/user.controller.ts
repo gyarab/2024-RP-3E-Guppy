@@ -32,7 +32,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async getOne(@Param('id') id: string): Promise<User | null> {
+  async getOne(@Param('id') id: number): Promise<User | null> {
     return this.userService.user({
       id,
     });
@@ -47,7 +47,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() data: Prisma.UserUpdateInput,
   ): Promise<User> {
     return this.userService.update({
@@ -60,7 +60,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<User> {
+  async delete(@Param('id') id: number): Promise<User> {
     return this.userService.delete({
       id,
     });

@@ -23,7 +23,7 @@ export class CommentController {
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async getOne(@Param('id') id: string): Promise<Comment> {
+  async getOne(@Param('id') id: number): Promise<Comment> {
     return this.commentService.comment({ id });
   }
 
@@ -37,7 +37,7 @@ export class CommentController {
   @Post(':postId')
   async create(
     @Body() data: Prisma.CommentCreateInput,
-    @Param('postId') postId: string,
+    @Param('postId') postId: number,
     @Request() req,
   ): Promise<Comment> {
     const user = req.user as UserWithoutPassword;
@@ -47,7 +47,7 @@ export class CommentController {
   @HttpCode(HttpStatus.OK)
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Param('data') data: Prisma.CommentUpdateInput,
   ): Promise<Comment> {
     return this.commentService.update({ where: { id }, data });
@@ -55,7 +55,7 @@ export class CommentController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<Comment> {
+  async delete(@Param('id') id: number): Promise<Comment> {
     return this.commentService.delete({ id });
   }
 }

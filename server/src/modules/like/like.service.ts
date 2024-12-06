@@ -12,13 +12,13 @@ export class LikeService {
     private commentService: CommentService,
   ) {}
 
-  async likePost(userId: string, postId: string): Promise<Like> {
+  async likePost(userId: number, postId: number): Promise<Like> {
     const post = await this.postService.post({ id: postId });
     if (!post) throw new NotFoundException('Post not found');
 
     return this.prisma.like.upsert({
       where: {
-        unique_user_post_like: {
+        userId_postId: {
           userId,
           postId,
         },
@@ -28,7 +28,7 @@ export class LikeService {
     });
   }
 
-  async likeComment(userId: string, commentId: string): Promise<Like> {
+  async likeComment(userId: number, commentId: number): Promise<Like> {
     const comment = await this.commentService.comment({
       id: commentId,
     });
@@ -36,7 +36,7 @@ export class LikeService {
 
     return this.prisma.like.upsert({
       where: {
-        unique_user_comment_like: {
+        userId_commentId: {
           userId,
           commentId,
         },
@@ -46,10 +46,10 @@ export class LikeService {
     });
   }
 
-  async unlikePost(userId: string, postId: string): Promise<Like> {
+  async unlikePost(userId: number, postId: number): Promise<Like> {
     return this.prisma.like.delete({
       where: {
-        unique_user_post_like: {
+        userId_postId: {
           userId,
           postId,
         },
@@ -57,10 +57,10 @@ export class LikeService {
     });
   }
 
-  async unlikeComment(userId: string, commentId: string): Promise<Like> {
+  async unlikeComment(userId: number, commentId: number): Promise<Like> {
     return this.prisma.like.delete({
       where: {
-        unique_user_comment_like: {
+        userId_commentId: {
           userId,
           commentId,
         },
@@ -68,11 +68,11 @@ export class LikeService {
     });
   }
 
-  async countPostLikes(postId: string): Promise<number> {
+  async countPostLikes(postId: number): Promise<number> {
     return this.prisma.like.count({ where: { postId } });
   }
 
-  async countCommentLikes(commentId: string): Promise<number> {
+  async countCommentLikes(commentId: number): Promise<number> {
     return this.prisma.like.count({ where: { commentId } });
   }
 }

@@ -38,7 +38,8 @@ export class PostService {
 
   async create(
     postCreateDto: Prisma.PostCreateInput,
-    userId: string,
+    userId: number,
+    organizationId: number,
   ): Promise<Post> {
     const user = await this.userService.user({ id: userId });
     if (!user) throw new Error('User not found');
@@ -50,6 +51,7 @@ export class PostService {
         title,
         content,
         authorId: userId,
+        organizationId: organizationId,
       },
     });
   }
