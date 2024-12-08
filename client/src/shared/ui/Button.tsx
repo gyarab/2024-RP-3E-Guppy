@@ -1,8 +1,9 @@
 import React from "react";
 
-type ButtonVariant = "primary" | "secondary" | "danger" | "success";
+type ButtonVariant = "primary" | "secondary";
 type ButtonSize = "small" | "medium" | "large";
 type ButtonType = "submit" | "button" | "reset";
+type ButtonOnClick = (() => void) | ((e: React.MouseEvent) => void);
 
 interface ButtonProps {
   variant?: ButtonVariant;
@@ -11,7 +12,7 @@ interface ButtonProps {
   additionalClasses?: string;
   disabled?: boolean;
   href?: string;
-  onClick?: () => void;
+  onClick?: ButtonOnClick;
   children: React.ReactNode;
 }
 

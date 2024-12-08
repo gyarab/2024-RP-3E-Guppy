@@ -1,12 +1,12 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { useLoginMutation } from "../features/auth/authApi";
-import { LoginCredentials } from "../shared/interfaces/LoginCredentials";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+
 import { AppDispatch } from "../app/store";
-import { setAuthCredentials } from "../features/auth/authSlice";
-import Loader from "../shared/ui/Loader";
 import { isApiError } from "../shared/utils/helpers";
+import { useLoginMutation } from "../features/auth/authApi";
+import { setAuthCredentials } from "../features/auth/authSlice";
+import { LoginCredentials } from "../shared/interfaces/LoginCredentials";
 
 const DEFAULT_CREDENTIALS: LoginCredentials = {
   email: "",
@@ -54,47 +54,9 @@ function LoginPage() {
   };
 
   return (
-    <section className="section">
-      <div className="container">
-        <h2 className="section__title">Login page</h2>
-        <form className="form" onSubmit={handleSubmit}>
-          <div className="form__group">
-            <label htmlFor="email" className="form__label">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="form__input"
-              ref={emailInputRef}
-              value={credentials.email}
-              onChange={handleFormChange}
-            />
-          </div>
-          <div className="form__group">
-            <label htmlFor="password" className="form__label">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="form__input"
-              value={credentials.password}
-              onChange={handleFormChange}
-            />
-          </div>
-          <div className="form__group">
-            <p className="form__error">{errMessage}</p>
-          </div>
-          <button type="submit" className="btn" disabled={isLoading}>
-            Login
-          </button>
-        </form>
-        {isLoading && <Loader />}
-      </div>
-    </section>
+    <div className="container">
+      <h2 className="section__title">Login page</h2>
+    </div>
   );
 }
 

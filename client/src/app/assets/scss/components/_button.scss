@@ -29,26 +29,6 @@
     }
   }
 
-  &--danger {
-    color: var(--background-color);
-    background-color: var(--primary-color);
-  
-    &:hover {
-      color: var(--primary-color);
-      background-color: var(--background-color);
-    }
-  }
-
-  &--success {
-    color: var(--background-color);
-    background-color: $alert-success-text;
-  
-    &:hover {
-      color: $alert-success-text;
-      background-color: var(--background-color);
-    }
-  }
-
   &--small {
     font-size: 0.875rem;
     padding: 0.5rem 0.75rem;

@@ -4,6 +4,7 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
+
 import { RootState } from "../../app/store";
 import { logout, setAuthCredentials } from "../../features/auth/authSlice";
 

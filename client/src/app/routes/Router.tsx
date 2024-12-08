@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import { publicRoutes, privateRoutes, adminRoutes } from "./routes";
 
 // Mock authentication and authorization functions
