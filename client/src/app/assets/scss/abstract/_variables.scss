@@ -1,36 +1,10 @@
 // Colors
-$primary-color: #7a87fb;
-$secondary-color: #ffd49c;
-$text-light-color: #fff;
-$text-dark-color: #101111;
-$bg-dark-color: #101111;
-$grid-color: rgba(255, 255, 255, 0.2);
-$danger-color: #ff4d4f;
+// all colors should be located in themes folder
+// because we will have multiple themes in the future
 
 // Typography
-$font-family-poppins: "Poppins", sans-serif;
-$letter-spacing: 0;
+$font-family: "Poppins", sans-serif;
 
-// Alerts
-$alert-success-bg: #d4edda;
-$alert-success-border: #c3e6cb;
-$alert-success-text: #155724;
-
-$alert-error-bg: #f8d7da;
-$alert-error-border: #f5c6cb;
-$alert-error-text: #721c24;
-
-$alert-warning-bg: #fff3cd;
-$alert-warning-border: #ffeeba;
-$alert-warning-text: #856404;
-
-$alert-info-bg: #d1ecf1;
-$alert-info-border: #bee5eb;
-$alert-info-text: #0c5460;
-
-// Spacing and Layout
-$container-max-width: 1200px;
-$gutter-width: 1.5rem;
 
 // Breakpoints
 $breakpoint-xs: 480px;
@@ -45,11 +19,7 @@ $breakpoints: (
   lg: (min-width: $breakpoint-md),
 );
 
-// Shadows and Borders
-$box-shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
-$box-shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
-$box-shadow-heavy: 0 10px 20px rgba(0, 0, 0, 0.2);
-
+// Borders
 $border-thickness: 1px;
 $border-style: solid;
 $border-color: #e0e0e0;
@@ -71,10 +41,6 @@ $transition-ease: ease-in-out;
 $z-index-dropdown: 1000;
 $z-index-modal: 1050;
 $z-index-tooltip: 1500;
-
-// Grid System
-$grid-columns: 12;
-$grid-gutter-width: 1.5rem;
 
 // Others
 $image-path: "../images/";

@@ -1,20 +1,5 @@
 @use "./variables" as *;
 
-@mixin background($img-path,$position:0 0,$repeat: no-repeat,$size:cover) {
-  background: {
-    image: url($img-path);
-    position: $position;
-    repeat: $repeat;
-    size: $size;
-  }
-}
-
-@mixin flex-center($justify-content:center,$align-items:center) {
-  display: flex;
-  justify-content: $justify-content;
-  align-items: $align-items;
-}
-
 @mixin xs {
   @media #{inspect(map-get($breakpoints, xs))} {
     @content;
@@ -41,6 +26,10 @@
 
 @mixin theme-to-css($theme) {
   @each $key, $value in $theme {
-    --#{$key}-color: #{$value};
+    --#{$key}-color: #{if(type-of($value) == 'color', format-rgb($value), $value)};
   }
+}
+
+@function format-rgb($color) {
+  @return "rgb(#{red($color)}, #{green($color)}, #{blue($color)})";
 }

@@ -19,7 +19,7 @@
 
     circle {
       animation: dash 1.5s ease-in-out infinite;
-      stroke: $secondary-color;
+      stroke: var(--secondary-color);
       fill: none;
       stroke-width: 5;
       stroke-linecap: round;
