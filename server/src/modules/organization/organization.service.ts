@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { Organization, Prisma } from '@prisma/client';
@@ -16,6 +20,25 @@ export class OrganizationService {
   ) {
     return this.prisma.organization.findUnique({
       where: organizationWhereUniqueInput,
+      include: {
+        users: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                name: true,
+              },
+            },
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        posts: true, // zakomentovat
+      },
     });
   }
 
@@ -35,7 +58,23 @@ export class OrganizationService {
       where,
       orderBy,
       include: {
-        users: true,
+        users: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                name: true,
+              },
+            },
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        posts: true, // zakomentovat
       },
     });
   }
@@ -47,15 +86,17 @@ export class OrganizationService {
     const { name, userIds } = organizationCreateDto;
 
     const creator = await this.userService.user({ id: userId });
-    if (!creator) throw new Error('Creator user not found');
+    if (!creator) {
+      throw new NotFoundException('Creator user not found');
+    }
+
     const users = await this.prisma.user.findMany({
       where: { id: { in: userIds } },
     });
     if (users.length !== userIds.length) {
-      throw new Error('Some users not found');
+      throw new BadRequestException('Some users not found');
     }
 
-    // Ensure the 'Member' role exists
     const memberRole = await this.prisma.role.findUnique({
       where: { name: 'Member' },
     });
@@ -103,10 +144,14 @@ export class OrganizationService {
     userId: number,
   ): Promise<Organization> {
     const organization = await this.organization({ id: organizationId });
-    if (!organization) throw new Error('Organization not found');
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
 
     const user = await this.userService.user({ id: userId });
-    if (!user) throw new Error('User not found');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return this.prisma.organization.update({
       where: { id: organizationId },
@@ -126,10 +171,14 @@ export class OrganizationService {
     userId: number,
   ): Promise<Organization> {
     const organization = await this.organization({ id: organizationId });
-    if (!organization) throw new Error('Organization not found');
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
 
     const user = await this.userService.user({ id: userId });
-    if (!user) throw new Error('User not found');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return this.prisma.organization.update({
       where: { id: organizationId },
@@ -152,10 +201,14 @@ export class OrganizationService {
     roleName: string,
   ): Promise<Organization> {
     const organization = await this.organization({ id: organizationId });
-    if (!organization) throw new Error('Organization not found');
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
 
     const user = await this.userService.user({ id: userId });
-    if (!user) throw new Error('User not found');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return this.prisma.organization.update({
       where: { id: organizationId },

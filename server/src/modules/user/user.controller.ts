@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   UseGuards,
@@ -32,7 +33,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async getOne(@Param('id') id: number): Promise<User | null> {
+  async getOne(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
     return this.userService.user({
       id,
     });

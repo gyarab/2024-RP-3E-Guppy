@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Post, Prisma } from '@prisma/client';
 import { UserService } from '../user/user.service';
@@ -42,7 +42,7 @@ export class PostService {
     organizationId: number,
   ): Promise<Post> {
     const user = await this.userService.user({ id: userId });
-    if (!user) throw new Error('User not found');
+    if (!user) throw new NotFoundException('User not found');
 
     const { title, content } = postCreateDto;
 
@@ -71,5 +71,18 @@ export class PostService {
     return this.prisma.post.delete({
       where,
     });
+  }
+
+  async checkOrganizationAndMembership(
+    organizationId: number,
+    userId: number,
+  ): Promise<boolean> {
+    const membership = await this.prisma.userOrganization.findFirst({
+      where: {
+        organizationId,
+        userId,
+      },
+    });
+    return !!membership;
   }
 }
