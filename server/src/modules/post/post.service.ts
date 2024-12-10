@@ -37,21 +37,19 @@ export class PostService {
   }
 
   async create(
-    postCreateDto: Prisma.PostCreateInput,
+    data: Prisma.PostCreateInput,
     userId: number,
     organizationId: number,
   ): Promise<Post> {
     const user = await this.userService.user({ id: userId });
     if (!user) throw new Error('User not found');
 
-    const { title, content } = postCreateDto;
-
     return this.prisma.post.create({
       data: {
-        title,
-        content,
-        authorId: userId,
-        organizationId: organizationId,
+        title: data.title,
+        content: data.content,
+        author: { connect: { id: userId } },
+        organization: { connect: { id: organizationId } },
       },
     });
   }
