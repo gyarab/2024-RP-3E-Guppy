@@ -29,6 +29,7 @@ function ThemeSwitch() {
       className={`theme-switch theme-switch--${theme}`}
       onClick={toggleTheme}
       tabIndex={0}
+      onKeyDown={() => {}}
     >
       <span className="theme-switch__circle"></span>
       <span className="theme-switch__icon theme-switch__icon--sun"></span>
