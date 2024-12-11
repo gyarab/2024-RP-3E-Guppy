@@ -6,7 +6,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { store } from "./store.ts";
 
-import "../app/assets/scss/styles.scss";
+import "../app/scss/styles.scss";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

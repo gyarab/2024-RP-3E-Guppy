@@ -14,9 +14,6 @@ function Header() {
         </Link>
         <Nav />
         <div className="cta">
-          {/* <Button onClick={toggleTheme} variant="primary">
-            Toggle Theme
-          </Button> */}
           <ThemeSwitch />
           <Link to="/login">
             <Button>Login</Button>

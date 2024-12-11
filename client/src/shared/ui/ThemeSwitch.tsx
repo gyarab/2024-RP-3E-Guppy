@@ -5,9 +5,6 @@ import { AppDispatch } from "../../app/store";
 import { selectTheme, setTheme } from "../../features/ui/uiSlice";
 import { themes } from "../constants/themes";
 
-// import sunIcon from "../../app/assets/icons/sun.svg";
-// import moonIcon from "../../app/assets/icons/moon.svg";
-
 function ThemeSwitch() {
   const dispatch: AppDispatch = useDispatch();
   const theme = useSelector(selectTheme);
