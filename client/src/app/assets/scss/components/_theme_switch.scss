@@ -1,0 +1,80 @@
+.theme-switch {
+  position: relative;
+  width: 4rem;
+  height: 2rem;
+  background-color: var(--background-color, #f0f0f0);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.5s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &__circle {
+    position: absolute;
+    top: 50%;
+    left: 0rem;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--primary-color);
+    transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  &__icon--sun {
+    width: 1rem;
+    height: 1rem;
+    background-image: url('/icons/sun.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+  }
+
+  &__icon--moon {
+    width: 1rem;
+    height: 1rem;
+    background-image: url('/icons/moon.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+  }
+
+  &--dark {
+    .theme-switch__circle {
+      background-color: var(--secondary-color);
+      box-shadow: 0 0 20px var(--secondary-color);
+      left: calc(100% - 1.75rem);
+    }
+
+    .theme-switch__icon--sun {
+      opacity: 0.5;
+    }
+
+    .theme-switch__icon--moon {
+      opacity: 1;
+    }
+  }
+
+  &--light {
+    .theme-switch__circle {
+      background-color: var(--primary-color);
+      box-shadow: 0 0 20px var(--primary-color);
+      left: 0.25rem;
+    }
+
+    .theme-switch__icon--sun {
+      opacity: 1;
+    }
+
+    .theme-switch__icon--moon {
+      opacity: 0.5;
+    }
+  }
+}

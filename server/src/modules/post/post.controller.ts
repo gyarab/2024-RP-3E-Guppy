@@ -11,6 +11,8 @@ import {
   Delete,
   Put,
   ParseIntPipe,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Prisma } from '@prisma/client';
@@ -23,13 +25,24 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @HttpCode(HttpStatus.CREATED)
-  @Post()
-  async create(@Body() data: Prisma.PostCreateInput, @Request() req) {
+  @Post('organization/:organizationId')
+  async create(
+    @Body() data: Prisma.PostCreateInput,
+    @Request() req,
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+  ) {
     const user = req.user as UserWithoutPassword;
+    if (!user) throw new NotFoundException('User not found');
 
-    // TODO get organizationId from user
+    if (
+      !(await this.postService.checkOrganizationAndMembership(
+        organizationId,
+        user.id,
+      ))
+    ) {
+      throw new BadRequestException('User is not a member of the organization');
+    }
 
-    const organizationId = 1;
     return this.postService.create(data, user.id, organizationId);
   }
 
