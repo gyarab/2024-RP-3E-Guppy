@@ -1,0 +1,45 @@
+.logo {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: .75rem;
+
+  &__icon {
+    width: 100%;
+    max-width: 2.25rem;
+  }
+
+  &__text {
+    font-size: 1.25rem;
+    letter-spacing: 3px;
+    text-decoration: none;
+    position: relative;
+    text-transform: uppercase;
+  }
+
+  .actual-text {
+    transition: color 0.5s ease-in-out;
+  }
+
+  .hover-text {
+    position: absolute;
+    color: var(--accent-color);
+    width: 0%;
+    inset: 0;
+    border-right: 4px solid var(--accent-color);
+    overflow: hidden;
+    transition: width 0.5s ease-in-out, filter 0.5s ease-in-out;
+  }
+
+  &:hover {
+    .hover-text {
+      width: 100%;
+      filter: drop-shadow(0 0 23px var(--accent-color));
+    }
+
+    .actual-text {
+      color: var(--accent-color);
+    }
+  }
+
+}
