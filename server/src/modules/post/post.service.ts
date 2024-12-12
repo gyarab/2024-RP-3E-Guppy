@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { File as MulterFile } from 'multer';
-
-import { Post, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { Post, Prisma } from '@prisma/client';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -15,11 +13,6 @@ export class PostService {
   async post(postWhereUniqueInput: Prisma.PostWhereUniqueInput) {
     return this.prisma.post.findUnique({
       where: postWhereUniqueInput,
-      include: {
-        comments: true,
-        likes: true,
-        images: true,
-      },
     });
   }
 
@@ -39,8 +32,6 @@ export class PostService {
       orderBy,
       include: {
         comments: true,
-        likes: true,
-        images: true,
       },
     });
   }
@@ -49,15 +40,9 @@ export class PostService {
     data: Prisma.PostCreateInput,
     userId: number,
     organizationId: number,
-    images: MulterFile[],
   ): Promise<Post> {
     const user = await this.userService.user({ id: userId });
     if (!user) throw new NotFoundException('User not found');
-
-    const imagePaths = images.map((image) => ({
-      path: '../../../../uploads/${image.filename}',
-      originalName: image.originalname,
-    }));
 
     return this.prisma.post.create({
       data: {
@@ -65,7 +50,6 @@ export class PostService {
         content: data.content,
         author: { connect: { id: userId } },
         organization: { connect: { id: organizationId } },
-        images: { createMany: { data: imagePaths } },
       },
     });
   }

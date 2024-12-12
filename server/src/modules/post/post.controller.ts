@@ -13,14 +13,9 @@ import {
   ParseIntPipe,
   NotFoundException,
   BadRequestException,
-  UploadedFiles,
-  UseInterceptors,
 } from '@nestjs/common';
-import { File as MulterFile } from 'multer';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-
-import { Prisma } from '@prisma/client';
 import { PostService } from './post.service';
+import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserWithoutPassword } from 'src/auth/types/auth.types';
 
@@ -29,36 +24,12 @@ import { UserWithoutPassword } from 'src/auth/types/auth.types';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  // @HttpCode(HttpStatus.CREATED)
-  // @Post('organization/:organizationId')
-  // async create(
-  //   @Body() data: Prisma.PostCreateInput,
-  //   @Request() req,
-  //   @Param('organizationId', ParseIntPipe) organizationId: number,
-  // ) {
-  //   const user = req.user as UserWithoutPassword;
-  //   if (!user) throw new NotFoundException('User not found');
-
-  //   if (
-  //     !(await this.postService.checkOrganizationAndMembership(
-  //       organizationId,
-  //       user.id,
-  //     ))
-  //   ) {
-  //     throw new BadRequestException('User is not a member of the organization');
-  //   }
-
-  //   return this.postService.create(data, user.id, organizationId);
-  // }
-
   @HttpCode(HttpStatus.CREATED)
   @Post('organization/:organizationId')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 5 }])) // Přidání FileFieldsInterceptoru pro obrázky
   async create(
     @Body() data: Prisma.PostCreateInput,
     @Request() req,
     @Param('organizationId', ParseIntPipe) organizationId: number,
-    @UploadedFiles() images: MulterFile[], // Obrázky jako pole souborů
   ) {
     const user = req.user as UserWithoutPassword;
     if (!user) throw new NotFoundException('User not found');
@@ -72,7 +43,7 @@ export class PostController {
       throw new BadRequestException('User is not a member of the organization');
     }
 
-    return this.postService.create(data, user.id, organizationId, images);
+    return this.postService.create(data, user.id, organizationId);
   }
 
   @HttpCode(HttpStatus.OK)

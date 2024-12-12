@@ -68,16 +68,6 @@ model Post {
   updatedAt      DateTime     @updatedAt
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId Int
-  images         Image[]
-}
-
-model Image {
-  id      Int      @id @default(autoincrement())
-  path     String
-  originalName String
-  postId  Int
-  post    Post     @relation(fields: [postId], references: [id])
-  createdAt DateTime @default(now())
 }
 
 model Comment {
