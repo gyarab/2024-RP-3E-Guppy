@@ -8,6 +8,7 @@ import { PostModule } from './modules/post/post.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeModule } from './modules/like/like.module';
 import { OrganizationModule } from './modules/organization/organization.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { OrganizationModule } from './modules/organization/organization.module';
     CommentModule,
     LikeModule,
     OrganizationModule,
+    UploadModule,
   ],
 })
 export class AppModule {}
