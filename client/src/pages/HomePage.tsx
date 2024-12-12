@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 import { useNavigateWithParams } from "../shared/hooks/useNavigateParams";
+import Post from "../shared/ui/post/Post";
+import CreatePostForm from "../shared/ui/post/CreatePostForm";
 
 // Mock Data
 const organizations = [
@@ -24,11 +26,25 @@ const HomePage = () => {
     navigateWithParams("/org", { id: orgId.toString() });
   };
 
+  const postData = {
+    id: 1,
+    title: "Udela bombustic neco na frontendu nebo ne?",
+    content:
+      "lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod.",
+    author: {
+      name: "Milan Tucek",
+      avatar: "https://i.pravatar.cc/50",
+    },
+    mostPopularComment: "Most popular comment",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   return (
     <div className="container">
       <main className="main">
         <h1 className="main__title">Welcome to the Home Page</h1>
-        <ul className="org-list">
+        {/* <ul className="org-list">
           {organizations.map((org) => (
             <li
               key={org.id}
@@ -44,7 +60,9 @@ const HomePage = () => {
               <h3 className="org-list__title">Create your own organization</h3>
             </Link>
           </li>
-        </ul>
+        </ul> */}
+        <Post data={postData} />
+        <CreatePostForm />
       </main>
     </div>
   );

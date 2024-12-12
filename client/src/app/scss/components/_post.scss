@@ -1,0 +1,48 @@
+@use "../abstract" as *;
+
+.post {
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 0.75rem 1.5rem;
+  max-width: 600px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  &__main {
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  } 
+
+  &__action {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__read-more {
+    display: block;
+    text-align: right;
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: var(--secondary-color);
+    }
+  }
+}
