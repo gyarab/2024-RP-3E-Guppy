@@ -54,8 +54,54 @@ function LoginPage() {
   };
   
   return (
-    <div className="container">
-      <h2 className="section__title">Login page</h2>
+    <div className="login__wrapper">
+      <div className="login__container">
+        <h1 className="login_title">Welcome!</h1>
+        <h2 className="section__subtitle">Login to use our services</h2>
+        <h3 className="section__text">Don't have an account?<a href="/signup" className="section__link"> Sign up here!</a></h3>
+
+        <form onSubmit={handleSubmit} className="login__form">
+          <div className="form__group">
+            <input 
+              type="email"
+              id="email"
+              name="email"
+              ref={emailInputRef}
+              value={credentials.email}
+              onChange={handleFormChange}
+              required
+              placeholder=" Email"
+            />
+          </div>
+          <div className="form__group">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={credentials.password}
+              onChange={handleFormChange}
+              required
+              placeholder=" Password"
+            />
+          </div>
+          <div className="form__group__checkbox">
+          <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              className="rememberMe__checkbox"
+            />
+          <label htmlFor="rememberMe" className="rememberMe__label">
+            Remember me
+          </label>
+          <h3><a href="" className="section__link">Forgot password?</a></h3>
+          </div>
+          {errMessage && <p className="error">{errMessage}</p>}
+          <button type="submit" className="login__button" disabled={isLoading}>
+            {isLoading ? "Loading..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
