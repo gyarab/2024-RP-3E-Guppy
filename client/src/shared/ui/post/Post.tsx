@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import Avatar from "../Avatar";
+
 import { Post as IPost } from "../../interfaces/Post";
 import { truncate } from "../../utils/truncate";
 
@@ -24,12 +26,11 @@ function Post({ data }: PostProps) {
   return (
     <article className="post">
       <div className="post__header">
-        <img
-          src={data.author.avatar}
-          alt={`${data.author.name}'s avatar`}
-          className="post__avatar"
+        <Avatar
+          image="https://i.pravatar.cc/50"
+          text="Milan Tucek"
+          secondaryText="UI & UX Developer"
         />
-        <h4 className="post__author">{data.author.name}</h4>
       </div>
       <div className="post__main">
         <h3 className="post__title">{data.title}</h3>

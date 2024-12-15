@@ -52,7 +52,7 @@ function LoginPage() {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
-
+  
   return (
     <div className="container">
       <h2 className="section__title">Login page</h2>

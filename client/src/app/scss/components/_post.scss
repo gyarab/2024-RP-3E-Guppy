@@ -13,6 +13,12 @@
   }
 
   &__avatar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__avatar__img {
     width: 40px;
     height: 40px;
     border-radius: 50%;

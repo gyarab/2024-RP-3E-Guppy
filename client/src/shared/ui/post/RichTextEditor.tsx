@@ -1,12 +1,20 @@
-import React from "react";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+
+// Extensions for the text editor
+import Document from "@tiptap/extension-document";
+import Text from "@tiptap/extension-text";
+import Paragraph from "@tiptap/extension-paragraph";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import Strike from "@tiptap/extension-strike";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
 import Image from "@tiptap/extension-image";
 
-import FileInput from "../FileInput";
 import { capitalize } from "../../utils/capitalize";
-
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+import { useState } from "react";
+import FileUploader from "../FileUploader";
 
 interface RichTextEditorProps {
   value: string;
@@ -14,142 +22,128 @@ interface RichTextEditorProps {
 }
 
 function RichTextEditor({ value, onChange }: RichTextEditorProps) {
-  console.count("editor render");
+  const [isDragging, setIsDragging] = useState(false);
 
   const editor = useEditor({
-    extensions: [StarterKit, Image.configure({ inline: true })],
+    extensions: [
+      Document,
+      Text,
+      Paragraph,
+      Bold,
+      Italic,
+      Strike,
+      BulletList,
+      OrderedList,
+      ListItem,
+      Image,
+    ],
     content: value,
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
   });
 
-  const handleImageUpload = async (files: File[]) => {
-    const file = files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await fetch("http://localhost:3000/upload/image", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Image upload failed: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      const uploadedImageUrl = data.imageUrl;
-
-      editor?.chain().focus().setImage({ src: uploadedImageUrl }).run();
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      alert("Failed to upload image. Please try again.");
-    }
-  };
-
-  const handleHeadingChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ): void => {
-    const level = parseInt(event.target.value, 10) as HeadingLevel | 0;
-    if (level === 0) {
-      editor?.chain().focus().setParagraph().run();
-    } else {
-      editor?.chain().focus().toggleHeading({ level }).run();
-    }
-  };
-
-  const getHeadingLevel = (editor: any): string => {
-    for (let level = 1; level <= 6; level++) {
-      if (editor.isActive("heading", { level })) {
-        return level.toString();
-      }
-    }
-    return "0";
-  };
-
   if (!editor) return null;
 
+  const handleImageUpload = (file: File | null) => {
+    if (!file) {
+      editor.chain().focus().deleteSelection().run();
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      console.error("Unsupported file type:", file.name);
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      editor
+        .chain()
+        .focus()
+        .setImage({ src: event.target?.result as string })
+        .run();
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(event.dataTransfer.files);
+    handleImageUpload(files[0]);
+  };
+
   return (
-    <div className="rich-text-editor">
-      <div className="toolbar">
-        <button
-          type="button"
-          aria-label="Bold"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "active" : ""}
-        >
-          Bold
-        </button>
+    <div
+      className={`rich-text-editor ${isDragging ? "dragging" : ""}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      <div className="toolbar" aria-label="Text Formatting Toolbar">
+        <div className="button-group">
+          <button
+            type="button"
+            aria-label="Bold"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            disabled={!editor.can().chain().focus().toggleBold().run()}
+            className={editor.isActive("bold") ? "active" : ""}
+          >
+            <strong>B</strong>
+          </button>
 
-        <button
-          type="button"
-          aria-label="Italic"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={!editor.can().chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") ? "active" : ""}
-        >
-          Italic
-        </button>
+          <button
+            type="button"
+            aria-label="Italic"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            disabled={!editor.can().chain().focus().toggleItalic().run()}
+            className={editor.isActive("italic") ? "active" : ""}
+          >
+            <em>I</em>
+          </button>
 
-        <button
-          type="button"
-          aria-label="Strike Through"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={!editor.can().chain().focus().toggleStrike().run()}
-          className={editor.isActive("strike") ? "active" : ""}
-        >
-          Strike
-        </button>
+          <button
+            type="button"
+            aria-label="Strike Through"
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            disabled={!editor.can().chain().focus().toggleStrike().run()}
+            className={editor.isActive("strike") ? "active" : ""}
+          >
+            <s>S</s>
+          </button>
+        </div>
 
-        <select onChange={handleHeadingChange} value={getHeadingLevel(editor)}>
-          <option value="0">Paragraph</option>
-          {[1, 2, 3, 4, 5, 6].map((level) => (
-            <option key={level} value={level}>
-              Heading {level}
-            </option>
-          ))}
-        </select>
+        <div className="button-group">
+          <button
+            type="button"
+            aria-label="Bullet List"
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={editor.isActive("bulletList") ? "active" : ""}
+          >
+            • List
+          </button>
 
-        <button
-          type="button"
-          aria-label="Bullet List"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "active" : ""}
-        >
-          Bullet List
-        </button>
-
-        <button
-          type="button"
-          aria-label="Ordered List"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "active" : ""}
-        >
-          Ordered List
-        </button>
-
-        <button
-          type="button"
-          aria-label="Undo"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().chain().focus().undo().run()}
-        >
-          Undo
-        </button>
-
-        <button
-          type="button"
-          aria-label="Redo"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().chain().focus().redo().run()}
-        >
-          Redo
-        </button>
+          <button
+            type="button"
+            aria-label="Ordered List"
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={editor.isActive("orderedList") ? "active" : ""}
+          >
+            1. List
+          </button>
+        </div>
       </div>
 
       <BubbleMenu editor={editor} className="bubble-menu">
@@ -171,9 +165,7 @@ function RichTextEditor({ value, onChange }: RichTextEditorProps) {
 
       <EditorContent editor={editor} className="editor" />
 
-      <div>
-        <FileInput accept="image/*" onFileSelect={handleImageUpload} />
-      </div>
+      <FileUploader onFileChange={handleImageUpload} accept="image/*" />
     </div>
   );
 }

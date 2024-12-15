@@ -1,0 +1,26 @@
+.avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+  }
+
+  &__name {
+    font-weight: bold;
+    font-size: 1.125rem;
+  }
+
+  &__secondary {
+    color: #474747;
+    font-size: 0.875rem;
+  }
+}

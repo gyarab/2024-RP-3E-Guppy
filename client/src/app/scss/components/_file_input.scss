@@ -1,14 +1,9 @@
-.file-input {
+.file-uploader {
   border: 2px dashed var(--text-color);
   border-radius: 8px;
   padding: 16px;
   cursor: pointer;
   transition: border-color 0.3s ease;
-
-  &.dragging {
-    border-color: var(--accent-color);
-    background-color: var(--background-color);
-  }
 
   &__input {
     display: none;
