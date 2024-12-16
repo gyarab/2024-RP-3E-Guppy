@@ -1,69 +1,48 @@
-.login__wrapper {
-    background-image: url('/images/login-background.svg');
-    background-size: cover;
-    background-position: center;
-    min-height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.login__container {
+@use "../abstract" as *;
+
+.login {
+  background-image: url("/images/login-background.svg");
+  background-size: cover;
+  background-position: center;
+  min-height: content-height();
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__container {
+    width: 30%;
+    text-align: center;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  &__form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10%;
-    margin-bottom: 10%;
-    height: 400px;
-    width: 550px;
-    background-color: #9FDBB7;
-    border-radius: 10px;
-    .login__title {
-        font-size: 2rem;
-        font-weight: 500;
-        line-height: 1.2;
-        margin-bottom: 1rem;
-    }
-    .login__form .form__group {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        input {
-            width: 100%;
-            height: 2.25rem;
-            margin-top: 5%;
-            border-radius: 3px;
-            border-style: none;
-        }
-    }
-    .login__button {
-        width: 17.5rem;
-        height: 2rem;
-        border-radius: 4px;
-        border-style: none;
-        background-color: #ACC054;
-        color: var(--background-color);
-        margin: 10px auto;
-        display: block;
-        &:hover {
-            background-color: #D9D9D9;
-            cursor: pointer;
-        }
-    }
-    .form__group__checkbox {
-        display: flex;
-        align-items: center;
-        margin-top: 0.5rem;
-        gap: 0.5rem;
-    }
-    .rememberMe__checkbox {
-        width: 1rem;
-        height: 1rem;
-        cursor: pointer;
-    }
-    .rememberMe__label {
-        font-size: 1rem;
-        cursor: pointer;
-    }
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  &__text {
+    margin-bottom: 1.5rem;
+  }
+
+  &__button {
+    width: 100%;
+    border: 1px solid var(--accent-color);
+  }
+
+  .error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
 }

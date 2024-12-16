@@ -7,6 +7,8 @@ import { isApiError } from "../shared/utils/helpers";
 import { useLoginMutation } from "../features/auth/authApi";
 import { setAuthCredentials } from "../features/auth/authSlice";
 import { LoginCredentials } from "../shared/interfaces/LoginCredentials";
+import Checkbox from "../shared/ui/Checkbox";
+import Button from "../shared/ui/Button";
 
 const DEFAULT_CREDENTIALS: LoginCredentials = {
   email: "",
@@ -15,7 +17,7 @@ const DEFAULT_CREDENTIALS: LoginCredentials = {
 
 function LoginPage() {
   const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
-  const [errMessage, setErrMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -29,7 +31,7 @@ function LoginPage() {
   }, []);
 
   useEffect(() => {
-    setErrMessage("");
+    setErrorMessage("");
   }, [credentials]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -43,66 +45,83 @@ function LoginPage() {
       navigate("/");
     } catch (error) {
       if (isApiError(error)) {
-        setErrMessage(error.data.message);
+        setErrorMessage(error.data.message);
       }
     }
   };
 
-  const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
-  
-  return (
-    <div className="login__wrapper">
-      <div className="login__container">
-        <h1 className="login_title">Welcome!</h1>
-        <h2 className="section__subtitle">Login to use our services</h2>
-        <h3 className="section__text">Don't have an account?<a href="/signup" className="section__link"> Sign up here!</a></h3>
 
-        <form onSubmit={handleSubmit} className="login__form">
+  return (
+    <main className="login">
+      <div className="container login__container">
+        <h2 className="login__title">Welcome!</h2>
+        <h3 className="section__subtitle">Login to use our services</h3>
+        <p className="login__text">
+          Don&apos;t have an account?{" "}
+          <a href="/signup" className="form__link">
+            Sign up here!
+          </a>
+        </p>
+
+        <form onSubmit={handleSubmit} className="form login__form">
           <div className="form__group">
-            <input 
+            <input
               type="email"
+              className="form__input"
               id="email"
               name="email"
               ref={emailInputRef}
               value={credentials.email}
-              onChange={handleFormChange}
+              onChange={handleInputChange}
+              autoComplete="off"
               required
-              placeholder=" Email"
             />
+            <span>Email</span>
+            <i></i>
           </div>
+
           <div className="form__group">
             <input
               type="password"
+              className="form__input"
               id="password"
               name="password"
               value={credentials.password}
-              onChange={handleFormChange}
+              onChange={handleInputChange}
+              autoComplete="off"
               required
-              placeholder=" Password"
             />
+            <span>Password</span>
+            <i></i>
           </div>
-          <div className="form__group__checkbox">
-          <input
-              type="checkbox"
-              id="rememberMe"
-              name="rememberMe"
-              className="rememberMe__checkbox"
-            />
-          <label htmlFor="rememberMe" className="rememberMe__label">
-            Remember me
-          </label>
-          <h3><a href="" className="section__link">Forgot password?</a></h3>
+
+          <div className="form__group--horizontal">
+            <div className="form__group--checkbox">
+              <Checkbox />
+              <p>Remember me</p>
+            </div>
+            <a href="/change-password" className="form__link">
+              Forgot password?
+            </a>
           </div>
-          {errMessage && <p className="error">{errMessage}</p>}
-          <button type="submit" className="login__button" disabled={isLoading}>
+
+          {errorMessage && <p className="error">{errorMessage}</p>}
+
+          <Button
+            type="submit"
+            variant="accent"
+            additionalClasses="login__button"
+            disabled={isLoading}
+          >
             {isLoading ? "Loading..." : "Login"}
-          </button>
+          </Button>
         </form>
       </div>
-    </div>
+    </main>
   );
 }
 

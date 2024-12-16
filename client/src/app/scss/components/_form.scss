@@ -1,0 +1,73 @@
+.form {
+  &__group {
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+
+  &__group--horizontal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  &__group--checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__input {
+    position: relative;
+    width: 100%;
+    padding: 0.875rem;
+
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    z-index: 10;
+  }
+
+  &__link {
+    color: var(--accent-color);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span {
+    position: absolute;
+    left: 0;
+    font-size: 1em;
+    color: #8f8f8f;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+    pointer-events: none;
+  }
+
+  &__input:focus ~ span,
+  &__input:not(:placeholder-shown) ~ span {
+    color: var(--accent-color);
+    transform: translateY(-1rem);
+    font-size: 0.75em;
+  }
+
+  i {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent-color);
+    border-radius: 4px;
+    transition: 0.5s;
+    pointer-events: none;
+    z-index: 9;
+  }
+
+  &__input:focus ~ i {
+    height: 2.75rem;
+  }
+}

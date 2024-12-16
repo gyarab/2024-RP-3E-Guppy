@@ -1,6 +1,6 @@
 import React from "react";
 
-type ButtonVariant = "primary" | "secondary";
+type ButtonVariant = "primary" | "secondary" | "accent";
 type ButtonSize = "small" | "medium" | "large";
 type ButtonType = "submit" | "button" | "reset";
 type ButtonOnClick = (() => void) | ((e: React.MouseEvent) => void);

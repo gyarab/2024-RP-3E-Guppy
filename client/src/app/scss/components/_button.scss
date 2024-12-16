@@ -2,31 +2,43 @@
 
 .btn {
   @extend %btn-reset;
-  border-radius: $border-radius;
-  transition-property: color, background-color, border-color;
-  transition-timing-function: $transition-ease;
-  transition-duration: $transition-duration;
-  color: var(--text-color);
+  text-transform: uppercase;
+  position: relative;
+  transition: 0.3s ease;
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    transition: 0.3s ease;
   }
 
-  &--primary {
-    background-color: var(--primary-color);
-  
-    &:hover {
-      background-color: var(--accent-color);
-    }
+  &:hover {
+    color: var(--text-color);
+    transition-delay: 0.3s;
   }
 
-  &--secondary {
-    background-color: var(--secondary-color);
+  &:hover::before {
+    width: 100%;
+  }
 
-    &:hover {
-      background-color: var(--primary-color);      
-    }
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    transition: 0.3s ease;
+    z-index: -1;
+  }
+
+  &:hover::after {
+    height: 100%;
+    transition-delay: 0.3s;
   }
 
   &--small {
@@ -42,5 +54,65 @@
   &--large {
     font-size: 1.125rem;
     padding: 0.875rem 1.25rem;
+  }
+
+  &--primary {
+    color: var(--primary-color);
+
+    &::before {
+      background-color: var(--primary-color);
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    &::after {
+      background-color: var(--primary-color);
+    }
+
+    &:hover::after {
+      height: 100%;
+    }
+  }
+
+  &--secondary {
+    color: var(--secondary-color);
+
+    &::before {
+      background-color: var(--secondary-color);
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    &::after {
+      background-color: var(--secondary-color);
+    }
+
+    &:hover::after {
+      height: 100%;
+    }
+  }
+
+  &--accent {
+    color: var(--accent-color);
+
+    &::before {
+      background-color: var(--accent-color);
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    &::after {
+      background-color: var(--accent-color);
+    }
+
+    &:hover::after {
+      height: 100%;
+    }
   }
 }
