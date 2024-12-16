@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   HttpCode,
   HttpStatus,
+  Param,
   ParseFilePipeBuilder,
   Post,
   UploadedFile,
@@ -35,5 +37,10 @@ export class UploadController {
     file: Express.Multer.File,
   ) {
     return await this.uploadService.upload(file);
+  }
+
+  @Delete(':name')
+  async delete(@Param('name') name: string) {
+    return await this.uploadService.delete(name);
   }
 }

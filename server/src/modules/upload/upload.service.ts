@@ -22,4 +22,10 @@ export class UploadService {
     const relativePath = path.join('uploads', `${hash}.jpg`);
     return { path: relativePath };
   }
+
+  async delete(name: string) {
+    const filePath = path.join(__dirname, '../../../uploads', name);
+    await fs.promises.unlink(filePath);
+    return filePath;
+  }
 }
