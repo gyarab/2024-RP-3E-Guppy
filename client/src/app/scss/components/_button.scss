@@ -2,117 +2,69 @@
 
 .btn {
   @extend %btn-reset;
-  text-transform: uppercase;
-  position: relative;
-  transition: 0.3s ease;
+  border-radius: 20px;
+  color: var(--background-color);
+  background: var(--accent-color);
+  display: flex;
+  transition: 0.2s background;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: bold;
+  cursor: pointer;
 
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
+  .arrow-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .arrow {
+    margin-top: 1px;
+    width: 0.875rem;
+    background: var(--accent-color);
     height: 2px;
-    width: 0;
-    transition: 0.3s ease;
+    position: relative;
+    transition: 0.2s;
+  }
+
+  .arrow::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    border: solid var(--background-color);
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    top: -3px;
+    right: 3px;
+    transition: 0.2s;
+    padding: 3px;
+    transform: rotate(-45deg);
   }
 
   &:hover {
-    color: var(--text-color);
-    transition-delay: 0.3s;
+    background-color: var(--secondary-color);
   }
 
-  &:hover::before {
-    width: 100%;
+  &:hover .arrow {
+    background: var(--background-color);
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 0;
-    width: 100%;
-    transition: 0.3s ease;
-    z-index: -1;
-  }
-
-  &:hover::after {
-    height: 100%;
-    transition-delay: 0.3s;
+  &:hover .arrow:before {
+    right: 0;
   }
 
   &--small {
-    font-size: 0.875rem;
-    padding: 0.5rem 0.75rem;
+    font-size: 0.875em;
+    padding: 0.5em 0.75em;
   }
 
   &--medium {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
+    font-size: 1em;
+    padding: 0.75em 1em;
   }
 
   &--large {
-    font-size: 1.125rem;
-    padding: 0.875rem 1.25rem;
-  }
-
-  &--primary {
-    color: var(--primary-color);
-
-    &::before {
-      background-color: var(--primary-color);
-    }
-
-    &:hover::before {
-      width: 100%;
-    }
-
-    &::after {
-      background-color: var(--primary-color);
-    }
-
-    &:hover::after {
-      height: 100%;
-    }
-  }
-
-  &--secondary {
-    color: var(--secondary-color);
-
-    &::before {
-      background-color: var(--secondary-color);
-    }
-
-    &:hover::before {
-      width: 100%;
-    }
-
-    &::after {
-      background-color: var(--secondary-color);
-    }
-
-    &:hover::after {
-      height: 100%;
-    }
-  }
-
-  &--accent {
-    color: var(--accent-color);
-
-    &::before {
-      background-color: var(--accent-color);
-    }
-
-    &:hover::before {
-      width: 100%;
-    }
-
-    &::after {
-      background-color: var(--accent-color);
-    }
-
-    &:hover::after {
-      height: 100%;
-    }
+    font-size: 1.125em;
+    padding: 0.875em 1.25em;
   }
 }

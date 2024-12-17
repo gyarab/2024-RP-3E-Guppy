@@ -16,10 +16,10 @@ function Header() {
         <div className="cta">
           <ThemeSwitch />
           <Link to="/login">
-            <Button>Login</Button>
+            <Button variant="accent">Login</Button>
           </Link>
           <Link to="/signup">
-            <Button>Sign Up</Button>
+            <Button variant="accent">Sign Up</Button>
           </Link>
         </div>
       </div>
