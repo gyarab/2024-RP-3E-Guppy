@@ -1,0 +1,52 @@
+@use "../abstract" as *;
+
+.sidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    width: 18%;
+    height: 100%;
+    background-color: #f9f9f9;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .organizations {
+        width: 30%;
+        background-color: #fff;
+        border-right: 1px solid #e0e0e0;
+
+        a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+
+            &:hover {
+                background-color: #f0f0f0;
+                transform: scale(1.02);
+            }
+
+            img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .links {
+        width: 70%;
+        padding: 1rem;
+
+        /* Placeholder for future content */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #888;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+}
