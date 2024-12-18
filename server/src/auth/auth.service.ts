@@ -79,4 +79,11 @@ export class AuthService {
       data: { tokenVersion: { increment: 1 } },
     });
   }
+
+  async verify(accessToken: string): Promise<boolean> {
+    if (!accessToken) return false;
+
+    const payload = await this.tokenService.validateAccessToken(accessToken);
+    return !!payload;
+  }
 }

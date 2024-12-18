@@ -4,12 +4,12 @@ import { RootState } from "../../app/store";
 import { User } from "../../shared/interfaces/User";
 
 interface AuthState {
-  token: string | null;
+  isAuthenticated: boolean;
   user: User | null;
 }
 
 const initialState: AuthState = {
-  token: null,
+  isAuthenticated: false,
   user: null,
 };
 
@@ -18,20 +18,23 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuthCredentials: (state, action) => {
-      const { user, accessToken } = action.payload;
+      const { user } = action.payload;
       state.user = user;
-      state.token = accessToken;
+      state.isAuthenticated = true;
+    },
+    setIsAuth: (state, action) => {
+      state.isAuthenticated = action.payload;
     },
     logout: (state) => {
       state.user = null;
-      state.token = null;
+      state.isAuthenticated = false;
     },
   },
 });
 
-export const { setAuthCredentials, logout } = authSlice.actions;
+export const { setAuthCredentials, setIsAuth, logout } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectToken = (state: RootState) => state.auth.token;
+export const selectIsAuth = (state: RootState) => state.auth.isAuthenticated;
 export const selectUser = (state: RootState) => state.auth.user;
