@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   Request,
   Res,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -31,7 +33,13 @@ export class AuthController {
     @Body() loginDto: LoginUserDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<SignInResponse> {
-    const { refreshToken, ...payload } = await this.authService.login(loginDto);
+    const { accessToken, refreshToken, ...payload } =
+      await this.authService.login(loginDto);
+
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60,
+    });
 
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -87,5 +95,14 @@ export class AuthController {
     });
 
     return { accessToken };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/verify')
+  async verify(
+    @Cookies('accessToken') accessToken: string,
+  ): Promise<{ isAuth: boolean }> {
+    const isAuth = await this.authService.verify(accessToken);
+    return { isAuth };
   }
 }

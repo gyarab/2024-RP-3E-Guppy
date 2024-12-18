@@ -41,6 +41,8 @@ function LoginPage() {
       const userData = await login(credentials).unwrap();
       dispatch(setAuthCredentials(userData));
 
+      console.log(userData);
+
       setCredentials(DEFAULT_CREDENTIALS);
       navigate("/");
     } catch (error) {

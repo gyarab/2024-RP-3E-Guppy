@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
-function Nav() {
+interface NavProps {
+  isAuthenticated?: boolean;
+}
+
+function Nav({ isAuthenticated = false }: NavProps) {
   return (
     <nav className="nav">
       <ul className="nav__list">
@@ -19,6 +23,13 @@ function Nav() {
             Our services
           </Link>
         </li>
+        {isAuthenticated && (
+          <li className="nav__item">
+            <Link to="/dashboard" className="nav__link">
+              Dashboard
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );

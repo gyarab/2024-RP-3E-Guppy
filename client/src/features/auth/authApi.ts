@@ -25,7 +25,10 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    verify: build.query<{ isAuth: boolean }, void>({
+      query: () => "/auth/verify",
+    }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useVerifyQuery } = authApi;

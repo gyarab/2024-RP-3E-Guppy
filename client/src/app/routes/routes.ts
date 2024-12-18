@@ -1,3 +1,4 @@
+import Dashboard from "../../pages/Dashboard";
 import HomePage from "../../pages/HomePage";
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
@@ -14,7 +15,7 @@ export const publicRoutes: Route[] = [
 ];
 
 export const privateRoutes: Route[] = [
-  // { path: '/dashboard', component: DashboardPage },
+  { path: "/dashboard", component: Dashboard },
 ];
 
 export const adminRoutes: Route[] = [
