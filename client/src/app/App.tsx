@@ -9,6 +9,7 @@ import Header from "../widgets/Header";
 import Footer from "../widgets/Footer";
 import Router from "./routes/Router";
 import Loader from "../shared/ui/Loader";
+import Sidebar from "../widgets/Sidebar";
 
 function App() {
   const { data, isLoading } = useVerifyQuery();
@@ -28,6 +29,7 @@ function App() {
   return (
     <>
       <Header />
+      <Sidebar />
       <Router isAuthenticated={!!data?.isAuth} />
       <Footer />
     </>
