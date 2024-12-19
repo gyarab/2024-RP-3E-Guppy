@@ -1,0 +1,44 @@
+.avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__img {
+    width: 3.125rem; /* 50px */
+    height: 3.125rem; /* 50px */
+    object-fit: cover;
+  }
+
+  &__text {
+    font-weight: bold;
+    font-size: 1em;
+  }
+
+  &__secondary {
+    color: #6b7280;
+    font-size: 0.75em;
+  }
+
+  &--rounded {
+    .avatar__img {
+      border-radius: 0.75rem;
+    }
+  }
+
+  &--circle {
+    .avatar__img {
+      border-radius: 50%;
+    }
+  }
+
+  &--square {
+    .avatar__img {
+      border-radius: 0;
+    }
+  }
+}
