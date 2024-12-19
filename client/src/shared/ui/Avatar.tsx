@@ -7,7 +7,7 @@ interface AvatarProps {
   shape?: AvatarShape;
 }
 
-function Avatar({ src, text, secondaryText, shape }: AvatarProps) {
+function Avatar({ src, text, secondaryText, shape = "circle" }: AvatarProps) {
   return (
     <div className={`avatar avatar--${shape}`}>
       <img src={src} alt="Avatar image" className="avatar__img" />
