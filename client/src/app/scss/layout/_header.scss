@@ -3,7 +3,7 @@
 .header {
   height: $header-height;
 
-  .container {
+  &__container {
     display: flex;
     align-items: center;
     justify-content: space-between;

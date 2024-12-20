@@ -12,6 +12,7 @@ interface ButtonProps {
   additionalClasses?: string;
   disabled?: boolean;
   href?: string;
+  noArrow?: boolean;
   onClick?: ButtonOnClick;
   children: React.ReactNode;
 }
@@ -37,6 +38,7 @@ function Button({
   additionalClasses = "",
   disabled = false,
   href,
+  noArrow = false,
   onClick,
   children,
 }: ButtonProps) {
@@ -64,9 +66,11 @@ function Button({
       disabled={disabled}
     >
       {children}
-      <div className="arrow-wrapper">
-        <div className="arrow"></div>
-      </div>
+      {!noArrow && (
+        <div className="arrow-wrapper">
+          <div className="arrow"></div>
+        </div>
+      )}
     </button>
   );
 }

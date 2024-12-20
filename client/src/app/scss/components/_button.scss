@@ -3,10 +3,8 @@
 .btn {
   @extend %btn-reset;
   border-radius: 20px;
-  color: var(--background-color);
-  background: var(--accent-color);
   display: flex;
-  transition: 0.2s background;
+  transition: 0.2s background-color;
   align-items: center;
   gap: 0.5em;
   font-weight: bold;
@@ -21,7 +19,6 @@
   .arrow {
     margin-top: 1px;
     width: 0.875rem;
-    background: var(--accent-color);
     height: 2px;
     position: relative;
     transition: 0.2s;
@@ -46,11 +43,16 @@
   }
 
   &:hover .arrow {
-    background: var(--background-color);
+    background-color: var(--background-color);
   }
 
   &:hover .arrow:before {
     right: 0;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   &--small {
@@ -66,5 +68,44 @@
   &--large {
     font-size: 1.125em;
     padding: 0.875em 1.25em;
+  }
+
+  &--primary {
+    color: var(--background-color);
+    background-color: var(--primary-color);
+
+    &:hover {
+      background-color: var(--accent-color);
+    }
+
+    .arrow {
+      background-color: var(--primary-color);
+    }
+  }
+
+  &--secondary {
+    color: var(--background-color);
+    background-color: var(--secondary-color);
+
+    &:hover {
+      background-color: var(--primary-color);
+    }
+
+    .arrow {
+      background-color: var(--secondary-color);
+    }
+  }
+
+  &--accent {
+    color: var(--background-color);
+    background-color: var(--accent-color);
+
+    &:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .arrow {
+      background-color: var(--accent-color);
+    }
   }
 }

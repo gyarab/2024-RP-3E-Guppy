@@ -1,10 +1,15 @@
-@use '../abstract' as *;
+@use "../abstract" as *;
 
 .aside {
+  position: sticky;
+  top: 0;
+  // top: 0;
+  // right: 0;
   padding: 1rem;
   background-color: var(--background-color);
   border-radius: 10px;
   max-height: fit-content;
+  // width: 300px;
 
   .aside__title {
     font-size: 1.2rem;
@@ -24,7 +29,7 @@
 }
 
 .main {
-  text-align: center;
+  // text-align: center;
 
   &__title {
     font-size: 2rem;

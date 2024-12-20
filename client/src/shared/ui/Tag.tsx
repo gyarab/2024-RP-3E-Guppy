@@ -1,11 +1,11 @@
 interface TagProps {
   value: string;
   onClick: () => void;
-  isSelected?: boolean;
-  showRemoveIcon?: boolean;
+  isSelected: boolean;
+  tooltip?: string;
 }
 
-function Tag({ value, onClick, isSelected, showRemoveIcon }: TagProps) {
+function Tag({ value, onClick, isSelected, tooltip }: TagProps) {
   return (
     <span
       onClick={onClick}
@@ -13,19 +13,9 @@ function Tag({ value, onClick, isSelected, showRemoveIcon }: TagProps) {
       role="button"
       tabIndex={0}
       aria-pressed={isSelected}
+      title={tooltip}
     >
       {value}
-      {showRemoveIcon && (
-        <span
-          className="tag__remove-icon"
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick();
-          }}
-        >
-          &times;
-        </span>
-      )}
     </span>
   );
 }

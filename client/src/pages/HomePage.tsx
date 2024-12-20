@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { useNavigateWithParams } from "../shared/hooks/useNavigateParams";
+import Avatar from "../shared/ui/Avatar";
 
 // Mock Data
 const organizations = [
@@ -12,6 +13,46 @@ const organizations = [
   {
     id: 2,
     name: "Org 2",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 3,
+    name: "Org 3",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 4,
+    name: "Org 4",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 5,
+    name: "Org 5",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 6,
+    name: "Org 6",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 7,
+    name: "Org 7",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 8,
+    name: "Org 8",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 9,
+    name: "Org 9",
+    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+  },
+  {
+    id: 10,
+    name: "Org 10",
     description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
   },
 ];
@@ -45,6 +86,12 @@ const HomePage = () => {
             </Link>
           </li>
         </ul>
+
+        <Avatar
+          src="https://placehold.co/50"
+          text="Ilja Novak"
+          secondaryText="UI & UX Developer"
+        />
       </main>
     </div>
   );

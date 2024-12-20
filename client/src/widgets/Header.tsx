@@ -12,7 +12,7 @@ function Header() {
 
   return (
     <header className="header">
-      <div className="container">
+      <div className="container header__container">
         <Link to="/" className="header__link">
           <Logo />
         </Link>

@@ -10,9 +10,10 @@ import Footer from "../widgets/Footer";
 import Router from "./routes/Router";
 import Loader from "../shared/ui/Loader";
 import Sidebar from "../widgets/Sidebar";
+import Aside from "../shared/ui/Aside";
 
 function App() {
-  const { data, isLoading } = useVerifyQuery();
+  const { data, isLoading, isFetching } = useVerifyQuery();
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
@@ -22,17 +23,18 @@ function App() {
     }
   }, [data, dispatch]);
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <Loader />;
   }
 
   return (
-    <>
+    <div className="page-container">
       <Header />
       <Sidebar />
       <Router isAuthenticated={!!data?.isAuth} />
+      <Aside />
       <Footer />
-    </>
+    </div>
   );
 }
 

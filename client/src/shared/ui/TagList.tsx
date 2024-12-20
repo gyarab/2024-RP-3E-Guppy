@@ -1,66 +1,66 @@
 import { useState } from "react";
 import Tag from "./Tag";
+import Button from "./Button";
 
 function TagList({ tags }: { tags: string[] }) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const handleTagClick = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
-    } else {
-      setSelectedTags([...selectedTags, tag]);
-    }
+  const toggleTagSelection = (tag: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag)
+        ? prev.filter((prevTag) => prevTag !== tag)
+        : [...prev, tag]
+    );
   };
 
-  const handleClearAll = () => {
+  const clearAllTags = () => {
     setSelectedTags([]);
   };
 
+  const selectAllTags = () => {
+    setSelectedTags(tags);
+  };
+
   return (
-    <div className="tag-list">
-      <section className="tag-list__selected">
-        <h4 className="tag-list__title">Selected Tags:</h4>
-
-        <div className="tag-list__content tag-list__content--selected">
-          {selectedTags.length ? (
-            <>
-              <div className="tag-list__tags tag-list__tags--selected">
-                {selectedTags.map((tag, index) => (
-                  <Tag
-                    key={index}
-                    value={tag}
-                    onClick={() => handleTagClick(tag)}
-                    isSelected
-                    showRemoveIcon
-                  />
-                ))}
-                <button className="btn tag-list__btn" onClick={handleClearAll}>
-                  Clear all
-                </button>
-              </div>
-            </>
-          ) : (
-            <p className="tag-list__placeholder">No tags selected</p>
-          )}
-        </div>
-      </section>
-
-      <section className="tag-list__available">
-        <h4 className="tag-list__title">Available Tags:</h4>
-        <div className="tag-list__content tag-list__content--available">
-          <div className="tag-list__tags">
+    <div className="tags">
+      <section className="tags__available">
+        <h4 className="tags__title">Available Tags:</h4>
+        <div className="tags__content">
+          <div className="tags__list">
             {tags.map((tag, index) => (
               <Tag
                 key={index}
                 value={tag}
-                onClick={() => {
-                  if (!selectedTags.includes(tag)) {
-                    setSelectedTags([...selectedTags, tag]);
-                  }
-                }}
+                onClick={() => toggleTagSelection(tag)}
                 isSelected={selectedTags.includes(tag)}
+                tooltip={
+                  selectedTags.includes(tag)
+                    ? "Click to deselect"
+                    : "Click to select"
+                }
               />
             ))}
+          </div>
+          <div className="tags__controls">
+            <Button
+              onClick={selectAllTags}
+              size="small"
+              disabled={selectedTags.length === tags.length}
+              variant="primary"
+              noArrow
+            >
+              Select All
+            </Button>
+            {selectedTags.length > 0 && (
+              <Button
+                onClick={clearAllTags}
+                size="small"
+                variant="primary"
+                noArrow
+              >
+                Clear All
+              </Button>
+            )}
           </div>
         </div>
       </section>
