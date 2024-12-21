@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useNavigateWithParams } from "../shared/hooks/useNavigateParams";
 import Avatar from "../shared/ui/Avatar";
+import Post from "../shared/ui/Post";
 
 // Mock Data
 const organizations = [
@@ -40,22 +41,21 @@ const organizations = [
     name: "Org 7",
     description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
   },
-  {
-    id: 8,
-    name: "Org 8",
-    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
-  },
-  {
-    id: 9,
-    name: "Org 9",
-    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
-  },
-  {
-    id: 10,
-    name: "Org 10",
-    description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
-  },
 ];
+
+const postData = {
+  id: 1,
+  title: "Post Title",
+  content:
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+  author: {
+    name: "Author Name",
+    avatar: "https://placehold.co/50",
+  },
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  topComment: "Top Comment",
+};
 
 const HomePage = () => {
   const navigateWithParams = useNavigateWithParams();
@@ -87,11 +87,7 @@ const HomePage = () => {
           </li>
         </ul>
 
-        <Avatar
-          src="https://placehold.co/50"
-          text="Ilja Novak"
-          secondaryText="UI & UX Developer"
-        />
+        <Post data={postData} />
       </main>
     </div>
   );

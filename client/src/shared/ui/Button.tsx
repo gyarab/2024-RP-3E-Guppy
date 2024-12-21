@@ -1,6 +1,6 @@
 import React from "react";
 
-type ButtonVariant = "primary" | "secondary" | "accent";
+type ButtonVariant = "primary" | "secondary" | "accent" | "basic";
 type ButtonSize = "small" | "medium" | "large";
 type ButtonType = "submit" | "button" | "reset";
 type ButtonOnClick = (() => void) | ((e: React.MouseEvent) => void);
@@ -18,18 +18,7 @@ interface ButtonProps {
 }
 
 /**
- * Vykreslí jednoduché tlačítko nebo odkaz na základě zadaných vlastností
- * @param variant - barva tlačítka
- * @param type - typ tlačítka
- * @param additionalClasses - další CSS třídy
- * @param disabled - zakáže tlačítko
- * @param href - odkaz
- * @param onClick - událost kliknutí
- * @param children - obsah tlačítka
- * @example
- * <Button type="submit" additionalClasses="btn--large" disabled={false} href="/home">Click me</Button>
- * @example
- * <Button variant="secondary" additionalClasses="btn--small" disabled={true}>Click me</Button>
+ * Renders a button or a link based on provided props.
  */
 function Button({
   variant = "secondary",
@@ -42,13 +31,11 @@ function Button({
   onClick,
   children,
 }: ButtonProps) {
-  let className = `btn btn--${variant}`;
-  if (additionalClasses) {
-    className += ` ${additionalClasses}`;
-  }
-  if (size) {
-    className += ` btn--${size}`;
-  }
+  let className = "btn";
+  className += ` btn--${variant}`;
+  className += ` btn--${size}`;
+  if (additionalClasses) className += ` ${additionalClasses}`;
+  if (disabled) className += " btn--disabled";
 
   if (href) {
     return (
@@ -66,7 +53,7 @@ function Button({
       disabled={disabled}
     >
       {children}
-      {!noArrow && (
+      {variant !== "basic" && !noArrow && (
         <div className="arrow-wrapper">
           <div className="arrow"></div>
         </div>

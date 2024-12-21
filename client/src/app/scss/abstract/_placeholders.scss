@@ -1,6 +1,14 @@
 %btn-reset {
-  cursor: pointer;
+  padding: 0;
   border: none;
   outline: none;
-  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  // gap: 0.5em;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s background-color;
 }

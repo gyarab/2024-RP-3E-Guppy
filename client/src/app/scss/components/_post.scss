@@ -1,0 +1,138 @@
+.post {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 600px;
+  overflow: hidden;
+  // font-family: Arial, sans-serif;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #f9f9f9;
+    border-bottom: 1px solid #eee;
+  }
+
+  &__main {
+    padding: 1rem;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+  }
+
+  &__footer {
+    padding: 0.75rem 1rem;
+    background: #f9f9f9;
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    margin: 0 0 0.75rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  &__content {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0 0 0.75rem;
+    color: #555;
+  }
+
+  &__read-more {
+    text-align: right;
+    font-weight: bold;
+    color: var(--primary-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.3s;
+
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
+
+  &__action {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+
+    .post__button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+    }
+  }
+
+  &__date {
+    font-size: 0.875rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+  }
+
+  &__comment {
+    font-size: 0.9rem;
+    color: #555;
+  }
+}
+
+.comment {
+  display: flex;
+  gap: 0.5rem;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &__body {
+    width: 100%;
+  }
+
+  &__author {
+    margin-right: 0.5rem;
+    font-weight: bold;
+  }
+
+  &__date {
+    font-size: 0.875rem;
+    color: #777;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+// .like-button {
+//   cursor: pointer;
+//   display: flex;
+//   align-items: center;
+//   gap: 0.25rem;
+// }
+
+.like {
+  display: flex;
+  align-items: center;
+}
+
+.like-icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  transition: fill 0.2s ease;
+}
+
+.like-count {
+  user-select: none;
+}

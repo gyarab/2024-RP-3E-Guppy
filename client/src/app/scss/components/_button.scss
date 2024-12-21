@@ -2,13 +2,8 @@
 
 .btn {
   @extend %btn-reset;
-  border-radius: 20px;
-  display: flex;
-  transition: 0.2s background-color;
-  align-items: center;
+  border-radius: $border-radius;
   gap: 0.5em;
-  font-weight: bold;
-  cursor: pointer;
 
   .arrow-wrapper {
     display: flex;
@@ -17,11 +12,10 @@
   }
 
   .arrow {
-    margin-top: 1px;
     width: 0.875rem;
     height: 2px;
     position: relative;
-    transition: 0.2s;
+    transition: $transition-duration;
   }
 
   .arrow::before {
@@ -33,13 +27,9 @@
     display: inline-block;
     top: -3px;
     right: 3px;
-    transition: 0.2s;
+    transition: $transition-duration;
     padding: 3px;
     transform: rotate(-45deg);
-  }
-
-  &:hover {
-    background-color: var(--secondary-color);
   }
 
   &:hover .arrow {
@@ -55,6 +45,7 @@
     cursor: not-allowed;
   }
 
+  // Button Sizes
   &--small {
     font-size: 0.875em;
     padding: 0.5em 0.75em;
@@ -70,6 +61,7 @@
     padding: 0.875em 1.25em;
   }
 
+  // Variants
   &--primary {
     color: var(--background-color);
     background-color: var(--primary-color);
@@ -107,5 +99,15 @@
     .arrow {
       background-color: var(--accent-color);
     }
+  }
+
+  // Basic Button (No background)
+  &--basic {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-weight: normal;
+    border: none;
+    gap: 0.2em;
   }
 }
