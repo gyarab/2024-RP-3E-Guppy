@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -58,5 +59,14 @@ export class CommentController {
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number): Promise<Comment> {
     return this.commentService.delete({ id });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post(':id/like')
+  async like(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    const user = req.user as UserWithoutPassword;
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.commentService.likeComment(id, user.id);
   }
 }

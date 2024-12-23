@@ -14,8 +14,9 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { PostService } from './post.service';
 import { Prisma } from '@prisma/client';
+
+import { PostService } from './post.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserWithoutPassword } from 'src/auth/types/auth.types';
 
@@ -71,5 +72,14 @@ export class PostController {
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return this.postService.delete({ id });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post(':id/like')
+  async like(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    const user = req.user as UserWithoutPassword;
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.postService.likePost(id, user.id);
   }
 }
