@@ -22,11 +22,10 @@ export class PostService {
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
     orderBy?: Prisma.PostOrderByWithRelationInput;
-    userId: number;
   }): Promise<any> {
-    const { skip, take, cursor, where, orderBy, userId } = params;
+    const { skip, take, cursor, where, orderBy } = params;
 
-    const posts = await this.prisma.post.findMany({
+    return this.prisma.post.findMany({
       skip,
       take,
       cursor,
@@ -34,19 +33,7 @@ export class PostService {
       orderBy,
       include: {
         comments: true,
-        likes: true,
       },
-    });
-
-    return posts.map((post) => {
-      const likeCount = post.likes.length;
-      const userLiked = post.likes.some((like) => like.userId == userId);
-
-      return {
-        ...post,
-        likeCount,
-        userLiked,
-      };
     });
   }
 
