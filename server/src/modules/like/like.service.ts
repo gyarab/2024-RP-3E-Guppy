@@ -12,19 +12,33 @@ export class LikeService {
     private commentService: CommentService,
   ) {}
 
-  async likePost(userId: number, postId: number): Promise<Like> {
+  async likePost(userId: number, postId: number): Promise<Like | null> {
     const post = await this.postService.post({ id: postId });
     if (!post) throw new NotFoundException('Post not found');
 
-    return this.prisma.like.upsert({
+    const existingLike = await this.prisma.like.findUnique({
       where: {
         userId_postId: {
           userId,
           postId,
         },
       },
-      create: { userId, postId },
-      update: {},
+    });
+
+    if (existingLike) {
+      await this.prisma.like.delete({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+      });
+      return null;
+    }
+
+    return this.prisma.like.create({
+      data: { userId, postId },
     });
   }
 

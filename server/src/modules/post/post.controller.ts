@@ -13,6 +13,7 @@ import {
   ParseIntPipe,
   NotFoundException,
   BadRequestException,
+  Req,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Prisma } from '@prisma/client';
@@ -48,8 +49,9 @@ export class PostController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getAll() {
-    return this.postService.posts({});
+  async getAll(@Request() req) {
+    const userId = (req.user as UserWithoutPassword).id;
+    return this.postService.posts({ userId });
   }
 
   @HttpCode(HttpStatus.OK)

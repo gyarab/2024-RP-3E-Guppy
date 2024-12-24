@@ -38,9 +38,11 @@ export class LikeController {
   @Delete('post/:postId')
   async unlikePost(
     @Param('postId', ParseIntPipe) postId: number,
-    @Param('userId', ParseIntPipe) userId: number,
+    @Request() req,
   ) {
-    return this.likeService.unlikePost(userId, postId);
+    const user = req.user as UserWithoutPassword;
+
+    return this.likeService.unlikePost(user.id, postId);
   }
 
   @Delete('comment/:commentId')

@@ -2,8 +2,6 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   max-width: 600px;
-  overflow: hidden;
-  // font-family: Arial, sans-serif;
 
   &__header {
     display: flex;
@@ -12,6 +10,8 @@
     padding: 0.75rem 1rem;
     background: #f9f9f9;
     border-bottom: 1px solid #eee;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
   }
 
   &__main {
@@ -23,6 +23,8 @@
   &__footer {
     padding: 0.75rem 1rem;
     background: #f9f9f9;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
   }
 
   &__title {
@@ -135,4 +137,10 @@
 
 .like-count {
   user-select: none;
+}
+
+.feed {
+  display: grid;
+  place-items: center;
+  gap: 1.5rem;
 }

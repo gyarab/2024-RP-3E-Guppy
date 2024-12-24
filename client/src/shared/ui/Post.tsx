@@ -1,33 +1,13 @@
 import { useState } from "react";
-import { Post as IPost } from "../interfaces/Post";
-import Avatar from "./Avatar";
-import { truncate } from "../utils/truncate";
-import { MAX_POST_LENGTH } from "../constants/post";
-import CommentSection from "./CommentSection";
-import Button from "./Button";
 
-const comments = [
-  {
-    id: 1,
-    author: {
-      name: "Jane Smith",
-      avatar: "https://placehold.co/40",
-    },
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    content:
-      "Another comment here. Some dummy text in order to fill the space.",
-  },
-  {
-    id: 2,
-    author: {
-      name: "John Doe",
-      avatar: "https://placehold.co/40",
-    },
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 6),
-    content:
-      "Some dummy text in order to fill the space. Another comment here.",
-  },
-];
+import Avatar from "./Avatar";
+import Button from "./Button";
+import CommentSection from "./CommentSection";
+
+import { truncate } from "../utils/truncate";
+import { Post as IPost } from "../interfaces/Post";
+import { MAX_POST_LENGTH } from "../constants/post";
+import { useLikePostMutation } from "../../features/post/postApi";
 
 interface PostProps {
   data: IPost;
@@ -35,12 +15,17 @@ interface PostProps {
 
 function Post({ data }: PostProps) {
   const [isReadMore, setIsReadMore] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(68);
+  const [isLiked, setIsLiked] = useState(data.userLiked);
+  const [likeCount, setLikeCount] = useState(data.likeCount);
+
+  const [likePost] = useLikePostMutation();
 
   const handleLikeClick = () => {
     setIsLiked((prevLiked) => !prevLiked);
     setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+
+    // TODO: send a request to the server
+    likePost(data.id);
   };
 
   const handleReadMoreToggle = () => {
@@ -74,17 +59,6 @@ function Post({ data }: PostProps) {
 
       <footer className="post__footer">
         <div className="post__action">
-          {/* <button
-            className={`post__button ${isLiked ? "post__button--active" : ""}`}
-            onClick={handleLikeToggle}
-            aria-label="Toggle like"
-          >
-            {isLiked ? (
-              <img src="/icons/like-filled.svg" alt="Liked" />
-            ) : (
-              <img src="/icons/like.svg" alt="Like" />
-            )}
-          </button> */}
           <Button variant="basic" size="small" onClick={handleLikeClick}>
             <div className="like">
               <svg
@@ -105,11 +79,7 @@ function Post({ data }: PostProps) {
             <img src="/icons/share.svg" alt="Share" />
           </button>
         </div>
-        {/* <p>Comments</p> */}
-        {/* <time className="post__date">
-          {data.createdAt.toLocaleDateString()}
-        </time> */}
-        <CommentSection comments={comments} onLoadMore={() => {}} />
+        <CommentSection comments={data.comments} onLoadMore={() => {}} />
       </footer>
     </article>
   );

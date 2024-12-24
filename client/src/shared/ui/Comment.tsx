@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import Avatar from "./Avatar";
 import Button from "./Button";
+
 import { formatRelativeDate } from "../utils/formatRelativeDate";
 import { Comment as IComment } from "../interfaces/Comment";
 
@@ -15,6 +17,8 @@ function Comment({ data }: CommentProps) {
   const handleLikeClick = () => {
     setIsLiked((prev) => !prev);
     setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+
+    // TODO: send request to the server
   };
 
   return (

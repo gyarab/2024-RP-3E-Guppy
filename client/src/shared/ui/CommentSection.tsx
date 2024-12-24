@@ -1,6 +1,7 @@
-import { Comment as IComment } from "../interfaces/Comment";
 import Button from "./Button";
 import Comment from "./Comment";
+
+import { Comment as IComment } from "../interfaces/Comment";
 
 interface CommentSectionProps {
   comments: IComment[];
