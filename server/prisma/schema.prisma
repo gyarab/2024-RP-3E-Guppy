@@ -24,11 +24,12 @@ model User {
   name                 String?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
-  posts                Post[]
-  comments             Comment[]
-  likes                Like[]
+  posts                Post[]             @relation(name: "PostAuthor")
+  comments             Comment[]          @relation(name: "CommentAuthor")
   organizations        UserOrganization[]
   createdOrganizations Organization[]
+  likedPosts           Post[]             @relation(name: "PostLikedBy")
+  likedComments        Comment[]          @relation(name: "CommentLikedBy")
   tokenVersion         Int                @default(0)
 }
 
@@ -38,11 +39,6 @@ model Role {
   userOrganizations UserOrganization[]
 }
 
-// Tahle tabluka slouzi jako junction table, ktera umoznuje vytvorit  
-// many-to-many relaci mezi tabulkami User a Organization.
-// Krome propojeni uzivatele s organizaci tato tabulka 
-// umoznuje pridat dalsi informace, coz v nasem pripade 
-// je role usera v dane organizaci.
 model UserOrganization {
   id             Int          @id @default(autoincrement())
   user           User         @relation(fields: [userId], references: [id])
@@ -52,17 +48,18 @@ model UserOrganization {
   role           Role         @relation(fields: [roleId], references: [id])
   roleId         Int
 
-  @@unique([userId, organizationId]) // Zajistuje, ze uzivatel nemuze byt ve stejne organizaci vicekrat
+  @@unique([userId, organizationId])
 }
 
 model Post {
   id             Int          @id @default(autoincrement())
   title          String
   content        String
-  author         User         @relation(fields: [authorId], references: [id])
+  author         User         @relation(name: "PostAuthor", fields: [authorId], references: [id])
   authorId       Int
   comments       Comment[]
-  likes          Like[]
+  likes          Int          @default(0)
+  likedBy        User[]       @relation(name: "PostLikedBy")
   tags           Tag[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -75,24 +72,11 @@ model Comment {
   content   String
   post      Post     @relation(fields: [postId], references: [id])
   postId    Int
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(name: "CommentAuthor", fields: [authorId], references: [id])
   authorId  Int
-  likes     Like[]
+  likes     Int      @default(0)
+  likedBy   User[]   @relation(name: "CommentLikedBy")
   createdAt DateTime @default(now())
-}
-
-model Like {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  post      Post?    @relation(fields: [postId], references: [id])
-  postId    Int? // Optional: Umoznuje tomuto likeu patrit k postu nebo ne
-  comment   Comment? @relation(fields: [commentId], references: [id])
-  commentId Int? // Optional: Umoznuje tomuto likeu patrit k komentari nebo ne
-  createdAt DateTime @default(now())
-
-  @@unique([userId, postId]) // Zajistuje, ze uzivatel muze likeovat post jen jednou
-  @@unique([userId, commentId]) // Zajistuje, ze uzivatel muze likeovat komentar jen jednou
 }
 
 model Tag {

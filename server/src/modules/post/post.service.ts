@@ -97,4 +97,33 @@ export class PostService {
     });
     return !!membership;
   }
+
+  async likePost(postId: number, userId: number): Promise<Post> {
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+      include: { likedBy: true },
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    if (post.likedBy.some((user) => user.id === userId)) {
+      return this.prisma.post.update({
+        where: { id: postId },
+        data: {
+          likes: { decrement: 1 },
+          likedBy: { disconnect: { id: userId } },
+        },
+      });
+    }
+
+    return this.prisma.post.update({
+      where: { id: postId },
+      data: {
+        likes: { increment: 1 },
+        likedBy: { connect: { id: userId } },
+      },
+    });
+  }
 }
