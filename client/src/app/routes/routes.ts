@@ -1,4 +1,5 @@
 import Dashboard from "../../pages/Dashboard";
+import FeedPage from "../../pages/FeedPage";
 import HomePage from "../../pages/HomePage";
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
@@ -12,6 +13,7 @@ export const publicRoutes: Route[] = [
   { path: "/", component: HomePage },
   { path: "/login", component: LoginPage },
   { path: "/signup", component: SignupPage },
+  { path: "/feed", component: FeedPage },
 ];
 
 export const privateRoutes: Route[] = [

@@ -1,6 +1,7 @@
-import { LoginCredentials } from "../../shared/interfaces/LoginCredentials";
 import { apiSlice } from "../../shared/api/apiSlice";
+
 import { User } from "../../shared/interfaces/User";
+import { LoginCredentials } from "../../shared/interfaces/LoginCredentials";
 import { SignupCredentials } from "../../shared/interfaces/SignupCredentials";
 
 export const authApi = apiSlice.injectEndpoints({
