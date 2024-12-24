@@ -54,7 +54,7 @@ model UserOrganization {
 model Post {
   id             Int          @id @default(autoincrement())
   title          String
-  content        String
+  content        String       @db.Text
   author         User         @relation(name: "PostAuthor", fields: [authorId], references: [id])
   authorId       Int
   comments       Comment[]
@@ -69,7 +69,7 @@ model Post {
 
 model Comment {
   id        Int      @id @default(autoincrement())
-  content   String
+  content   String   @db.VarChar(255)
   post      Post     @relation(fields: [postId], references: [id])
   postId    Int
   author    User     @relation(name: "CommentAuthor", fields: [authorId], references: [id])
