@@ -55,8 +55,13 @@ export class AuthController {
     @Body() signupDto: SignupUserDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<SignUpResponse> {
-    const { refreshToken, ...payload } =
+    const { accessToken, refreshToken, ...payload } =
       await this.authService.signup(signupDto);
+
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
 
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
