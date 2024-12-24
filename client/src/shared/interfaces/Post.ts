@@ -5,16 +5,11 @@ export interface Post {
   id: number;
   title: string;
   content: string;
-  // author: {
-  //   name: string;
-  //   avatar: string;
-  // };
   authorId: number;
-  published: boolean;
   organizationId: number;
   comments: Comment[];
-  likeCount: number;
-  userLiked: boolean;
+  likes: number;
+  hasLiked: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -31,7 +31,7 @@ export const postApi = apiSlice.injectEndpoints({
     }),
     likePost: build.mutation<Post, number>({
       query: (id) => ({
-        url: `/likes/post/${id}`,
+        url: `/posts/${id}/like`,
         method: "POST",
       }),
       invalidatesTags: (_, __, id) => [{ type: "Post", id }],

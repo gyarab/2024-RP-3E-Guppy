@@ -15,8 +15,8 @@ interface PostProps {
 
 function Post({ data }: PostProps) {
   const [isReadMore, setIsReadMore] = useState(false);
-  const [isLiked, setIsLiked] = useState(data.userLiked);
-  const [likeCount, setLikeCount] = useState(data.likeCount);
+  const [isLiked, setIsLiked] = useState(data.hasLiked);
+  const [likeCount, setLikeCount] = useState(data.likes);
 
   const [likePost] = useLikePostMutation();
 

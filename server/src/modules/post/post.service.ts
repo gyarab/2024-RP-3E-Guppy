@@ -22,10 +22,11 @@ export class PostService {
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
     orderBy?: Prisma.PostOrderByWithRelationInput;
+    userId: number;
   }): Promise<any> {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { skip, take, cursor, where, orderBy, userId } = params;
 
-    return this.prisma.post.findMany({
+    const posts = await this.prisma.post.findMany({
       skip,
       take,
       cursor,
@@ -33,8 +34,20 @@ export class PostService {
       orderBy,
       include: {
         comments: true,
+        likedBy: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
+
+    const postsWithHasLiked = posts.map((post) => ({
+      ...post,
+      hasLiked: post.likedBy.some((user) => user.id === userId),
+    }));
+
+    return postsWithHasLiked;
   }
 
   async create(

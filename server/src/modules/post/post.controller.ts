@@ -49,8 +49,11 @@ export class PostController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getAll() {
-    return this.postService.posts({});
+  async getAll(@Request() req) {
+    const user = req.user as UserWithoutPassword;
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.postService.posts({ userId: user.id });
   }
 
   @HttpCode(HttpStatus.OK)
