@@ -21,7 +21,7 @@ function FeedPage() {
   useEffect(() => {
     if (data && data.length > 0) {
       setPosts((prevPosts) => [...prevPosts, ...data]);
-      if (data.length < FETCH_POSTS_LIMIT) {
+      if (data.length <= FETCH_POSTS_LIMIT) {
         setHasMore(false);
       }
     }

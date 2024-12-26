@@ -1,6 +1,5 @@
 import { Comment } from "./Comment";
 
-// FIXME: change Post field according to the server
 export interface Post {
   id: number;
   title: string;

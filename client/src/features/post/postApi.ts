@@ -34,7 +34,8 @@ export const postApi = apiSlice.injectEndpoints({
         url: `/posts/${id}/like`,
         method: "POST",
       }),
-      invalidatesTags: (_, __, id) => [{ type: "Post", id }],
+      // invalidatesTags: (_, __, id) => [{ type: "Post", id }],
+      // jsou kvuli tomu bugy, seru na to
     }),
   }),
 });

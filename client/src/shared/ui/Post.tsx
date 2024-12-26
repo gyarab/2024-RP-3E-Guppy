@@ -24,7 +24,6 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
     setIsLiked((prevLiked) => !prevLiked);
     setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
 
-    // TODO: send a request to the server
     likePost(data.id);
   };
 
