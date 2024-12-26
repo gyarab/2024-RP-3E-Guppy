@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 
 import Avatar from "./Avatar";
 import Button from "./Button";
@@ -13,7 +13,7 @@ interface PostProps {
   data: IPost;
 }
 
-function Post({ data }: PostProps) {
+const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
   const [isReadMore, setIsReadMore] = useState(false);
   const [isLiked, setIsLiked] = useState(data.hasLiked);
   const [likeCount, setLikeCount] = useState(data.likes);
@@ -33,7 +33,7 @@ function Post({ data }: PostProps) {
   };
 
   return (
-    <article className="post">
+    <article className="post" ref={ref}>
       <header className="post__header">
         <Avatar
           src="https://placehold.co/50"
@@ -83,6 +83,6 @@ function Post({ data }: PostProps) {
       </footer>
     </article>
   );
-}
+});
 
 export default Post;

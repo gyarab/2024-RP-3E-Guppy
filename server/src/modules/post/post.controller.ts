@@ -13,6 +13,7 @@ import {
   ParseIntPipe,
   NotFoundException,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
@@ -49,11 +50,19 @@ export class PostController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getAll(@Request() req) {
+  async getAll(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
+    @Request() req,
+  ) {
     const user = req.user as UserWithoutPassword;
     if (!user) throw new NotFoundException('User not found');
 
-    return this.postService.posts({ userId: user.id });
+    return this.postService.posts({
+      skip: (page - 1) * limit,
+      take: limit,
+      userId: user.id,
+    });
   }
 
   @HttpCode(HttpStatus.OK)

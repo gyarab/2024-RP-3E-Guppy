@@ -1,58 +1,55 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import { useGetPostsQuery } from "../features/post/postApi";
+
 import Post from "../shared/ui/Post";
 import Loader from "../shared/ui/Loader";
-
-const posts = [
-  {
-    id: 1,
-    title: "Hello, world!",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    authorId: 1,
-    comments: [
-      {
-        id: 1,
-        content:
-          "Another comment here. Some dummy text in order to fill the space.",
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-        author: {
-          name: "Jane Smith",
-          avatar: "https://placehold.co/40",
-        },
-      },
-    ],
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 12), // 12 hours ago
-    organizationId: 1,
-    published: true,
-  },
-  {
-    id: 2,
-    title: "Hello, world!",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    authorId: 1,
-    comments: [
-      {
-        id: 3,
-        content:
-          "Another comment here. Some dummy text in order to fill the space.",
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-        author: {
-          name: "Jane Smith",
-          avatar: "https://placehold.co/40",
-        },
-      },
-    ],
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 12), // 12 hours ago
-    organizationId: 1,
-    published: true,
-  },
-];
+import { Post as IPost } from "../shared/interfaces/Post";
+import { FETCH_POSTS_LIMIT } from "../shared/constants/post";
 
 function FeedPage() {
-  const { data: posts, isLoading } = useGetPostsQuery();
+  const [page, setPage] = useState(1);
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const { data, isLoading } = useGetPostsQuery({
+    page,
+    limit: FETCH_POSTS_LIMIT,
+  });
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setPosts((prevPosts) => [...prevPosts, ...data]);
+      if (data.length < FETCH_POSTS_LIMIT) {
+        setHasMore(false);
+      }
+    }
+  }, [data]);
+
+  const observeLastPost = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isLoading || !hasMore) return;
+
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+          }
+        },
+        { threshold: 1.0 }
+      );
+
+      if (node) {
+        observer.current.observe(node);
+      }
+    },
+    [isLoading, hasMore]
+  );
 
   return (
     <div className="container">
@@ -62,8 +59,12 @@ function FeedPage() {
         Here you can see posts from people you follow.
       </p>
       <div className="feed">
-        {posts?.map((post) => (
-          <Post key={post.id} data={post} />
+        {posts?.map((post, index) => (
+          <Post
+            key={post.id}
+            data={post}
+            ref={index === posts.length - 1 ? observeLastPost : null} // sledovani posledniho postu
+          />
         ))}
       </div>
     </div>

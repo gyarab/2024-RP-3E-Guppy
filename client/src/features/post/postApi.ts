@@ -6,8 +6,8 @@ import { providesList } from "../../shared/utils/helpers";
 
 export const postApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getPosts: build.query<Post[], void>({
-      query: () => "/posts",
+    getPosts: build.query<Post[], { page: number; limit: number }>({
+      query: ({ page, limit }) => `/posts?page=${page}&limit=${limit}`,
       providesTags: (result) => providesList(result, "Post"),
     }),
     getPost: build.query<Post, number>({
