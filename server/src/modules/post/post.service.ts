@@ -26,28 +26,33 @@ export class PostService {
   }): Promise<any> {
     const { skip, take, cursor, where, orderBy, userId } = params;
 
-    const posts = await this.prisma.post.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-      include: {
-        comments: true,
-        likedBy: {
-          select: {
-            id: true,
+    // da se to rozepsat jako dva prisma prikazy
+    // ale z duvodu optimizace je to sjednoceny do jedne transakce
+    const [posts, totalCount] = await this.prisma.$transaction([
+      this.prisma.post.findMany({
+        skip,
+        take,
+        cursor,
+        where,
+        orderBy,
+        include: {
+          comments: true,
+          likedBy: {
+            select: {
+              id: true,
+            },
           },
         },
-      },
-    });
+      }),
+      this.prisma.post.count({ where }),
+    ]);
 
     const postsWithHasLiked = posts.map((post) => ({
       ...post,
       hasLiked: post.likedBy.some((user) => user.id === userId),
     }));
 
-    return postsWithHasLiked;
+    return { posts: postsWithHasLiked, count: totalCount };
   }
 
   async create(

@@ -19,9 +19,11 @@ function FeedPage() {
   });
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setPosts((prevPosts) => [...prevPosts, ...data]);
-      if (data.length <= FETCH_POSTS_LIMIT) {
+    if (data && data.posts.length > 0) {
+      setPosts((prevPosts) => [...prevPosts, ...data.posts]);
+      console.log(data);
+
+      if (posts.length + data.posts.length >= data.count) {
         setHasMore(false);
       }
     }
@@ -41,7 +43,7 @@ function FeedPage() {
             setPage((prevPage) => prevPage + 1);
           }
         },
-        { threshold: 1.0 }
+        { threshold: 1.0 } // FIXME: zmenit dle potreby
       );
 
       if (node) {

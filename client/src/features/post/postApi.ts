@@ -6,9 +6,15 @@ import { providesList } from "../../shared/utils/helpers";
 
 export const postApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getPosts: build.query<Post[], { page: number; limit: number }>({
-      query: ({ page, limit }) => `/posts?page=${page}&limit=${limit}`,
-      providesTags: (result) => providesList(result, "Post"),
+    getPosts: build.query<
+      { posts: Post[]; count: number },
+      { page: number; limit: number }
+    >({
+      query: ({ page, limit }) => ({
+        url: "/posts",
+        params: { page, limit },
+      }),
+      providesTags: (result) => providesList(result?.posts, "Post"),
     }),
     getPost: build.query<Post, number>({
       query: (id) => `/posts/${id}`,
@@ -34,8 +40,8 @@ export const postApi = apiSlice.injectEndpoints({
         url: `/posts/${id}/like`,
         method: "POST",
       }),
+      // DO NOT UNCOMMENT - jsou kvuli tomu bugy
       // invalidatesTags: (_, __, id) => [{ type: "Post", id }],
-      // jsou kvuli tomu bugy, seru na to
     }),
   }),
 });
