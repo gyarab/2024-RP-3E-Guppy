@@ -1,20 +1,28 @@
 import { forwardRef, useState } from "react";
+import DOMPurify from "dompurify";
 
 import Avatar from "./Avatar";
 import Button from "./Button";
 import CommentSection from "./CommentSection";
 
-import { truncate } from "../utils/truncate";
 import { Post as IPost } from "../interfaces/Post";
-import { MAX_POST_LENGTH } from "../constants/post";
+// import { MAX_POST_LENGTH } from "../constants/post";
 import { useLikePostMutation } from "../../features/post/postApi";
 
 interface PostProps {
   data: IPost;
 }
 
+const createMarkup = (dirty: string) => {
+  const sanitized = DOMPurify.sanitize(dirty);
+
+  return {
+    __html: sanitized,
+  };
+};
+
 const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
-  const [isReadMore, setIsReadMore] = useState(false);
+  // const [isReadMore, setIsReadMore] = useState(false);
   const [isLiked, setIsLiked] = useState(data.hasLiked);
   const [likeCount, setLikeCount] = useState(data.likes);
 
@@ -27,9 +35,9 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
     likePost(data.id);
   };
 
-  const handleReadMoreToggle = () => {
-    setIsReadMore((prev) => !prev);
-  };
+  // const handleReadMoreToggle = () => {
+  //   setIsReadMore((prev) => !prev);
+  // };
 
   return (
     <article className="post" ref={ref}>
@@ -43,17 +51,19 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
 
       <main className="post__main">
         <h3 className="post__title">{data.title}</h3>
-        <p className="post__content">
-          {isReadMore ? data.content : truncate(data.content, MAX_POST_LENGTH)}
-        </p>
-        {data.content.length > MAX_POST_LENGTH && (
+        <p
+          className="post__content"
+          dangerouslySetInnerHTML={createMarkup(data.content)}
+        />
+        {/* {data.content} */}
+        {/* {data.content.length > MAX_POST_LENGTH && (
           <button
             onClick={handleReadMoreToggle}
             className="post__button post__read-more"
           >
             {isReadMore ? "Read Less" : "Read More"}
           </button>
-        )}
+        )} */}
       </main>
 
       <footer className="post__footer">

@@ -22,7 +22,7 @@ export const postApi = apiSlice.injectEndpoints({
     }),
     createPost: build.mutation<Post, CreatePostDto>({
       query: (data) => ({
-        url: "/posts",
+        url: "/posts/organization/1",
         method: "POST",
         body: data,
       }),

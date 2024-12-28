@@ -1,0 +1,17 @@
+.file-uploader {
+  &__input {
+    display: none;
+  }
+
+  &__error {
+    color: #f00;
+  }
+
+  &__button {
+    height: 100%;
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

@@ -1,13 +1,16 @@
+@use "../abstract" as *;
+
 .post {
   border: 1px solid #ccc;
   border-radius: 8px;
+  width: 100%;
   max-width: 600px;
 
   &__header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1rem;
+    padding: 0.675rem 0.875rem;
     background: #f9f9f9;
     border-bottom: 1px solid #eee;
     border-top-right-radius: 8px;
@@ -15,13 +18,13 @@
   }
 
   &__main {
-    padding: 1rem;
+    padding: 0.675rem 0.875rem;
     background: #fff;
     border-bottom: 1px solid #eee;
   }
 
   &__footer {
-    padding: 0.75rem 1rem;
+    padding: 0.675rem 0.875rem;
     background: #f9f9f9;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
@@ -37,8 +40,14 @@
   &__content {
     font-size: 1rem;
     line-height: 1.5;
-    margin: 0 0 0.75rem;
     color: #555;
+
+    img {
+      max-height: 250px;
+      border-radius: 8px;
+      margin: 0.5rem;
+      margin-left: 0;
+    }
   }
 
   &__read-more {
@@ -59,7 +68,6 @@
   &__action {
     display: flex;
     gap: 1rem;
-    margin-bottom: 0.5rem;
 
     .post__button {
       border: none;
@@ -117,13 +125,6 @@
   }
 }
 
-// .like-button {
-//   cursor: pointer;
-//   display: flex;
-//   align-items: center;
-//   gap: 0.25rem;
-// }
-
 .like {
   display: flex;
   align-items: center;
@@ -143,4 +144,45 @@
   display: grid;
   place-items: center;
   gap: 1.5rem;
+}
+
+.post-form {
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 0.75rem 1.5rem;
+  max-width: 600px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .edit-icon {
+      cursor: pointer;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+  }
 }
