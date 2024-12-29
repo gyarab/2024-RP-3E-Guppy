@@ -238,6 +238,25 @@ export class OrganizationService {
     userId: number,
   ): Promise<Organization> {
     const organization = await this.organization({ joinUrl: joinUrl });
-    return await this.addUserToOrganization(organization.id, userId);
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    const user = await this.userService.user({ id: userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.prisma.organization.update({
+      where: { joinUrl: organization.joinUrl },
+      data: {
+        users: {
+          create: {
+            user: { connect: { id: userId } },
+            role: { connect: { name: 'Member' } },
+          },
+        },
+      },
+    });
   }
 }

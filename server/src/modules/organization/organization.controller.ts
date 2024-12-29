@@ -49,8 +49,8 @@ export class OrganizationController {
     @Body() createOrganizationDto: CreateOrganizationDto,
     @Request() req,
   ) {
-    const creatorId = (req.user as UserWithoutPassword).id;
-    return this.organizationService.create(createOrganizationDto, creatorId);
+    const creator = req.user as UserWithoutPassword;
+    return this.organizationService.create(createOrganizationDto, creator.id);
   }
 
   @Put(':id')
