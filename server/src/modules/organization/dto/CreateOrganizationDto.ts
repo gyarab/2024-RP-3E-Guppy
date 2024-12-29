@@ -15,8 +15,4 @@ export class CreateOrganizationDto {
   @IsInt({ each: true })
   @IsOptional() // Pokud chcete, aby bylo volitelné, např. prázdné pole uživatelů.
   userIds: number[];
-
-  @IsInt()
-  @IsNotEmpty()
-  creatorId: number; // Přidání creatorId
 }

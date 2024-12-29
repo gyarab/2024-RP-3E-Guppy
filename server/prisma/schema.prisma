@@ -15,6 +15,7 @@ model Organization {
   users     UserOrganization[]
   posts     Post[]
   createdAt DateTime           @default(now())
+  joinUrl   String            @unique
 }
 
 model User {

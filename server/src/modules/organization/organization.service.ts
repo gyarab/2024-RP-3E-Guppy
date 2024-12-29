@@ -109,10 +109,13 @@ export class OrganizationService {
       });
     }
 
+    const urlLink = await this.randomString(8);
+
     return this.prisma.organization.create({
       data: {
         name,
         creatorId: userId,
+        joinUrl: urlLink,
         users: {
           create: userIds.map((uid) => ({
             user: { connect: { id: uid } },
@@ -121,6 +124,12 @@ export class OrganizationService {
         },
       },
     });
+  }
+
+  async randomString(length: number): Promise<string> {
+    return String.fromCharCode(
+      ...Array.from({ length }, () => Math.floor(Math.random() * 26) + 97),
+    );
   }
 
   async update(params: {
@@ -222,5 +231,13 @@ export class OrganizationService {
         },
       },
     });
+  }
+
+  async joinOrganization(
+    joinUrl: string,
+    userId: number,
+  ): Promise<Organization> {
+    const organization = await this.organization({ joinUrl: joinUrl });
+    return await this.addUserToOrganization(organization.id, userId);
   }
 }

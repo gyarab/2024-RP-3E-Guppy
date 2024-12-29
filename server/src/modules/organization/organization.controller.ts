@@ -9,11 +9,15 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  Request,
+  NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from './dto/CreateOrganizationDto';
-import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { UserWithoutPassword } from 'src/auth/types/auth.types';
 
 @UseGuards(AuthGuard)
 @Controller('organizations')
@@ -43,8 +47,9 @@ export class OrganizationController {
   @Post()
   async createOrganization(
     @Body() createOrganizationDto: CreateOrganizationDto,
+    @Request() req,
   ) {
-    const { creatorId } = createOrganizationDto;
+    const creatorId = (req.user as UserWithoutPassword).id;
     return this.organizationService.create(createOrganizationDto, creatorId);
   }
 
@@ -97,5 +102,12 @@ export class OrganizationController {
       userId,
       roleName,
     );
+  }
+
+  @Put('/join/:joinUrl')
+  async joinOrganization(@Param('joinUrl') joinUrl: string, @Request() req) {
+    const user = req.user as UserWithoutPassword;
+    if (!user) throw new NotFoundException('User not found');
+    return this.organizationService.joinOrganization(joinUrl, user.id);
   }
 }
