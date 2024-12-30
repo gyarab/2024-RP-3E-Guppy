@@ -13,7 +13,7 @@ import Sidebar from "../widgets/Sidebar";
 import Aside from "../shared/ui/Aside";
 
 function App() {
-  const { data, isLoading, isFetching } = useVerifyQuery();
+  const { data, isLoading } = useVerifyQuery();
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
@@ -22,15 +22,18 @@ function App() {
     }
   }, [data, dispatch]);
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return <Loader />;
   }
+
+  const isAuthenticated = data?.isAuth ?? false;
+  const isAdmin = false;
 
   return (
     <div className="page-container">
       <Header />
       <Sidebar />
-      <Router />
+      <Router isAuthenticated={isAuthenticated} isAdmin={isAdmin} />
       <Aside />
       <Footer />
     </div>

@@ -1,19 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import { publicRoutes, privateRoutes, adminRoutes } from "./routes";
-import { useSelector } from "react-redux";
-import { selectIsAuth } from "../../features/auth/authSlice";
 
-// Mock authentication and authorization functions
-const isAdmin = true; // Replace with real admin check
+interface RouterProps {
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+}
 
-// interface RouterProps {
-//   isAuthenticated: boolean;
-// }
-
-function Router() {
-  const isAuthenticated = useSelector(selectIsAuth);
-
+function Router({ isAuthenticated, isAdmin }: RouterProps) {
   return (
     <Routes>
       {/* Public routes */}
