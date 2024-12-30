@@ -18,8 +18,7 @@ function App() {
 
   useEffect(() => {
     if (data) {
-      console.log("Authenticated user:", data);
-      dispatch(setIsAuth(data.isAuth));
+      dispatch(setIsAuth(data));
     }
   }, [data, dispatch]);
 
@@ -31,7 +30,7 @@ function App() {
     <div className="page-container">
       <Header />
       <Sidebar />
-      <Router isAuthenticated={!!data?.isAuth} />
+      <Router />
       <Aside />
       <Footer />
     </div>

@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/LoginUserDto';
-import { Tokens, UserWithTokens } from './types/auth.types';
+import {
+  Tokens,
+  UserWithoutPassword,
+  UserWithTokens,
+} from './types/auth.types';
 import { TokenService } from '../modules/token/token.service';
 import { UserService } from '../modules/user/user.service';
 import { SignupUserDto } from './dto/SignupUserDto';
@@ -80,10 +84,12 @@ export class AuthService {
     });
   }
 
-  async verify(accessToken: string): Promise<boolean> {
-    if (!accessToken) return false;
+  async verify(accessToken: string): Promise<UserWithoutPassword> {
+    if (!accessToken) {
+      return null;
+    }
 
     const payload = await this.tokenService.validateAccessToken(accessToken);
-    return !!payload;
+    return payload;
   }
 }

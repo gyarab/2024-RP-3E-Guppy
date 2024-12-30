@@ -26,7 +26,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
-    verify: build.query<{ isAuth: boolean }, void>({
+    verify: build.query<{ isAuth: boolean; user: User }, void>({
       query: () => "/auth/verify",
     }),
   }),

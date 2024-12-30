@@ -104,10 +104,8 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/verify')
-  async verify(
-    @Cookies('accessToken') accessToken: string,
-  ): Promise<{ isAuth: boolean }> {
-    const isAuth = await this.authService.verify(accessToken);
-    return { isAuth };
+  async verify(@Cookies('accessToken') accessToken: string): Promise<any> {
+    const user = await this.authService.verify(accessToken);
+    return { isAuth: !!user, user };
   }
 }
