@@ -11,13 +11,15 @@ import {
   UseGuards,
   Request,
   NotFoundException,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
+import { AuthGuard } from '../../auth/guards/auth.guard';
 import { OrganizationService } from './organization.service';
+
+import { UserWithoutPassword } from '../../auth/types/auth.types';
 import { CreateOrganizationDto } from './dto/CreateOrganizationDto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { UserWithoutPassword } from 'src/auth/types/auth.types';
 
 @UseGuards(AuthGuard)
 @Controller('organizations')
@@ -25,27 +27,27 @@ export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @Get(':id')
-  async getOrganization(@Param('id', ParseIntPipe) id: number) {
+  async getOne(@Param('id', ParseIntPipe) id: number) {
     return this.organizationService.organization({ id });
   }
 
   @Get()
-  async getOrganizations(
-    @Query('skip') skip?: number,
-    @Query('take') take?: number,
+  async getAll(
+    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
+    @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
     @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
     @Query('where') where?: Prisma.OrganizationWhereInput,
   ) {
     return this.organizationService.organizations({
-      skip: skip ? Number(skip) : undefined,
-      take: take ? Number(take) : undefined,
+      skip,
+      take,
       orderBy,
       where,
     });
   }
 
   @Post()
-  async createOrganization(
+  async create(
     @Body() createOrganizationDto: CreateOrganizationDto,
     @Request() req,
   ) {
@@ -54,7 +56,7 @@ export class OrganizationController {
   }
 
   @Put(':id')
-  async updateOrganization(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: Prisma.OrganizationUpdateInput,
   ) {
@@ -65,7 +67,7 @@ export class OrganizationController {
   }
 
   @Delete(':id')
-  async deleteOrganization(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return this.organizationService.delete({ id });
   }
 

@@ -7,7 +7,9 @@ import { Organization, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
+
 import { CreateOrganizationDto } from './dto/CreateOrganizationDto';
+import { generateRandomString } from '../../common/utils/randomString';
 
 @Injectable()
 export class OrganizationService {
@@ -91,7 +93,7 @@ export class OrganizationService {
       throw new NotFoundException('Creator user not found');
     }
 
-    const users = await this.prisma.user.findMany({
+    const users = await this.userService.users({
       where: { id: { in: userIds } },
     });
     if (users.length !== userIds.length) {
@@ -109,7 +111,7 @@ export class OrganizationService {
       });
     }
 
-    const urlLink = await this.randomString(8);
+    const urlLink = await generateRandomString(8);
 
     return this.prisma.organization.create({
       data: {
@@ -124,12 +126,6 @@ export class OrganizationService {
         },
       },
     });
-  }
-
-  async randomString(length: number): Promise<string> {
-    return String.fromCharCode(
-      ...Array.from({ length }, () => Math.floor(Math.random() * 26) + 97),
-    );
   }
 
   async update(params: {
