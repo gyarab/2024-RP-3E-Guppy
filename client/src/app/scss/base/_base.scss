@@ -49,7 +49,7 @@ p {
     "footer footer footer";
   grid-template-columns: 1fr 5fr 2fr;
   grid-template-rows: auto 1fr auto;
-  height: 100vh;
+  // height: 100vh; // problem s position: sticky;
 }
 
 .header {
