@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { AuthGuard } from '../../auth/guards/auth.guard';
 import { UploadService } from './upload.service';
 
 @UseGuards(AuthGuard)
@@ -35,8 +35,9 @@ export class UploadController {
         }),
     )
     file: Express.Multer.File,
+    @Body('type') type: string,
   ) {
-    return await this.uploadService.upload(file);
+    return await this.uploadService.upload(file, type);
   }
 
   @Delete(':name')
