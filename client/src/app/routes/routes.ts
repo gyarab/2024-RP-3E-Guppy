@@ -1,3 +1,4 @@
+import CreateOrganizationPage from "../../pages/CreateOrganizationPage";
 import CreatePostPage from "../../pages/CreatePostPage";
 import Dashboard from "../../pages/Dashboard";
 import FeedPage from "../../pages/FeedPage";
@@ -14,6 +15,7 @@ export const publicRoutes: Route[] = [
   { path: "/", component: HomePage },
   { path: "/login", component: LoginPage },
   { path: "/signup", component: SignupPage },
+  { path: "/org/create", component: CreateOrganizationPage }, // FIXME: This should private
 ];
 
 export const privateRoutes: Route[] = [

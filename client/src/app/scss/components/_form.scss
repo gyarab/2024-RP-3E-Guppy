@@ -29,6 +29,12 @@
     z-index: 10;
   }
 
+  &__textarea {
+    resize: none;
+    outline: none;
+    padding: 0.875rem;
+  }
+
   &__link {
     color: var(--accent-color);
 
@@ -37,7 +43,7 @@
     }
   }
 
-  span {
+  &__label-span {
     position: absolute;
     left: 0;
     font-size: 1em;
@@ -47,8 +53,8 @@
     pointer-events: none;
   }
 
-  &__input:focus ~ span,
-  &__input:not(:placeholder-shown) ~ span {
+  &__input:focus ~ .form__label-span,
+  &__input:not(:placeholder-shown) ~ .form__label-span {
     color: var(--accent-color);
     transform: translateY(-1rem);
     font-size: 0.75em;
@@ -69,5 +75,82 @@
 
   &__input:focus ~ i {
     height: 2.75rem;
+  }
+}
+
+.create-org__container {
+  display: grid;
+  grid-template-columns: 4fr 3fr;
+  gap: 2.5rem;
+}
+
+.create-org__form {
+  .form__group--horizontal {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .form__group {
+      margin-bottom: 0;
+    }
+  }
+
+  .form__group--checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .form__label {
+    margin-bottom: 2px;
+  }
+
+  .form__input {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: #f8fafc;
+    border: 1px solid #e3e7f0;
+    border-radius: 8px;
+
+    &::placeholder {
+      color: #b8bcca;
+    }
+  }
+
+  .form__textarea {
+    resize: vertical;
+    min-height: fit-content;
+    max-height: 100px;
+    width: 100%;
+    background-color: #f8fafc;
+    border: 1px solid #e3e7f0;
+    border-radius: 8px;
+
+    &::placeholder {
+      color: #b8bcca;
+    }
+  }
+
+  .form__button {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #3f3f3f;
+    }
+  }
+}
+
+.custom-file-upload {
+  width: 100%;
+
+  input[type="file"] {
+    display: none;
   }
 }

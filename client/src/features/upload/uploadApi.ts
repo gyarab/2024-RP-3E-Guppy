@@ -2,10 +2,11 @@ import { apiSlice } from "../../shared/api/apiSlice";
 
 export const uploadApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    uploadImage: build.mutation<string, File>({
-      query: (file) => {
+    uploadImage: build.mutation<string, { file: File; type: string }>({
+      query: ({ file, type }) => {
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("type", type);
 
         return {
           url: "/upload",

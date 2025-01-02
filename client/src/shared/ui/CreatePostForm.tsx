@@ -25,7 +25,10 @@ function CreatePostForm() {
 
     const imageMap = new Map();
     for (const [placeholder, file] of imageFiles) {
-      const { data: url } = await uploadImage(file);
+      const { data: url } = await uploadImage({
+        file,
+        type: "post",
+      });
       if (url) {
         imageMap.set(placeholder, `http://localhost:3000/${url}`);
       }

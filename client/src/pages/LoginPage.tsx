@@ -80,7 +80,7 @@ function LoginPage() {
               autoComplete="off"
               required
             />
-            <span>Email</span>
+            <span className="form__label-span">Email</span>
             <i></i>
           </div>
 
@@ -95,7 +95,7 @@ function LoginPage() {
               autoComplete="off"
               required
             />
-            <span>Password</span>
+            <span className="form__label-span">Password</span>
             <i></i>
           </div>
 

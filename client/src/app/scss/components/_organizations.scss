@@ -1,0 +1,111 @@
+@use "../abstract" as *;
+
+.org-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  .org-card {
+    transition: transform $transition-duration $transition-ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.025);
+    }
+  }
+}
+
+.org-card {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+
+  &__header {
+    height: 60px;
+  }
+
+  &__name {
+    margin: 0.5rem 0 0.25rem;
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  &__separator {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    margin-top: 15px;
+  }
+
+  &__icon {
+    position: absolute;
+    background: var(--background-color);
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%);
+  }
+
+  &__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__body {
+    padding: 1rem;
+    text-align: center;
+    margin-top: -35px;
+  }
+
+  &__description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #555;
+  }
+
+  &--create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    background: var(--accent-color);
+
+    .org-card__name {
+      z-index: 1;
+      font-size: 1.375rem;
+      color: var(--background-color);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 200%;
+      background-color: rgb(154, 225, 247);
+      animation: rotate 4s linear infinite;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      background: var(--accent-color);
+      inset: 7px;
+      border-radius: 8px;
+    }
+  }
+}

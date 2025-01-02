@@ -1,0 +1,24 @@
+.aside {
+  position: sticky;
+  top: 0;
+  padding: 1rem;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  max-height: fit-content;
+
+  .aside__title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .aside__item:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  .aside__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
