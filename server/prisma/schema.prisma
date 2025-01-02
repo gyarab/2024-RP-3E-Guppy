@@ -8,14 +8,16 @@ datasource db {
 }
 
 model Organization {
-  id        Int                @id @default(autoincrement())
-  name      String             @unique
-  creator   User               @relation(fields: [creatorId], references: [id])
-  creatorId Int
-  users     UserOrganization[]
-  posts     Post[]
-  createdAt DateTime           @default(now())
-  joinUrl   String            @unique
+  id          Int                @id @default(autoincrement())
+  name        String             @unique
+  description String             @db.VarChar(255)
+  joinCode    String             @unique
+  logoUrl     String
+  creator     User               @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+  users       UserOrganization[]
+  posts       Post[]
+  createdAt   DateTime           @default(now())
 }
 
 model User {

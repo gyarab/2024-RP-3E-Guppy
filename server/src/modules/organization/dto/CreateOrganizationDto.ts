@@ -11,6 +11,9 @@ export class CreateOrganizationDto {
   @IsNotEmpty()
   name: string;
 
+  description: string;
+  logoUrl: string;
+
   @IsArray()
   @IsInt({ each: true })
   @IsOptional() // Pokud chcete, aby bylo volitelné, např. prázdné pole uživatelů.

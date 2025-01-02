@@ -86,18 +86,11 @@ export class OrganizationService {
     organizationCreateDto: CreateOrganizationDto,
     userId: number,
   ): Promise<Organization> {
-    const { name, userIds } = organizationCreateDto;
+    const { name, description, logoUrl, userIds } = organizationCreateDto;
 
     const creator = await this.userService.user({ id: userId });
     if (!creator) {
       throw new NotFoundException('Creator user not found');
-    }
-
-    const users = await this.userService.users({
-      where: { id: { in: userIds } },
-    });
-    if (users.length !== userIds.length) {
-      throw new BadRequestException('Some users not found');
     }
 
     const memberRole = await this.prisma.role.findUnique({
@@ -111,18 +104,47 @@ export class OrganizationService {
       });
     }
 
-    const urlLink = await generateRandomString(8);
+    let usersToAdd = [];
+    if (userIds && userIds.length > 0) {
+      const users = await this.userService.users({
+        where: { id: { in: userIds } },
+      });
+
+      if (users.length !== userIds.length) {
+        throw new BadRequestException('Some users not found');
+      }
+
+      usersToAdd = users.map((user) => ({
+        user: { connect: { id: user.id } },
+        role: { connect: { name: 'Member' } },
+      }));
+    }
+
+    const joinCodes = await this.prisma.organization.findMany({
+      select: { joinCode: true },
+    });
+    const existingCodes = joinCodes.map(({ joinCode }) => joinCode);
+
+    let uniqueCode = '';
+    do {
+      uniqueCode = await generateRandomString(6);
+    } while (existingCodes.includes(uniqueCode));
 
     return this.prisma.organization.create({
       data: {
         name,
+        description,
+        logoUrl,
         creatorId: userId,
-        joinUrl: urlLink,
+        joinCode: uniqueCode,
         users: {
-          create: userIds.map((uid) => ({
-            user: { connect: { id: uid } },
-            role: { connect: { name: 'Member' } },
-          })),
+          create: [
+            {
+              user: { connect: { id: userId } },
+              role: { connect: { name: 'Member' } },
+            },
+            ...usersToAdd,
+          ],
         },
       },
     });
@@ -230,10 +252,10 @@ export class OrganizationService {
   }
 
   async joinOrganization(
-    joinUrl: string,
+    joinCode: string,
     userId: number,
   ): Promise<Organization> {
-    const organization = await this.organization({ joinUrl: joinUrl });
+    const organization = await this.organization({ joinCode: joinCode });
     if (!organization) {
       throw new NotFoundException('Organization not found');
     }
@@ -244,7 +266,7 @@ export class OrganizationService {
     }
 
     return this.prisma.organization.update({
-      where: { joinUrl: organization.joinUrl },
+      where: { joinCode: organization.joinCode },
       data: {
         users: {
           create: {

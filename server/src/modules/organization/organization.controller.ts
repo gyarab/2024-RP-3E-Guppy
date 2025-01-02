@@ -106,10 +106,10 @@ export class OrganizationController {
     );
   }
 
-  @Put('/join/:joinUrl')
-  async joinOrganization(@Param('joinUrl') joinUrl: string, @Request() req) {
+  @Put('/join/:joinCode')
+  async joinOrganization(@Param('joinCode') joinCode: string, @Request() req) {
     const user = req.user as UserWithoutPassword;
     if (!user) throw new NotFoundException('User not found');
-    return this.organizationService.joinOrganization(joinUrl, user.id);
+    return this.organizationService.joinOrganization(joinCode, user.id);
   }
 }
