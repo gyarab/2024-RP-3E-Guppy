@@ -15,13 +15,13 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 <img src="docs/mysql.png" alt="MySQL" height="100"/>
 </p>
 
-# Spuštění programu
+## Spuštění programu
 Pro spuštění aplikaceje potřeba mít nainstalovaný Docker.
-## Windows
+### Windows
 ```bash
 ./start-dev.bat
 ```
-## Linux
+### Linux
 ```bash
 chmod +x start-dev-linux.sh
 ./start-dev-linux.sh
