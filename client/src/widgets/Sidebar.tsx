@@ -5,46 +5,14 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="organizations">
-        <h2 className="organizations__title">Organizations</h2>
-        <Button variant="accent">Create Org</Button>
+        <Button variant="accent">New organization</Button>
 
-        {/* <OrgLogo
-          orgLink="/signup"
-          orgName="Organization"
-          orgLogo="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg"
-        />
-        <OrgLogo
-          orgLink="/signup"
-          orgName="Organization"
-          orgLogo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxBzH8UEnwhZ3xdq-cC4D9_dK4nu_Cjk9p-Q&s"
-        />
-        <OrgLogo
-          orgLink="/signup"
-          orgName="Organization"
-          orgLogo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRMRwRwoKMcVOwjcvnvAMPNf84x1lb-N_Wog&s"
-        />
-        <OrgLogo
-          orgLink="/signup"
-          orgName="Organization"
-          orgLogo="https://yt3.googleusercontent.com/hNy_TSr82eNOUiiI64ot0E8oH8kzw3npqdajanbEHq4Q9hxGiXIDPThoHjKRBTEGxb2xrOhBKg=s900-c-k-c0x00ffffff-no-rj"
-        />
-        <OrgLogo
-          orgLink="/signup"
-          orgName="Organization"
-          orgLogo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7_6iKwEof8NGwqg6GHqoYuXiU9HF6YLqAUQ&s"
-        />
-        <OrgLogo
-          orgLink="/signup"
-          orgName="Organization"
-          orgLogo="https://www.youtube.com/img/desktop/yt_1200.png"
-        />
-        <OrgLogo
-          orgLink="/signup"
-          orgName="Organization"
-          orgLogo="https://yt3.googleusercontent.com/ytc/AIdro_laRShJ23cRl_TByWDUJpcUvpHap8AcQnYa49_inkgNSyc=s900-c-k-c0x00ffffff-no-rj"
-        /> */}
+        <OrgLogo orgName="Twitter" orgLogo="https://e7.pngegg.com/pngimages/708/311/png-clipart-icon-logo-twitter-logo-twitter-logo-blue-social-media-thumbnail.png" orgLink="/" mainColor="rgb(29, 161, 242)"/>
+        <OrgLogo orgName="Netflix" orgLogo="https://image.pmgstatic.com/cache/resized/w960h634/files/images/news/article/166/318/166318830_4c6e50.png" orgLink="/" mainColor="#E50914"/>
+        <OrgLogo orgName="Twitch" orgLogo="https://img.freepik.com/premium-vector/twitch-logo_578229-259.jpg?semt=ais_hybrid" orgLink="/" mainColor="#6441a5 "/>
+        <OrgLogo orgName="Spotify" orgLogo="https://play-lh.googleusercontent.com/4Yqe9IEyqK1E8FmtSMW-dxNLz4G-uMb07nIkmAy6ppk-Sj3oTx6-EFNEeeZmvpjJ72Q" orgLink="/" mainColor="#1ED760"/>
+        <OrgLogo orgName="HBO Max" orgLogo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSelMaZGLLpn2bFzF09E-qrtuQkMllGpS1iMA&s" orgLink="/" mainColor="#330551"/>
       </div>
-      <div className="links"></div>
     </aside>
   );
 }

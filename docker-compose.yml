@@ -1,27 +1,27 @@
 services:
-  # client:
-  #   image: node:23-alpine
-  #   working_dir: /app
-  #   volumes:
-  #     - ./client:/app
-  #     - /app/node_modules
-  #   ports:
-  #     - "5173:5173"
-  #   command: sh -c "npm install && npm run dev"
+  client:
+    image: node:23-alpine
+    working_dir: /app
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
 
-  # server:
-  #   image: node:23-alpine
-  #   working_dir: /app
-  #   volumes:
-  #     - ./server:/app
-  #     - /app/node_modules
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - DATABASE_URL=mysql://user:password@database:3306/mydb
-  #   command: sh -c "npm install && npx prisma db push && npm run dev"
-  #   depends_on:
-  #     - database
+  server:
+    image: node:23-alpine
+    working_dir: /app
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=mysql://user:password@database:3306/mydb
+    command: sh -c "npm install && npx prisma db push && npm run dev"
+    depends_on:
+      - database
 
   database:
     image: mysql:9

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
-
 interface OrgLogoProps {
-    orgName: string;
-    orgLogo: string;
-    orgLink: string;
+  orgName: string;
+  orgLogo: string;
+  orgLink: string;
+  mainColor: string;
 }
 
 /**
@@ -14,12 +14,18 @@ interface OrgLogoProps {
  * @param orgLink - odkaz na stránku organizace
  */
 
-function OrgLogo({orgName, orgLogo, orgLink}: OrgLogoProps) {
+function OrgLogo({ orgName, orgLogo, orgLink, mainColor }: OrgLogoProps) {
     return (
-        <div className="org-logo">
-            <Link to={orgLink}><img src={orgLogo} alt={orgName} /></Link> {/*Anchor v Link komponentu dosírá spodní část loga a protahuje jí*/}
-        </div>
-    )
-}
-
-export default OrgLogo;
+      <Link
+        to={orgLink}
+        className="org-logo"
+        style={{ '--org-background-color': mainColor } as React.CSSProperties}
+      >
+        <img src={orgLogo} alt={`${orgName} logo`} />
+        <span>{orgName}</span>
+      </Link>
+    );
+  }
+  
+  export default OrgLogo;
+  
