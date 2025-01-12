@@ -12,6 +12,7 @@ interface OrgLogoProps {
  * @param orgName - název organizace
  * @param orgLogo - logo organizace
  * @param orgLink - odkaz na stránku organizace
+ * @param mainColor - hlavní barva organizace
  */
 
 function OrgLogo({ orgName, orgLogo, orgLink, mainColor }: OrgLogoProps) {
