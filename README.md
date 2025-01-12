@@ -15,6 +15,18 @@ Sociální síť určená pro jednoduchou a přehlednou komunikaci v organizací
 <img src="docs/mysql.png" alt="MySQL" height="100"/>
 </p>
 
+# Spuštění programu
+Pro spuštění aplikaceje potřeba mít nainstalovaný Docker.
+## Windows
+```bash
+./start-dev.bat
+```
+## Linux
+```bash
+chmod +x start-dev-linux.sh
+./start-dev-linux.sh
+```
+
 ## Základní wireframe
 <p align="center">
 <a href="https://www.figma.com/design/LImyai58ZDJzPZBCGm7vol/Rocnikovka-1?node-id=0-1&t=JWsrBlChejYTvJ5R-1" target="_blank">Wireframe na Figmě</a>
