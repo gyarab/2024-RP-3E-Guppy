@@ -1,8 +1,172 @@
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+
+import { AppDispatch } from "../app/store";
+import { isApiError } from "../shared/utils/helpers";
+import { useSignupMutation } from "../features/auth/authApi";
+import { setAuthCredentials } from "../features/auth/authSlice";
+import { SignupCredentials } from "../shared/interfaces/SignupCredentials";
+import Checkbox from "../shared/ui/Checkbox";
+import Button from "../shared/ui/Button";
+
+const DEFAULT_CREDENTIALS: SignupCredentials = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  birthdate: "",
+};
+
 function SignupPage() {
+  const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const firstNameInputRef = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+
+  const [signup, { isLoading }] = useSignupMutation();
+
+  useEffect(() => {
+    firstNameInputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    setErrorMessage("");
+  }, [credentials]);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const userData = await signup(credentials).unwrap();
+      dispatch(setAuthCredentials(userData));
+
+      setCredentials(DEFAULT_CREDENTIALS);
+      navigate("/");
+    } catch (error) {
+      if (isApiError(error)) {
+        setErrorMessage(error.data.message);
+      }
+    }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCredentials((prev) => ({ ...prev, [name]: value }));
+  };
+
   return (
-    <div className="container">
-      <h2 className="section__title">Signup page</h2>
-    </div>
+    <main className="signup">
+      <div className="container signup__container">
+        <h2 className="signup__title">Join Us!</h2>
+        <h3 className="section__subtitle">Create your account</h3>
+        <p className="signup__text">
+          Already have an account?{" "}
+          <a href="/login" className="form__link">
+            Login here!
+          </a>
+        </p>
+
+        <form onSubmit={handleSubmit} className="form signup__form">
+          <div className="form__group">
+            <input
+              type="text"
+              className="form__input"
+              id="firstName"
+              name="firstName"
+              ref={firstNameInputRef}
+              value={credentials.firstName}
+              onChange={handleInputChange}
+              autoComplete="off"
+              required
+            />
+            <span className="form__label-span">First Name</span>
+            <i></i>
+          </div>
+
+          <div className="form__group">
+            <input
+              type="text"
+              className="form__input"
+              id="lastName"
+              name="lastName"
+              value={credentials.lastName}
+              onChange={handleInputChange}
+              autoComplete="off"
+              required
+            />
+            <span className="form__label-span">Last Name</span>
+            <i></i>
+          </div>
+
+          <div className="form__group">
+            <input
+              type="email"
+              className="form__input"
+              id="email"
+              name="email"
+              value={credentials.email}
+              onChange={handleInputChange}
+              autoComplete="off"
+              required
+            />
+            <span className="form__label-span">Email</span>
+            <i></i>
+          </div>
+
+          <div className="form__group">
+            <input
+              type="password"
+              className="form__input"
+              id="password"
+              name="password"
+              value={credentials.password}
+              onChange={handleInputChange}
+              autoComplete="off"
+              required
+            />
+            <span className="form__label-span">Password</span>
+            <i></i>
+          </div>
+
+          <div className="form__group">
+            <input
+              type="date"
+              className="form__input"
+              id="birthdate"
+              name="birthdate"
+              value={credentials.birthdate}
+              onChange={handleInputChange}
+              autoComplete="off"
+              required
+            />
+            <span className="form__label-span">Birthdate</span>
+            <i></i>
+          </div>
+
+          <div className="form__group--horizontal">
+            <div className="form__group--checkbox">
+              <Checkbox />
+              <p>I agree to the terms and conditions</p>
+            </div>
+          </div>
+
+          {errorMessage && <p className="error">{errorMessage}</p>}
+
+          <Button
+            type="submit"
+            variant="accent"
+            additionalClasses="signup__button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Sign Up"}
+          </Button>
+        </form>
+      </div>
+    </main>
   );
 }
 
