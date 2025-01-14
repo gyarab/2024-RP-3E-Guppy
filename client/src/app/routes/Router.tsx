@@ -9,32 +9,34 @@ interface RouterProps {
 
 function Router({ isAuthenticated, isAdmin }: RouterProps) {
   return (
-    <Routes>
-      {/* Public routes */}
-      {publicRoutes.map(({ path, component: Component }, index) => (
-        <Route key={index} path={path} element={<Component />} />
-      ))}
+    <div className="router">
+      <Routes>
+        {/* Public routes */}
+        {publicRoutes.map(({ path, component: Component }, index) => (
+          <Route key={index} path={path} element={<Component />} />
+        ))}
 
-      {/* Private routes */}
-      {privateRoutes.map(({ path, component: Component }, index) => (
-        <Route
-          key={index}
-          path={path}
-          element={isAuthenticated ? <Component /> : <Navigate to="/login" />}
-        />
-      ))}
+        {/* Private routes */}
+        {privateRoutes.map(({ path, component: Component }, index) => (
+          <Route
+            key={index}
+            path={path}
+            element={isAuthenticated ? <Component /> : <Navigate to="/login" />}
+          />
+        ))}
 
-      {/* Admin routes */}
-      {adminRoutes.map(({ path, component: Component }, index) => (
-        <Route
-          key={index}
-          path={path}
-          element={
-            isAuthenticated && isAdmin ? <Component /> : <Navigate to="/" />
-          }
-        />
-      ))}
-    </Routes>
+        {/* Admin routes */}
+        {adminRoutes.map(({ path, component: Component }, index) => (
+          <Route
+            key={index}
+            path={path}
+            element={
+              isAuthenticated && isAdmin ? <Component /> : <Navigate to="/" />
+            }
+          />
+        ))}
+      </Routes>
+    </div>
   );
 }
 

@@ -49,7 +49,31 @@ p {
     "footer footer footer";
   grid-template-columns: 1fr 5fr 2fr;
   grid-template-rows: auto 1fr auto;
-  // height: 100vh; // problem s position: sticky;
+  transition: grid-template-areas 0.3s ease, grid-template-columns 0.3s ease;
+
+  &.hide-sidebar {
+    grid-template-areas:
+      "header header header"
+      "router router aside"
+      "footer footer footer";
+    grid-template-columns: 1fr 2fr;
+  }
+
+  &.hide-aside {
+    grid-template-areas:
+      "header header header"
+      "sidebar router router"
+      "footer footer footer";
+    grid-template-columns: 1fr 5fr;
+  }
+
+  &.hide-sidebar.hide-aside {
+    grid-template-areas:
+      "header header header"
+      "router router router"
+      "footer footer footer";
+    grid-template-columns: 1fr;
+  }
 }
 
 .header {
@@ -60,9 +84,9 @@ p {
   grid-area: sidebar;
 }
 
-// .router {
-//   grid-area: router;
-// }
+.router {
+  grid-area: router;
+}
 
 .aside {
   grid-area: aside;
