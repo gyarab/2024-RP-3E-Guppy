@@ -21,6 +21,7 @@ const DEFAULT_CREDENTIALS: SignupCredentials = {
 function SignupPage() {
   const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isRemembered, setIsRemembered] = useState(false);
 
   const firstNameInputRef = useRef<HTMLInputElement>(null);
 
@@ -57,6 +58,12 @@ function SignupPage() {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
+
+  function agreeToTerms() {
+    if (isRemembered === false) {
+      setErrorMessage("You must agree to the terms and conditions");
+  }
+}
 
   return (
     <main className="signup">
@@ -149,7 +156,10 @@ function SignupPage() {
 
           <div className="form__group--horizontal">
             <div className="form__group--checkbox">
-              <Checkbox />
+            <Checkbox 
+              checked={isRemembered} 
+              setChecked={setIsRemembered}
+              />
               <p>I agree to the terms and conditions</p>
             </div>
           </div>
@@ -161,6 +171,7 @@ function SignupPage() {
             variant="accent"
             additionalClasses="signup__button"
             disabled={isLoading}
+            onClick={agreeToTerms}
           >
             {isLoading ? "Loading..." : "Sign Up"}
           </Button>

@@ -55,6 +55,13 @@ function LoginPage() {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
+  function rememberMe() {
+    if (isRemembered === true) {
+      //remember credentials 
+    } else {
+      //forget credentials
+    }
+  }
 
   return (
     <main className="login">
@@ -102,7 +109,10 @@ function LoginPage() {
 
           <div className="form__group--horizontal">
             <div className="form__group--checkbox">
-              <Checkbox checked={isRemembered} setChecked={setIsRemembered}/>
+              <Checkbox 
+              checked={isRemembered} 
+              setChecked={setIsRemembered}
+              />
               <p>Remember me</p>
             </div>
             <a href="/change-password" className="form__link">
@@ -117,6 +127,7 @@ function LoginPage() {
             variant="accent"
             additionalClasses="login__button"
             disabled={isLoading}
+            onClick={rememberMe}
           >
             {isLoading ? "Loading..." : "Login"}
           </Button>

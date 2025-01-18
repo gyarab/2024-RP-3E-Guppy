@@ -8,17 +8,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  
 
   &__container {
     width: 30%;
     text-align: center;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(8px);
     padding: 2rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
+  html[data-theme="dark"] &__container {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
   &__form {
     display: flex;
     flex-direction: column;
