@@ -1,12 +1,14 @@
 import OrgLogo from "../shared/ui/OrgLogo";
-import Button from "../shared/ui/Button";
+import CreateOrgButton from "../shared/ui/CreateOrgButton";
+import ToggleSidebar from "../shared/ui/ToggleSidebar";
 
 function Sidebar() {
+
   return (
     <aside className="sidebar">
+      <ToggleSidebar/>
       <div className="organizations">
-        <Button variant="accent">New organization</Button>
-
+        <CreateOrgButton/>
         <OrgLogo orgName="Twitter" orgLogo="https://e7.pngegg.com/pngimages/708/311/png-clipart-icon-logo-twitter-logo-twitter-logo-blue-social-media-thumbnail.png" orgLink="/" mainColor="rgb(29, 161, 242)"/>
         <OrgLogo orgName="Netflix" orgLogo="https://image.pmgstatic.com/cache/resized/w960h634/files/images/news/article/166/318/166318830_4c6e50.png" orgLink="/" mainColor="#E50914"/>
         <OrgLogo orgName="Twitch" orgLogo="https://img.freepik.com/premium-vector/twitch-logo_578229-259.jpg?semt=ais_hybrid" orgLink="/" mainColor="#6441a5 "/>

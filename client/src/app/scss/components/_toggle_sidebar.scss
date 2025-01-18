@@ -1,0 +1,75 @@
+#checkbox {
+  display: none;
+}
+
+.menuToggle {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.closed {
+  .toggle {
+    margin: 0 auto;
+  }
+}
+
+.toggle {
+  position: relative;
+  width: 36px;
+  cursor: pointer;
+  margin-left: auto;
+  display: block;
+  height: 31px;
+
+  .bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--secondary-color);
+    color: inherit;
+    opacity: 1;
+    transition: none 0.35s cubic-bezier(0.5, -0.35, 0.35, 1.5) 0s;
+
+    &--top {
+      bottom: 28px;
+      transition-property: bottom, transform;
+      transition-delay: 0.35s * 0.6;
+    }
+
+    &--middle {
+      top: 14px;
+      transition-property: opacity, transform;
+      transition-delay: 0.35s * 0.3;
+    }
+
+    &--bottom {
+      top: 28px;
+      transition-property: top, transform;
+      transition-delay: 0s;
+    }
+  }
+}
+
+#checkbox:checked + .toggle {
+  .bar {
+    &--top {
+      transform: rotate(-135deg);
+      transition-delay: 0s;
+      bottom: calc(50%);
+    }
+
+    &--middle {
+      opacity: 0;
+      transform: rotate(-135deg);
+      transition-delay: 0.35s * 0.3;
+    }
+
+    &--bottom {
+      top: calc(50% - 3px);
+      transform: rotate(-225deg);
+      transition-delay: 0.35s * 0.6;
+    }
+  }
+}
