@@ -1,8 +1,16 @@
-import { useState } from "react";
 
-function Checkbox() {
-  const [checked, setChecked] = useState(false);
+interface CheckboxProps {
+  checked: boolean;
+  setChecked: (checked: boolean) => void;
+}
 
+/**
+ * Vykreslí jednoduché tlačítko nebo odkaz na základě zadaných vlastností
+ * @param checked - stav zaškrtnutí
+ * @param setChecked - funkce pro změnu stavu zaškrtnutí
+ */
+
+function Checkbox({ checked, setChecked } : CheckboxProps) {
   return (
     <label className="checkbox__container">
       <input

@@ -6,13 +6,11 @@ import { User } from "../../shared/interfaces/User";
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
-  rememberMe: boolean;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
-  rememberMe: false,
 };
 
 const authSlice = createSlice({
@@ -32,16 +30,12 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
     },
-    checkRememberMe: (state) => {
-      state.rememberMe = !state.rememberMe;
-    }
   },
 });
 
-export const { setAuthCredentials, setIsAuth, logout, checkRememberMe } = authSlice.actions;
+export const { setAuthCredentials, setIsAuth, logout } = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectIsAuth = (state: RootState) => state.auth.isAuthenticated;
 export const selectUser = (state: RootState) => state.auth.user;
-export const selectRememberMe = (state: RootState) => state.auth.rememberMe;

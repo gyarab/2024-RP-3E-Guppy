@@ -18,6 +18,7 @@ const DEFAULT_CREDENTIALS: LoginCredentials = {
 function LoginPage() {
   const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isRemembered, setIsRemembered] = useState(false);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -101,7 +102,7 @@ function LoginPage() {
 
           <div className="form__group--horizontal">
             <div className="form__group--checkbox">
-              <Checkbox />
+              <Checkbox checked={isRemembered} setChecked={setIsRemembered}/>
               <p>Remember me</p>
             </div>
             <a href="/change-password" className="form__link">
