@@ -64,6 +64,19 @@ function SignupPage() {
       setErrorMessage("You must agree to the terms and conditions");
   }
 }
+  function minimumAge() {
+    const today = new Date();
+    const birthDate = new Date(credentials.birthdate);
+    const age = today.getFullYear() - birthDate.getFullYear();
+
+    if (birthDate > today) {
+      setErrorMessage("You can't be born in the future");
+    } else if (age < 15) {
+      setErrorMessage("You must be at least 15 years old to sign up");
+    } else if (age > 100) {
+      setErrorMessage("Yeah, we know u ain't this old")
+    }
+  }
 
   return (
     <main className="signup">
@@ -166,15 +179,18 @@ function SignupPage() {
 
           {errorMessage && <p className="error">{errorMessage}</p>}
 
-          <Button
+            <Button
             type="submit"
             variant="accent"
             additionalClasses="signup__button"
             disabled={isLoading}
-            onClick={agreeToTerms}
-          >
+            onClick={() => {
+              agreeToTerms();
+              minimumAge();
+            }}
+            >
             {isLoading ? "Loading..." : "Sign Up"}
-          </Button>
+            </Button>
         </form>
       </div>
     </main>

@@ -8,7 +8,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  
+
+    html[data-theme="dark"] & {
+      background-image: url("/images/loginDark-background.jpg");
+    }
     &__container {
       width: 50%;
       text-align: center;
