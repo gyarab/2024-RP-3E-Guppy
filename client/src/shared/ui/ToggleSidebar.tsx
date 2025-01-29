@@ -1,25 +1,18 @@
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../../app/store";
+import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../features/ui/uiSlice";
 
 function ToggleSidebar() {
   const dispatch = useDispatch();
 
-  const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
-
-  const toggleClass = isSidebarOpen ? "" : "closed";
-
   return (
-    <>
-      <div className={`${toggleClass} menuToggle`}>
-        <input id="checkbox" type="checkbox" />
-        <label onClick={() => dispatch(toggleSidebar())} className="toggle" htmlFor="checkbox">
-          <div className="bar bar--top"></div>
-          <div className="bar bar--middle"></div>
-          <div className="bar bar--bottom"></div>
-        </label>
-      </div>
-    </>
+    <div className="toggle-sidebar">
+      <input id="checkbox" type="checkbox" />
+      <label className="toggle" htmlFor="checkbox" onClick={() => dispatch(toggleSidebar())}>
+        <div id="bar1" className="bars"></div>
+        <div id="bar2" className="bars"></div>
+        <div id="bar3" className="bars"></div>
+      </label>
+    </div>
   );
 }
 

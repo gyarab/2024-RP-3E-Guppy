@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+import ToggleSidebar from "../shared/ui/ToggleSidebar";
 import Logo from "../shared/ui/Logo";
 import Nav from "../shared/ui/Nav";
 import Button from "../shared/ui/Button";
@@ -12,10 +13,13 @@ function Header() {
 
   return (
     <header className="header">
-      <div className="container header__container">
-        <Link to="/" className="header__link">
-          <Logo />
-        </Link>
+      <div className="header__container">
+        <div className="cta">
+          <ToggleSidebar />
+          <Link to="/" className="header__link">
+            <Logo />
+          </Link>
+        </div>
         <Nav isAuthenticated={isAuthenticated} />
         <div className="cta">
           <ThemeSwitch />

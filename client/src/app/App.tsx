@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
 import { AppDispatch } from "./store";
+import { selectIsSidebarOpen } from "../features/ui/uiSlice";
 import { selectIsAuth, setIsAuth } from "../features/auth/authSlice";
 import { useVerifyQuery } from "../features/auth/authApi";
 
@@ -15,6 +16,9 @@ import Aside from "../shared/ui/Aside";
 
 function App() {
   console.log("Rendering App...");
+
+  const isSidebarOpen = useSelector(selectIsSidebarOpen);
+  const toggleClass = isSidebarOpen ? "" : "switch-sidebar";
 
   const isAuth = useSelector(selectIsAuth);
   console.log("isAuth", isAuth);
@@ -53,7 +57,7 @@ function App() {
   ].join(" ");
 
   return (
-    <div className={`page-container ${layoutClass}`}>
+    <div className={`page-container ${layoutClass} ${toggleClass}`}>
       <Header />
       {shouldShowSidebar && <Sidebar />}
       <Router isAuthenticated={isAuth} isAdmin={isAdmin} />

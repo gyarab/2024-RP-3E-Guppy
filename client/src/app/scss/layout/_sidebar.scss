@@ -5,7 +5,8 @@
   top: 0;
   max-height: fit-content;
   background-color: var(--background-color);
-  padding-left: 2rem;
+  margin: 0 1rem;
+  width: max-content;
 
   .organizations {
     display: flex;

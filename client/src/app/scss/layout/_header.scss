@@ -2,6 +2,8 @@
 
 .header {
   height: $header-height;
+  padding-right: 2rem;
+  padding-left: 1rem;
 
   &__container {
     display: flex;
