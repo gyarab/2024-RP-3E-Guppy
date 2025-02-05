@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import ToggleSidebar from "../shared/ui/ToggleSidebar";
@@ -6,14 +5,13 @@ import Logo from "../shared/ui/Logo";
 import Nav from "../shared/ui/Nav";
 import Button from "../shared/ui/Button";
 import ThemeSwitch from "../shared/ui/ThemeSwitch";
-import { selectIsAuth } from "../features/auth/authSlice";
-import { shouldShowSidebar } from "../shared/constants/hideUrls";
+import { useAuth } from "../shared/hooks/useAuth";
+import { useShowElements } from "../shared/hooks/useShowElements";
 
 function Header() {
-  // const isAuthenticated = useSelector(selectIsAuth);
-  const token = sessionStorage.getItem("accessToken");
-  const isAuthenticated = !!token;
-  const showSidebar = shouldShowSidebar();
+  const { isAuth } = useAuth();
+
+  const { showSidebar } = useShowElements();
 
   return (
     <header className="header">
@@ -24,10 +22,10 @@ function Header() {
             <Logo />
           </Link>
         </div>
-        <Nav isAuthenticated={isAuthenticated} />
+        <Nav isAuthenticated={isAuth} />
         <div className="cta">
           <ThemeSwitch />
-          {isAuthenticated ? (
+          {isAuth ? (
             <Link to="/profile">
               <Button variant="accent">Your Profile</Button>
             </Link>

@@ -77,35 +77,15 @@
 
   &--create {
     display: flex;
-    align-items: center;
     justify-content: center;
     text-align: center;
-    position: relative;
-    overflow: hidden;
-    height: 100%;
+    padding: 1rem;
     background: var(--accent-color);
+    border: none;
 
     .org-card__name {
-      z-index: 1;
-      font-size: 1.375rem;
+      font-size: 1.125rem;
       color: var(--background-color);
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      width: 100px;
-      height: 200%;
-      background-color: rgb(154, 225, 247);
-      animation: rotate 4s linear infinite;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      background: var(--accent-color);
-      inset: 7px;
-      border-radius: 8px;
     }
   }
 }
