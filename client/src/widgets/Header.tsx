@@ -7,15 +7,19 @@ import Nav from "../shared/ui/Nav";
 import Button from "../shared/ui/Button";
 import ThemeSwitch from "../shared/ui/ThemeSwitch";
 import { selectIsAuth } from "../features/auth/authSlice";
+import { shouldShowSidebar } from "../shared/constants/hideUrls";
 
 function Header() {
-  const isAuthenticated = useSelector(selectIsAuth);
+  // const isAuthenticated = useSelector(selectIsAuth);
+  const token = sessionStorage.getItem("accessToken");
+  const isAuthenticated = !!token;
+  const showSidebar = shouldShowSidebar();
 
   return (
     <header className="header">
       <div className="header__container">
         <div className="cta">
-          <ToggleSidebar />
+          {showSidebar && <ToggleSidebar />}
           <Link to="/" className="header__link">
             <Logo />
           </Link>

@@ -4,9 +4,13 @@ import { User } from "../../shared/interfaces/User";
 import { LoginCredentials } from "../../shared/interfaces/LoginCredentials";
 import { SignupCredentials } from "../../shared/interfaces/SignupCredentials";
 
+type UserWithToken = User & {
+  accessToken: string;
+};
+
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    login: build.mutation<User, LoginCredentials>({
+    login: build.mutation<UserWithToken, LoginCredentials>({
       query: (credentials) => ({
         url: "/auth/login",
         method: "POST",

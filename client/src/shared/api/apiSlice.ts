@@ -11,13 +11,14 @@ import { logout, setAuthCredentials } from "../../features/auth/authSlice";
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3000",
   credentials: "include",
-  // prepareHeaders: (headers, { getState }) => {
-  //   const token = (getState() as RootState).auth.token;
-  //   if (token) {
-  //     headers.set("authorization", `Bearer ${token}`);
-  //   }
-  //   return headers;
-  // },
+  prepareHeaders: (headers, { getState }) => {
+    // const token = (getState() as RootState).auth.token;
+    const token = sessionStorage.getItem("accessToken");
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
+    }
+    return headers;
+  },
 });
 
 const baseQueryWithReAuth: BaseQueryFn<
@@ -43,6 +44,6 @@ const baseQueryWithReAuth: BaseQueryFn<
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReAuth,
-  tagTypes: ["Review", "User", "Post", "Comment", "Email"],
+  tagTypes: ["User", "Post", "Comment"],
   endpoints: () => ({}),
 });

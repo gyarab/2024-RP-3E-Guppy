@@ -47,12 +47,12 @@ p {
     "header header header"
     "sidebar router aside"
     "footer footer footer";
-  grid-template-columns: 1fr 5fr 2fr;
+  grid-template-columns: 1fr 5fr 300px;
   grid-template-rows: auto 1fr auto;
   transition: grid-template-areas 0.3s ease, grid-template-columns 0.3s ease;
 
   &.switch-sidebar {
-    grid-template-columns: 0fr 5fr 2fr;
+    grid-template-columns: 0fr 5fr 300px;
   }
 
   &.hide-sidebar {
