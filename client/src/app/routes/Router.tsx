@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import { publicRoutes, privateRoutes, adminRoutes } from "./routes";
 
@@ -8,6 +8,8 @@ interface RouterProps {
 }
 
 function Router({ isAuthenticated, isAdmin }: RouterProps) {
+  const location = useLocation();
+
   return (
     <div className="router">
       <Routes>
@@ -21,7 +23,13 @@ function Router({ isAuthenticated, isAdmin }: RouterProps) {
           <Route
             key={index}
             path={path}
-            element={isAuthenticated ? <Component /> : <Navigate to="/login" />}
+            element={
+              isAuthenticated ? (
+                <Component />
+              ) : (
+                <Navigate to="/login" state={{ from: location }} replace />
+              )
+            }
           />
         ))}
 
@@ -31,7 +39,11 @@ function Router({ isAuthenticated, isAdmin }: RouterProps) {
             key={index}
             path={path}
             element={
-              isAuthenticated && isAdmin ? <Component /> : <Navigate to="/" />
+              isAuthenticated && isAdmin ? (
+                <Component />
+              ) : (
+                <Navigate to="/" state={{ from: location }} replace />
+              )
             }
           />
         ))}

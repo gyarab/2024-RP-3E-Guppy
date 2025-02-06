@@ -13,6 +13,6 @@ export type UserWithoutPassword = Omit<User, 'password'>;
 
 export type UserWithTokens = UserWithoutPassword & Tokens;
 
-export type SignInResponse = UserWithoutPassword;
+export type SignInResponse = UserWithoutPassword & AccessToken;
 export type SignUpResponse = UserWithoutPassword;
 export type RefreshResponse = AccessToken;

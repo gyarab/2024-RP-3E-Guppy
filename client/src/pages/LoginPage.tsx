@@ -40,7 +40,10 @@ function LoginPage() {
 
     try {
       const userData = await login(credentials).unwrap();
-      dispatch(setAuthCredentials(userData));
+      // dispatch(setAuthCredentials(userData));
+      const { accessToken, ...payload } = userData;
+      sessionStorage.setItem("accessToken", accessToken);
+      dispatch(setAuthCredentials(payload));
 
       setCredentials(DEFAULT_CREDENTIALS);
       navigate("/");
@@ -57,7 +60,7 @@ function LoginPage() {
   };
   function rememberMe() {
     if (isRemembered === true) {
-      //remember credentials 
+      //remember credentials
     } else {
       //forget credentials
     }
@@ -109,10 +112,7 @@ function LoginPage() {
 
           <div className="form__group--horizontal">
             <div className="form__group--checkbox">
-              <Checkbox 
-              checked={isRemembered} 
-              setChecked={setIsRemembered}
-              />
+              <Checkbox checked={isRemembered} setChecked={setIsRemembered} />
               <p>Remember me</p>
             </div>
             <a href="/ForgotPassword" className="form__link">
