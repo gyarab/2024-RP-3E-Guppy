@@ -115,7 +115,7 @@ function LoginPage() {
               />
               <p>Remember me</p>
             </div>
-            <a href="/change-password" className="form__link">
+            <a href="/ForgotPassword" className="form__link">
               Forgot password?
             </a>
           </div>

@@ -3,6 +3,7 @@ import { apiSlice } from "../../shared/api/apiSlice";
 import { User } from "../../shared/interfaces/User";
 import { LoginCredentials } from "../../shared/interfaces/LoginCredentials";
 import { SignupCredentials } from "../../shared/interfaces/SignupCredentials";
+import { ForgotPasswordCredentials } from "../../shared/interfaces/ForgotPasswordCredentials";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -26,10 +27,17 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    forgotPassword: build.mutation<User, ForgotPasswordCredentials>({
+      query: (email) => ({
+        url: "/auth/forgotPassword",
+        method: "POST",
+        body: email,
+      }),
+    }),
     verify: build.query<{ isAuth: boolean; user: User }, void>({
       query: () => "/auth/verify",
     }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation, useVerifyQuery } = authApi;
+export const { useLoginMutation, useSignupMutation, useForgotPasswordMutation ,useVerifyQuery } = authApi;
