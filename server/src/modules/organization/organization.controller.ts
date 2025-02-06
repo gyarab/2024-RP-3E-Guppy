@@ -11,7 +11,6 @@ import {
   UseGuards,
   Request,
   NotFoundException,
-  DefaultValuePipe,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
@@ -33,14 +32,14 @@ export class OrganizationController {
 
   @Get()
   async getAll(
-    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-    @Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
     @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
     @Query('where') where?: Prisma.OrganizationWhereInput,
   ) {
     return this.organizationService.organizations({
-      skip,
-      take,
+      skip: (page - 1) * limit,
+      take: limit,
       orderBy,
       where,
     });

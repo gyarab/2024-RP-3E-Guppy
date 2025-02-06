@@ -54,32 +54,64 @@ export class OrganizationService {
   }) {
     const { skip, take, cursor, where, orderBy } = params;
 
-    return this.prisma.organization.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-      include: {
-        users: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                email: true,
-                name: true,
+    const [organizations, totalCount] = await this.prisma.$transaction([
+      this.prisma.organization.findMany({
+        skip,
+        take,
+        cursor,
+        where,
+        orderBy,
+        include: {
+          users: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  email: true,
+                  name: true,
+                },
               },
-            },
-            role: {
-              select: {
-                name: true,
+              role: {
+                select: {
+                  name: true,
+                },
               },
             },
           },
+          posts: true, // zakomentovat
         },
-        posts: true, // zakomentovat
-      },
-    });
+      }),
+      this.prisma.organization.count({ where }),
+    ]);
+
+    return { organizations, count: totalCount };
+
+    // return this.prisma.organization.findMany({
+    //   skip,
+    //   take,
+    //   cursor,
+    //   where,
+    //   orderBy,
+    //   include: {
+    //     users: {
+    //       include: {
+    //         user: {
+    //           select: {
+    //             id: true,
+    //             email: true,
+    //             name: true,
+    //           },
+    //         },
+    //         role: {
+    //           select: {
+    //             name: true,
+    //           },
+    //         },
+    //       },
+    //     },
+    //     posts: true, // zakomentovat
+    //   },
+    // });
   }
 
   async create(

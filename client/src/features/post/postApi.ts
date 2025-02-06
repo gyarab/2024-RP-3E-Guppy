@@ -10,9 +10,9 @@ export const postApi = apiSlice.injectEndpoints({
       { posts: Post[]; count: number },
       { page: number; limit: number }
     >({
-      query: ({ page, limit }) => ({
+      query: (params) => ({
         url: "/posts",
-        params: { page, limit },
+        params,
       }),
       providesTags: (result) => providesList(result?.posts, "Post"),
     }),
