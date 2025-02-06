@@ -16,6 +16,13 @@ export const organizationApi = apiSlice.injectEndpoints({
         body,
       }),
     }),
+    checkOrgName: build.mutation<{ available: boolean }, string>({
+      query: (name) => ({
+        url: "/organizations/check-name",
+        method: "POST",
+        body: { name },
+      }),
+    }),
   }),
 });
 
@@ -23,4 +30,5 @@ export const {
   useGetOrganizationQuery,
   useGetOrganizationsQuery,
   useCreateOrganizationMutation,
+  useCheckOrgNameMutation,
 } = organizationApi;

@@ -77,15 +77,35 @@
 
   &--create {
     display: flex;
+    align-items: center;
     justify-content: center;
     text-align: center;
     padding: 1rem;
     background: var(--accent-color);
     border: none;
+    height: 100%;
 
     .org-card__name {
       font-size: 1.125rem;
       color: var(--background-color);
     }
   }
+}
+
+.checking-text {
+  color: #555;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.error-text {
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.success-text {
+  color: #4caf50;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }

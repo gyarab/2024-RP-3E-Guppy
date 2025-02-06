@@ -277,4 +277,12 @@ export class OrganizationService {
       },
     });
   }
+
+  async checkName(name: string) {
+    const organization = await this.prisma.organization.findUnique({
+      where: { name },
+    });
+
+    return { available: !organization };
+  }
 }

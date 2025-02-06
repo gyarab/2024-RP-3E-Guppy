@@ -34,7 +34,7 @@ export class OrganizationController {
   @Get()
   async getAll(
     @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-    @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
+    @Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
     @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
     @Query('where') where?: Prisma.OrganizationWhereInput,
   ) {
@@ -111,5 +111,10 @@ export class OrganizationController {
     const user = req.user as UserWithoutPassword;
     if (!user) throw new NotFoundException('User not found');
     return this.organizationService.joinOrganization(joinCode, user.id);
+  }
+
+  @Post('check-name')
+  async checkName(@Body('name') name: string) {
+    return this.organizationService.checkName(name);
   }
 }
