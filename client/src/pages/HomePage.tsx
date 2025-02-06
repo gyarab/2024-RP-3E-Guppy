@@ -1,50 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+import { useGetOrganizationsQuery } from "../features/organization/organizationApi";
+
 import Loader from "../shared/ui/Loader";
 import OrganizationList from "../shared/ui/OrganizationList";
-import { useGetOrganizationsQuery } from "../features/organization/organizationApi";
-import { Organization } from "../shared/interfaces/Organization";
+import { FETCH_ORGS_LIMIT } from "../shared/constants/organization";
 
 function HomePage() {
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 10; // Items per page
 
-  // Fetch organizations and total count
-  const { data, isLoading, isError, error } = useGetOrganizationsQuery({
+  const { data, isLoading } = useGetOrganizationsQuery({
     page: currentPage,
-    limit,
+    limit: FETCH_ORGS_LIMIT,
   });
 
-  // Handle previous page click
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
   };
 
-  // Handle next page click
   const handleNextPage = () => {
-    if (data && currentPage < Math.ceil(data.count / limit)) {
+    if (data && currentPage < Math.ceil(data.count / FETCH_ORGS_LIMIT)) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
-  // Handle page number click
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
   };
 
-  // Effect to update organizations when the page changes
-  useEffect(() => {
-    if (data?.organizations) {
-      setOrganizations((prevOrganizations) => [
-        ...prevOrganizations,
-        ...data.organizations,
-      ]);
-    }
-  }, [data]);
-
-  // Early return for loading or error states
   if (isLoading) {
     return (
       <div className="container">
@@ -53,21 +38,17 @@ function HomePage() {
     );
   }
 
-  const totalPages = Math.ceil((data?.count || 0) / limit);
+  const organizations = data?.organizations || [];
+  const totalPages = Math.ceil((data?.count || 0) / FETCH_ORGS_LIMIT);
 
   return (
     <div className="container">
       <main className="main">
-        <h1 className="main__title">Welcome to the Home Page</h1>
+        <h1 className="main__title">Organizations</h1>
 
-        {/* Display the organization list if data is available */}
-        {organizations.length > 0 ? (
-          <OrganizationList organizations={organizations} />
-        ) : (
-          <p>No organizations found.</p>
-        )}
+        <OrganizationList organizations={organizations} />
 
-        {/* Pagination Controls */}
+        {/* TODO: Create a reusable <Pagination> component instead */}
         {totalPages > 1 && (
           <div className="pagination">
             <button
@@ -78,7 +59,6 @@ function HomePage() {
               Previous
             </button>
 
-            {/* Display page numbers */}
             {[...Array(totalPages)].map((_, index) => {
               const pageNumber = index + 1;
               return (

@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 
-import ToggleSidebar from "../shared/ui/ToggleSidebar";
+import { useAuth } from "../shared/hooks/useAuth";
+import { useShowElements } from "../shared/hooks/useShowElements";
+
 import Logo from "../shared/ui/Logo";
 import Nav from "../shared/ui/Nav";
 import Button from "../shared/ui/Button";
+import ToggleSidebar from "../shared/ui/ToggleSidebar";
 import ThemeSwitch from "../shared/ui/ThemeSwitch";
-import { useAuth } from "../shared/hooks/useAuth";
-import { useShowElements } from "../shared/hooks/useShowElements";
 
 function Header() {
   const { isAuth } = useAuth();

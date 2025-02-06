@@ -1,14 +1,14 @@
 import { useSelector } from "react-redux";
 
 import { selectIsSidebarOpen } from "../features/ui/uiSlice";
+import { useAuth } from "../shared/hooks/useAuth";
+import { useShowElements } from "../shared/hooks/useShowElements";
 
 import Header from "../widgets/Header";
 import Footer from "../widgets/Footer";
 import Router from "./routes/Router";
 import Sidebar from "../widgets/Sidebar";
 import Aside from "../shared/ui/Aside";
-import { useAuth } from "../shared/hooks/useAuth";
-import { useShowElements } from "../shared/hooks/useShowElements";
 
 function App() {
   const isSidebarOpen = useSelector(selectIsSidebarOpen);

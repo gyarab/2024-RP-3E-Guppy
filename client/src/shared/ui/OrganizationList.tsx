@@ -4,7 +4,7 @@ import { Organization } from "../interfaces/Organization";
 import { useNavigateWithParams } from "../hooks/useNavigateParams";
 
 interface OrganizationListProps {
-  organizations?: Organization[];
+  organizations: Organization[];
 }
 
 function OrganizationList({ organizations }: OrganizationListProps) {
@@ -19,9 +19,14 @@ function OrganizationList({ organizations }: OrganizationListProps) {
     e.preventDefault();
     navigateWithParams("/org/create", {});
   };
+
+  if (!organizations || organizations.length === 0) {
+    return <p>No organizations found.</p>;
+  }
+
   return (
     <ul className="org-list">
-      {organizations?.map((org) => (
+      {organizations.map((org) => (
         <OrganizationCard
           key={org.id}
           name={org.name}
