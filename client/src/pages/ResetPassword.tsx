@@ -50,6 +50,11 @@ function ResetPasswordPage() {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
+  function passwordCheck() {
+    if (credentials.password !== credentials.confirmPassword) {
+      setErrorMessage("Passwords do not match");
+    }
+  }
 
   return (
     <main className="resetPassword">
@@ -98,6 +103,9 @@ function ResetPasswordPage() {
             variant="accent"
             additionalClasses="resetPassword__button"
             disabled={isLoading}
+            onClick={() => {
+              passwordCheck();
+            }}
           >
             {isLoading ? "Loading..." : "Reset Password"}
           </Button>
