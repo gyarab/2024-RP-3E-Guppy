@@ -4,6 +4,7 @@ import { User } from "../../shared/interfaces/User";
 import { LoginCredentials } from "../../shared/interfaces/LoginCredentials";
 import { SignupCredentials } from "../../shared/interfaces/SignupCredentials";
 import { ForgotPasswordCredentials } from "../../shared/interfaces/ForgotPasswordCredentials";
+import { ResetPasswordCredentials } from "../../shared/interfaces/ResetPasswordCredentials";
 
 type UserWithToken = User & {
   accessToken: string;
@@ -38,10 +39,17 @@ export const authApi = apiSlice.injectEndpoints({
         body: email,
       }),
     }),
+    resetPassword: build.mutation<User, ResetPasswordCredentials>({
+      query: (credentials) => ({
+        url: "/auth/resetPassword",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
     verify: build.query<{ isAuth: boolean; user: User }, void>({
       query: () => "/auth/verify",
     }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation, useForgotPasswordMutation ,useVerifyQuery } = authApi;
+export const { useLoginMutation, useSignupMutation, useForgotPasswordMutation, useResetPasswordMutation,useVerifyQuery } = authApi;
