@@ -11,7 +11,6 @@ import {
   UseGuards,
   Request,
   NotFoundException,
-  DefaultValuePipe,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
@@ -33,14 +32,14 @@ export class OrganizationController {
 
   @Get()
   async getAll(
-    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-    @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
     @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
     @Query('where') where?: Prisma.OrganizationWhereInput,
   ) {
     return this.organizationService.organizations({
-      skip,
-      take,
+      skip: (page - 1) * limit,
+      take: limit,
       orderBy,
       where,
     });
@@ -111,5 +110,10 @@ export class OrganizationController {
     const user = req.user as UserWithoutPassword;
     if (!user) throw new NotFoundException('User not found');
     return this.organizationService.joinOrganization(joinCode, user.id);
+  }
+
+  @Post('check-name')
+  async checkName(@Body('name') name: string) {
+    return this.organizationService.checkName(name);
   }
 }
