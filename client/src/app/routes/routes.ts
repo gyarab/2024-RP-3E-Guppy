@@ -3,6 +3,8 @@ import CreatePostPage from "../../pages/CreatePostPage";
 import Dashboard from "../../pages/Dashboard";
 import FeedPage from "../../pages/FeedPage";
 import HomePage from "../../pages/HomePage";
+import About from "../../pages/About";
+import OurServices from "../../pages/OurServices";
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
 import ForgotPasswordPage from "../../pages/ForgotPassword";
@@ -15,6 +17,8 @@ interface Route {
 
 export const publicRoutes: Route[] = [
   { path: "/", component: HomePage },
+  { path: "/about", component: About},
+  { path: "/services", component: OurServices},
   { path: "/login", component: LoginPage },
   { path: "/signup", component: SignupPage },
   { path:"/forgotPassword", component: ForgotPasswordPage },
