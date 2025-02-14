@@ -1,39 +1,39 @@
 .create-org {
-    background: transparent;
-    position: relative;
-    padding: 5px 8px;
-    display: inline-flex;
+  background: transparent;
+  position: relative;
+  padding: 5px 8px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 15.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 25px;
+  outline: none;
+  overflow: hidden;
+  color: white;
+  transition: color 0.3s 0.1s ease-out;
+  text-align: center;
+  box-shadow: inset 0 0 0 10em #1ed760;
+
+  .create-icon {
+    width: 29px;
+    height: 29px;
+    font-size: 32px;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
-    font-size: 15.5px;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 25px;
-    outline: none;
-    overflow: hidden;
-    color: white;
-    transition: color 0.3s 0.1s ease-out;
-    text-align: center;
-    box-shadow: inset 0 0 0 10em #1ED760;
-  
-    .create-icon {
-      width: 29px;
-      height: 29px;
-      font-size: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  
-    .create-text {
-      margin: 0 10px;
-    }
-  
-    &:hover {
-        box-shadow: inset 0 0 0 10em #1EDF00;
-    }
+    justify-content: center;
   }
+
+  .create-text {
+    margin: 0 10px;
+  }
+
+  &:hover {
+    box-shadow: inset 0 0 0 10em #1edf00;
+  }
+}
 
 .sidebar-closed {
   .create-org {

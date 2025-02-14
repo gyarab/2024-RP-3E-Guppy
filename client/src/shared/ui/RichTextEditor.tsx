@@ -29,7 +29,7 @@ function RichTextEditor({
   onChange,
   onImageFilesChange,
   placeholder = "Write something...",
-  limit = 80,
+  limit = 250,
 }: RichTextEditorProps) {
   const imageFiles = useRef<Map<string, File>>(new Map());
 

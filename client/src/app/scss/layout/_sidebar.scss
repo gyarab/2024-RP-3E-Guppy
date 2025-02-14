@@ -2,16 +2,16 @@
 
 .sidebar {
   position: sticky;
-  top: 0;
+  top: 1rem;
   max-height: fit-content;
   background-color: var(--background-color);
-  margin: 0 1rem;
+  padding: 0 1rem;
   width: max-content;
 
   .organizations {
     display: flex;
     flex-direction: column;
-    row-gap: 5px;
+    gap: 5px;
     align-items: flex-start;
   }
 }

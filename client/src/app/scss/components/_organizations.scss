@@ -5,7 +5,7 @@
   // grid-template-columns: repeat(4, 1fr);
   // gap: 1.5rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-auto-rows: 1fr;
   gap: 1.5rem;
 
@@ -38,7 +38,7 @@
     margin: 0.5rem 0 0.25rem;
     font-size: 1.125rem;
     font-weight: bold;
-    color: #333;
+    // color: #333;
   }
 
   &__separator {
@@ -84,7 +84,7 @@
   &__description {
     margin: 0;
     font-size: 0.875rem;
-    color: #555;
+    // color: #555;
   }
 
   &--create {
