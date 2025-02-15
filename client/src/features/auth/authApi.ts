@@ -46,10 +46,16 @@ export const authApi = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
-    verify: build.query<{ isAuth: boolean; user: User }, void>({
+    verify: build.query<User, void>({
       query: () => "/auth/verify",
     }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation, useForgotPasswordMutation, useResetPasswordMutation,useVerifyQuery } = authApi;
+export const {
+  useLoginMutation,
+  useSignupMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useVerifyQuery,
+} = authApi;
