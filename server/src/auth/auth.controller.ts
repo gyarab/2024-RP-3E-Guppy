@@ -104,8 +104,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/verify')
-  async verify(@Cookies('accessToken') accessToken: string): Promise<any> {
+  async verify(@Request() req): Promise<UserWithoutPassword> {
+    const accessToken = req.headers.authorization.split(' ')[1];
     const user = await this.authService.verify(accessToken);
-    return { isAuth: !!user, user };
+    return user;
   }
 }
