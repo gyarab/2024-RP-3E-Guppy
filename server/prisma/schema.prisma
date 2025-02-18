@@ -23,6 +23,12 @@ model User {
   email             String             @unique
   password          String
   name              String?
+  birthdate         DateTime?
+  profilePictureUrl String?
+  bio               String?
+  phoneNumber       String?
+  isVerified        Boolean            @default(false)
+  lastLogin         DateTime?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   posts             Post[]
