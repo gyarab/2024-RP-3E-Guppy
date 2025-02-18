@@ -1,0 +1,68 @@
+@use "../abstract" as *;
+
+.profile {
+    min-height: content-height();
+    display: flex;
+    justify-content: center;
+    align-items: top;
+  
+    .form__group {
+        display: flex;
+        flex-direction: column;
+        background-color: #ececec;
+        width: auto;
+        height: 3rem;
+        border-radius: 10px;
+      }
+  &__text {
+    margin-bottom: 1.5rem;
+  }
+  .section__title {
+    margin: 1rem;
+    justify-self: center;
+    display: flex;
+  }
+    &__container {
+        width: 70%;
+        height: auto;
+        border-radius: 20px;
+        background-color: #f5f5f5;
+        margin: 3rem;
+
+        padding: 2rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr auto;
+
+        .button {
+            grid-column: span 2;
+            justify-self: center;
+            align-self: end;
+            display: flex;
+            height: 3rem;
+            width: auto;
+            margin: 1rem;
+        }
+        .logout__button {
+            background-color: #ff3a3a;
+        }
+        .logout__button:hover {
+            background-color: lighten($color: #ff3a3a, $amount: 10%);
+        }
+    }
+    .avatar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 2rem;
+    }
+    html[data-theme="dark"] &__container {
+        background-color: rgb(25, 25, 25);
+    }
+}
+html[data-theme="dark"] .form__group {
+    background-color: rgb(34, 34, 34);
+}
+html[data-theme="dark"] .form__input{
+    color: white;
+}
