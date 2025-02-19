@@ -21,10 +21,10 @@ model Organization {
 model User {
   id                Int                @id @default(autoincrement())
   email             String             @unique
-  password          String
+  password          String  
   name              String?
   birthdate         DateTime?
-  profilePictureUrl String?
+  profilePictureUrl String?            
   bio               String?
   phoneNumber       String?
   isVerified        Boolean            @default(false)
