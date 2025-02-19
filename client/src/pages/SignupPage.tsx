@@ -11,8 +11,7 @@ import Checkbox from "../shared/ui/Checkbox";
 import Button from "../shared/ui/Button";
 
 const DEFAULT_CREDENTIALS: SignupCredentials = {
-  firstName: "",
-  lastName: "",
+  name: "",
   email: "",
   password: "",
   birthdate: "",
@@ -23,7 +22,7 @@ function SignupPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isRemembered, setIsRemembered] = useState(false);
 
-  const firstNameInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
@@ -31,7 +30,7 @@ function SignupPage() {
   const [signup, { isLoading }] = useSignupMutation();
 
   useEffect(() => {
-    firstNameInputRef.current?.focus();
+    nameInputRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -95,30 +94,14 @@ function SignupPage() {
             <input
               type="text"
               className="form__input"
-              id="firstName"
-              name="firstName"
-              ref={firstNameInputRef}
-              value={credentials.firstName}
+              id="name"
+              name="name"
+              value={credentials.name}
               onChange={handleInputChange}
               autoComplete="off"
               required
             />
-            <span className="form__label-span">First Name</span>
-            <i></i>
-          </div>
-
-          <div className="form__group">
-            <input
-              type="text"
-              className="form__input"
-              id="lastName"
-              name="lastName"
-              value={credentials.lastName}
-              onChange={handleInputChange}
-              autoComplete="off"
-              required
-            />
-            <span className="form__label-span">Last Name</span>
+            <span className="form__label-span">Full name</span>
             <i></i>
           </div>
 
