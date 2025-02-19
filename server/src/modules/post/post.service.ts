@@ -2,12 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Post, Prisma } from '@prisma/client';
 import { UserService } from '../user/user.service';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class PostService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
+    private readonly likeService: LikeService,
   ) {}
 
   async post(postWhereUniqueInput: Prisma.PostWhereUniqueInput) {
@@ -23,12 +25,10 @@ export class PostService {
     where?: Prisma.PostWhereInput;
     orderBy?: Prisma.PostOrderByWithRelationInput;
     userId: number;
-  }): Promise<any> {
+  }): Promise<{ posts: Post[]; count: number }> {
     const { skip, take, cursor, where, orderBy, userId } = params;
 
-    // da se to rozepsat jako dva prisma prikazy
-    // ale z duvodu optimizace je to sjednoceny do jedne transakce
-    const [posts, totalCount] = await this.prisma.$transaction([
+    const [posts, count] = await this.prisma.$transaction([
       this.prisma.post.findMany({
         skip,
         take,
@@ -37,22 +37,21 @@ export class PostService {
         orderBy,
         include: {
           comments: true,
-          likedBy: {
-            select: {
-              id: true,
-            },
-          },
+          _count: { select: { likes: true } },
+          likes: { where: { userId }, select: { id: true } },
         },
       }),
       this.prisma.post.count({ where }),
     ]);
 
-    const postsWithHasLiked = posts.map((post) => ({
-      ...post,
-      hasLiked: post.likedBy.some((user) => user.id === userId),
-    }));
-
-    return { posts: postsWithHasLiked, count: totalCount };
+    return {
+      posts: posts.map(({ _count, likes, ...post }) => ({
+        ...post,
+        likes: _count.likes,
+        hasLiked: likes.length > 0,
+      })),
+      count,
+    };
   }
 
   async create(
@@ -103,32 +102,15 @@ export class PostService {
     return !!membership;
   }
 
-  async likePost(postId: number, userId: number): Promise<Post> {
+  async likePost(postId: number, userId: number): Promise<void> {
     const post = await this.prisma.post.findUnique({
       where: { id: postId },
-      include: { likedBy: true },
     });
 
     if (!post) {
       throw new NotFoundException('Post not found');
     }
 
-    if (post.likedBy.some((user) => user.id === userId)) {
-      return this.prisma.post.update({
-        where: { id: postId },
-        data: {
-          likes: { decrement: 1 },
-          likedBy: { disconnect: { id: userId } },
-        },
-      });
-    }
-
-    return this.prisma.post.update({
-      where: { id: postId },
-      data: {
-        likes: { increment: 1 },
-        likedBy: { connect: { id: userId } },
-      },
-    });
+    await this.likeService.togglePostLike(userId, postId);
   }
 }

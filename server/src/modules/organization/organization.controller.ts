@@ -35,13 +35,11 @@ export class OrganizationController {
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
     @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
-    @Query('where') where?: Prisma.OrganizationWhereInput,
   ) {
     return this.organizationService.organizations({
       skip: (page - 1) * limit,
       take: limit,
       orderBy,
-      where,
     });
   }
 
