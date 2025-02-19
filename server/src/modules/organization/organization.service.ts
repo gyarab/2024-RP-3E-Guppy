@@ -10,6 +10,7 @@ import { UserService } from '../user/user.service';
 
 import { CreateOrganizationDto } from './dto/CreateOrganizationDto';
 import { generateRandomString } from '../../common/utils/randomString';
+import { Role } from '../../auth/enum/roles.enum';
 
 @Injectable()
 export class OrganizationService {
@@ -40,7 +41,6 @@ export class OrganizationService {
             },
           },
         },
-        posts: true, // zakomentovat
       },
     });
   }
@@ -78,41 +78,81 @@ export class OrganizationService {
               },
             },
           },
-          posts: true, // zakomentovat
         },
       }),
       this.prisma.organization.count({ where }),
     ]);
 
     return { organizations, count: totalCount };
-
-    // return this.prisma.organization.findMany({
-    //   skip,
-    //   take,
-    //   cursor,
-    //   where,
-    //   orderBy,
-    //   include: {
-    //     users: {
-    //       include: {
-    //         user: {
-    //           select: {
-    //             id: true,
-    //             email: true,
-    //             name: true,
-    //           },
-    //         },
-    //         role: {
-    //           select: {
-    //             name: true,
-    //           },
-    //         },
-    //       },
-    //     },
-    //     posts: true, // zakomentovat
-    //   },
-    // });
   }
+
+  // async create(
+  //   organizationCreateDto: CreateOrganizationDto,
+  //   userId: number,
+  // ): Promise<Organization> {
+  //   const { name, description, logoUrl, userIds } = organizationCreateDto;
+
+  //   const creator = await this.userService.user({ id: userId });
+  //   if (!creator) {
+  //     throw new NotFoundException('Creator user not found');
+  //   }
+
+  //   const memberRole = await this.prisma.role.findUnique({
+  //     where: { name: 'Member' },
+  //   });
+  //   if (!memberRole) {
+  //     await this.prisma.role.create({
+  //       data: {
+  //         name: 'Member',
+  //       },
+  //     });
+  //   }
+
+  //   let usersToAdd = [];
+  //   if (userIds && userIds.length > 0) {
+  //     const users = await this.userService.users({
+  //       where: { id: { in: userIds } },
+  //     });
+
+  //     if (users.length !== userIds.length) {
+  //       throw new BadRequestException('Some users not found');
+  //     }
+
+  //     usersToAdd = users.map((user) => ({
+  //       user: { connect: { id: user.id } },
+  //       role: { connect: { name: 'Member' } },
+  //     }));
+  //   }
+
+  //   const joinCodes = await this.prisma.organization.findMany({
+  //     select: { joinCode: true },
+  //   });
+  //   const existingCodes = joinCodes.map(({ joinCode }) => joinCode);
+
+  //   let uniqueCode = '';
+  //   do {
+  //     uniqueCode = await generateRandomString(6);
+  //   } while (existingCodes.includes(uniqueCode));
+
+  //   return this.prisma.organization.create({
+  //     data: {
+  //       name,
+  //       description,
+  //       logoUrl,
+  //       creatorId: userId,
+  //       joinCode: uniqueCode,
+  //       users: {
+  //         create: [
+  //           {
+  //             user: { connect: { id: userId } },
+  //             role: { connect: { name: 'Member' } },
+  //           },
+  //           ...usersToAdd,
+  //         ],
+  //       },
+  //     },
+  //   });
+  // }
 
   async create(
     organizationCreateDto: CreateOrganizationDto,
@@ -125,14 +165,22 @@ export class OrganizationService {
       throw new NotFoundException('Creator user not found');
     }
 
-    const memberRole = await this.prisma.role.findUnique({
-      where: { name: 'Member' },
+    const roles = await this.prisma.role.findMany({
+      where: { name: { in: [Role.OWNER, Role.MEMBER] } },
     });
+
+    let ownerRole = roles.find((role) => role.name === Role.OWNER);
+    let memberRole = roles.find((role) => role.name === Role.MEMBER);
+
+    if (!ownerRole) {
+      ownerRole = await this.prisma.role.create({
+        data: { name: Role.OWNER },
+      });
+    }
+
     if (!memberRole) {
-      await this.prisma.role.create({
-        data: {
-          name: 'Member',
-        },
+      memberRole = await this.prisma.role.create({
+        data: { name: Role.MEMBER },
       });
     }
 
@@ -148,14 +196,13 @@ export class OrganizationService {
 
       usersToAdd = users.map((user) => ({
         user: { connect: { id: user.id } },
-        role: { connect: { name: 'Member' } },
+        role: { connect: { id: memberRole.id } },
       }));
     }
 
-    const joinCodes = await this.prisma.organization.findMany({
-      select: { joinCode: true },
-    });
-    const existingCodes = joinCodes.map(({ joinCode }) => joinCode);
+    const existingCodes = (
+      await this.prisma.organization.findMany({ select: { joinCode: true } })
+    ).map(({ joinCode }) => joinCode);
 
     let uniqueCode = '';
     do {
@@ -167,13 +214,12 @@ export class OrganizationService {
         name,
         description,
         logoUrl,
-        creatorId: userId,
         joinCode: uniqueCode,
         users: {
           create: [
             {
               user: { connect: { id: userId } },
-              role: { connect: { name: 'Member' } },
+              role: { connect: { id: ownerRole.id } },
             },
             ...usersToAdd,
           ],
@@ -219,7 +265,7 @@ export class OrganizationService {
         users: {
           create: {
             user: { connect: { id: userId } },
-            role: { connect: { name: 'Member' } },
+            role: { connect: { name: Role.MEMBER } },
           },
         },
       },

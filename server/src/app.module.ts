@@ -10,6 +10,7 @@ import { CommentModule } from './modules/comment/comment.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { join } from 'path';
+import { LikeModule } from './modules/like/like.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { join } from 'path';
     TokenModule,
     UserModule,
     AuthModule,
+    LikeModule,
     PostModule,
     CommentModule,
     OrganizationModule,

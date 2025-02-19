@@ -10,44 +10,45 @@ datasource db {
 model Organization {
   id          Int                @id @default(autoincrement())
   name        String             @unique
-  description String             @db.VarChar(255)
+  description String             @db.Text
   joinCode    String             @unique
-  logoUrl     String
-  creator     User               @relation(fields: [creatorId], references: [id])
-  creatorId   Int
+  logoUrl     String?
   users       UserOrganization[]
   posts       Post[]
   createdAt   DateTime           @default(now())
 }
 
 model User {
-  id                   Int                @id @default(autoincrement())
-  email                String             @unique
-  password             String
-  name                 String?
-  birthdate            DateTime           @default(now())
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-  posts                Post[]             @relation(name: "PostAuthor")
-  comments             Comment[]          @relation(name: "CommentAuthor")
-  organizations        UserOrganization[]
-  createdOrganizations Organization[]
-  likedPosts           Post[]             @relation(name: "PostLikedBy")
-  likedComments        Comment[]          @relation(name: "CommentLikedBy")
-  tokenVersion         Int                @default(0)
+  id                Int                @id @default(autoincrement())
+  email             String             @unique
+  password          String
+  name              String?
+  birthdate         DateTime?
+  profilePictureUrl String?
+  bio               String?
+  phoneNumber       String?
+  isVerified        Boolean            @default(false)
+  lastLogin         DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  posts             Post[]
+  comments          Comment[]
+  userOrganizations UserOrganization[]
+  likedEntities     Like[]
+  tokenVersion      Int                @default(0)
 }
 
 model Role {
-  id                Int                @id @default(autoincrement())
-  name              String             @unique
-  userOrganizations UserOrganization[]
+  id               Int                @id @default(autoincrement())
+  name             String             @unique
+  UserOrganization UserOrganization[]
 }
 
 model UserOrganization {
   id             Int          @id @default(autoincrement())
-  user           User         @relation(fields: [userId], references: [id])
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId Int
   role           Role         @relation(fields: [roleId], references: [id])
   roleId         Int
@@ -59,27 +60,25 @@ model Post {
   id             Int          @id @default(autoincrement())
   title          String
   content        String       @db.Text
-  author         User         @relation(name: "PostAuthor", fields: [authorId], references: [id])
+  author         User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId       Int
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId Int
   comments       Comment[]
-  likes          Int          @default(0)
-  likedBy        User[]       @relation(name: "PostLikedBy")
   tags           Tag[]
+  likes          Like[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId Int
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
-  content   String   @db.VarChar(255)
-  post      Post     @relation(fields: [postId], references: [id])
+  content   String   @db.Text
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
-  author    User     @relation(name: "CommentAuthor", fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
-  likes     Int      @default(0)
-  likedBy   User[]   @relation(name: "CommentLikedBy")
+  likes     Like[]
   createdAt DateTime @default(now())
 }
 
@@ -87,4 +86,16 @@ model Tag {
   id    Int    @id @default(autoincrement())
   name  String @unique
   posts Post[]
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int?
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int?
+
+  @@unique([userId, postId, commentId])
 }

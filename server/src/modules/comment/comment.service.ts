@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Comment, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private likeService: LikeService,
+  ) {}
 
   async comment(
     commentWhereUniqueInput: Prisma.CommentWhereUniqueInput,
@@ -70,32 +74,41 @@ export class CommentService {
     });
   }
 
-  async likeComment(commentId: number, userId: number): Promise<Comment> {
+  async likeComment(commentId: number, userId: number): Promise<void> {
     const comment = await this.prisma.comment.findUnique({
       where: { id: commentId },
-      include: { likedBy: true },
     });
 
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
 
-    if (comment.likedBy.some((user) => user.id === userId)) {
-      return this.prisma.comment.update({
-        where: { id: commentId },
-        data: {
-          likes: { decrement: 1 },
-          likedBy: { disconnect: { id: userId } },
-        },
-      });
-    }
+    await this.likeService.toggleCommentLike(userId, commentId);
+    // const comment = await this.prisma.comment.findUnique({
+    //   where: { id: commentId },
+    //   include: { likedBy: true },
+    // });
 
-    return this.prisma.comment.update({
-      where: { id: commentId },
-      data: {
-        likes: { increment: 1 },
-        likedBy: { connect: { id: userId } },
-      },
-    });
+    // if (!comment) {
+    //   throw new NotFoundException('Comment not found');
+    // }
+
+    // if (comment.likedBy.some((user) => user.id === userId)) {
+    //   return this.prisma.comment.update({
+    //     where: { id: commentId },
+    //     data: {
+    //       likes: { decrement: 1 },
+    //       likedBy: { disconnect: { id: userId } },
+    //     },
+    //   });
+    // }
+
+    // return this.prisma.comment.update({
+    //   where: { id: commentId },
+    //   data: {
+    //     likes: { increment: 1 },
+    //     likedBy: { connect: { id: userId } },
+    //   },
+    // });
   }
 }
