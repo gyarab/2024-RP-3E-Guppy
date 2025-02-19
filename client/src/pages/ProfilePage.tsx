@@ -42,7 +42,21 @@ function ProfilePage() {
         <main className="profile">
             <h1 className="section__title">Your profile</h1>
             <div className="container profile__container">
-                <div className="profile__left">
+                <div className="profile__preview">
+                    <Avatar 
+                       src={isUndefined("https://placehold.co/50", user?.profilePictureUrl)}
+                    />
+                    <div className="profile__info">
+                        <h2 className="section__subtitle">{user?.name}</h2>
+                        <span className="">{user?.email}</span>
+                    </div>
+                    <Button 
+                            additionalClasses="editProfile__button button" 
+                            variant="accent"
+                            onClick={toggleEdit}>
+                            {isEditing ? "Save Changes" : "Edit Profile"}
+                    </Button>
+                </div>
                     <div className="form__group">
                         <input
                             type="text"
@@ -51,7 +65,7 @@ function ProfilePage() {
                             defaultValue={user?.name} 
                             readOnly = {!isEditing}
                         />
-                        <span className="form__label-span">Name</span>
+                        <span className="form__label-span">Full name</span>
                         <i></i>
                     </div>
                     <div className="form__group">
@@ -59,7 +73,7 @@ function ProfilePage() {
                             type="text" 
                             id="bio"
                             className="form__input" 
-                            defaultValue={isUndefined("Enter Bio", user?.bio)} 
+                            defaultValue={user?.bio} //isUndefined("Enter Bio", user?.bio)
                             readOnly = {!isEditing}
                         />
                         <span className="form__label-span">Bio</span>
@@ -81,7 +95,7 @@ function ProfilePage() {
                             type="tel" 
                             id="phone"
                             className="form__input" 
-                            defaultValue={isUndefined("Enter Phone", user?.phoneNumber)}
+                            defaultValue={user?.phoneNumber} //isUndefined("Enter Phone", user?.phoneNumber)
                             readOnly = {!isEditing}
                         />
                         <span className="form__label-span">Phone</span>
@@ -98,28 +112,19 @@ function ProfilePage() {
                         <span className="form__label-span">Birthdate</span>
                         <i></i>
                     </div>
+                    <div className="bottom__buttons">
                     <Button 
-                        additionalClasses="changePassword__button" 
+                        additionalClasses="changePassword__button button" 
                         variant="accent"
-                        onClick={changePassword}>
-                        Change Password
+                        onClick={changePassword}
+                        >Change Password
                     </Button>
-                </div>
-
-                <div className="profile__right">
-                    <Avatar 
-                    src="https://placehold.co/50"/*{user?.profilePictureUrl}*/ 
-                    />
-                </div>
                     <Button 
-                        additionalClasses="editProfile__button button" 
-                        variant="accent"
-                        onClick={toggleEdit}>
-                        {isEditing ? "Save Changes" : "Edit Profile"}
-                    </Button>
-                    <Button additionalClasses="logout__button button" onClick={() => logout /*dispatch(logout)*/}>
+                        additionalClasses="logout__button button" 
+                        onClick={() => logout /*dispatch(logout)*/}>
                         Logout
                     </Button>
+                    </div>
             </div>
         </main>
     );
