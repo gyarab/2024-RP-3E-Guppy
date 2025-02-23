@@ -7,6 +7,7 @@ import { isApiError } from "../shared/utils/helpers";
 import { useResetPasswordMutation } from "../features/auth/authApi";
 import { setAuthCredentials } from "../features/auth/authSlice";
 import { ResetPasswordCredentials } from "../shared/interfaces/ResetPasswordCredentials";
+import EyeToggle from "../shared/ui/EyeToggle";
 import Button from "../shared/ui/Button";
 
 
@@ -19,6 +20,7 @@ function ResetPasswordPage() {
   const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
 
 
   const navigate = useNavigate();
@@ -67,7 +69,7 @@ function ResetPasswordPage() {
         <form onSubmit={handleSubmit} className="form resetPassword__form">
           <div className="form__group">
             <input
-              type="password"
+              type={isVisible ? "text" : "password"}
               className="form__input"
               id="password"
               name="password"
@@ -75,14 +77,14 @@ function ResetPasswordPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            />
+            /> <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
             <span className="form__label-span">Password</span>
             <i></i>
           </div>
 
           <div className="form__group">
             <input
-              type="password"
+              type={isVisible ? "text" : "password"}
               className="form__input"
               id="confirmPassword"
               name="confirmPassword"
@@ -90,7 +92,7 @@ function ResetPasswordPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            />
+            /> <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
             <span className="form__label-span">Confirm password</span>
             <i></i>
           </div>

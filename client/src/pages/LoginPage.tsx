@@ -7,6 +7,7 @@ import { isApiError } from "../shared/utils/helpers";
 import { useLoginMutation } from "../features/auth/authApi";
 import { setAuthCredentials } from "../features/auth/authSlice";
 import { LoginCredentials } from "../shared/interfaces/LoginCredentials";
+import EyeToggle from "../shared/ui/EyeToggle";
 import Checkbox from "../shared/ui/Checkbox";
 import Button from "../shared/ui/Button";
 
@@ -19,6 +20,7 @@ function LoginPage() {
   const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
   const [errorMessage, setErrorMessage] = useState("");
   const [isRemembered, setIsRemembered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -97,7 +99,7 @@ function LoginPage() {
 
           <div className="form__group">
             <input
-              type="password"
+              type={isVisible ? "text" : "password"}
               className="form__input"
               id="password"
               name="password"
@@ -105,7 +107,7 @@ function LoginPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            />
+            />  <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
             <span className="form__label-span">Password</span>
             <i></i>
           </div>

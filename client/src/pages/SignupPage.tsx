@@ -7,6 +7,7 @@ import { isApiError } from "../shared/utils/helpers";
 import { useSignupMutation } from "../features/auth/authApi";
 import { setAuthCredentials } from "../features/auth/authSlice";
 import { SignupCredentials } from "../shared/interfaces/SignupCredentials";
+import EyeToggle from "../shared/ui/EyeToggle";
 import Checkbox from "../shared/ui/Checkbox";
 import Button from "../shared/ui/Button";
 
@@ -21,6 +22,7 @@ function SignupPage() {
   const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
   const [errorMessage, setErrorMessage] = useState("");
   const [isRemembered, setIsRemembered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -122,7 +124,7 @@ function SignupPage() {
 
           <div className="form__group">
             <input
-              type="password"
+              type={isVisible ? "text" : "password"}
               className="form__input"
               id="password"
               name="password"
@@ -130,7 +132,7 @@ function SignupPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            />
+            /> <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
             <span className="form__label-span">Password</span>
             <i></i>
           </div>

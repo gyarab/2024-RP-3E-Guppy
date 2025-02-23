@@ -1,0 +1,43 @@
+.eye-toggle__container {
+    position: absolute;
+    right: 15px; // Ensures it's inside the input field but not covered
+    top: 50%;
+    transform: translateY(-40%); // Centers it vertically
+    cursor: pointer;
+    z-index: 11; // Ensure it appears above the input field
+  
+    input {
+      display: none; // Hide the checkbox
+    }
+  
+    svg {
+      width: 24px;
+      height: 24px;
+      stroke: #666;
+      cursor: pointer;
+      transition: stroke 0.2s ease-in-out;
+  
+      &:hover {
+        stroke: #000;
+      }
+    }
+  }
+  
+  .password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  
+    .form__input {
+      width: 100%;
+      padding: 0.875rem 40px 0.875rem 10px; // Add right padding for the eye icon
+      background-color: #f8fafc;
+      border: 1px solid #e3e7f0;
+      border-radius: 8px;
+  
+      &::placeholder {
+        color: #b8bcca;
+      }
+    }
+  }
+  
