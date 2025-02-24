@@ -8,10 +8,15 @@ import Button from "./Button";
 import Loader from "./Loader";
 import RichTextEditor from "./RichTextEditor";
 
+const initialTags = ["React", "JavaScript", "CSS", "UI/UX", "Next.js"];
+
 function CreatePostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageFiles, setImageFiles] = useState<Map<string, File>>(new Map());
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagOptions, setTagOptions] = useState<string[]>(initialTags);
+  const [tagSearch, setTagSearch] = useState(""); // Search input for tags
   const [isEditingTitle, setIsEditingTitle] = useState(false);
 
   const titleInputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +47,30 @@ function CreatePostForm() {
       );
     }
 
-    await createPost({ title, content: updatedContent });
+    await createPost({ title, content: updatedContent }); // TODO: include tags
+  };
+
+  const handleTagSelect = (tag: string) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
+    setTagSearch(""); // Clear search input
+  };
+
+  const handleTagRemove = (tag: string) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
+  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagSearch(e.target.value);
+  };
+
+  const handleAddNewTag = () => {
+    if (tagSearch.trim() && !tags.includes(tagSearch)) {
+      setTags([...tags, tagSearch]);
+      setTagOptions([...tagOptions, tagSearch]); // Add new tag to options
+    }
+    setTagSearch(""); // Reset input field
   };
 
   useEffect(() => {
@@ -109,6 +137,56 @@ function CreatePostForm() {
             text="Milan Tucek"
             secondaryText="UI & UX Developer"
           />
+        </div>
+        {/* Tag Selection UI */}
+        <div className="tags-selector">
+          <h4>Tags</h4>
+          <div className="tag-input-container">
+            <input
+              type="text"
+              placeholder="Search or add a tag..."
+              value={tagSearch}
+              onChange={handleTagInputChange}
+              onKeyDown={(e) => e.key === "Enter" && handleAddNewTag()}
+            />
+            <button type="button" onClick={handleAddNewTag}>
+              Add
+            </button>
+          </div>
+
+          {/* Tag suggestions dropdown */}
+          {tagSearch && (
+            <div className="tag-dropdown">
+              {tagOptions
+                .filter((tag) =>
+                  tag.toLowerCase().includes(tagSearch.toLowerCase())
+                )
+                .map((tag) => (
+                  <div
+                    key={tag}
+                    className="tag-dropdown-item"
+                    onClick={() => handleTagSelect(tag)}
+                  >
+                    {tag}
+                  </div>
+                ))}
+            </div>
+          )}
+
+          {/* Selected tags display */}
+          <div className="tags-list">
+            {tags.map((tag) => (
+              <div key={tag} className="tag-chip">
+                {tag}
+                <span
+                  className="remove-tag"
+                  onClick={() => handleTagRemove(tag)}
+                >
+                  ✕
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
         <RichTextEditor
           value={content}
