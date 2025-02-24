@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { AppDispatch } from "../app/store";
@@ -9,27 +9,31 @@ import Avatar from "../shared/ui/Avatar";
 
 function ProfilePage() {
     const [isEditing, setIsEditing] = useState(false);
+    const [dateValue, setDateValue] = useState("");
 
     const user = useSelector(selectUser);
-    const birthdate = user?.birthdate ? new Date(user.birthdate) : null;
-    const formattedBirthdate = birthdate ? birthdate.toDateString() : "N/A";
+    const birthdate = user?.birthdate ? new Date(user.birthdate) : new Date();
+    const formattedBirthdate = birthdate.toISOString().split("T")[0];
 
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
 
+    console.log("Bday: " + user?.birthdate);
+    console.log("formatted bday: " + formattedBirthdate);
 
-    console.log(user);
+    useEffect(() => {
+        if (formattedBirthdate) {
+            setDateValue(formattedBirthdate);
+        }
+    }, [formattedBirthdate]); 
 
-    function changePassword() {
-        navigate("/forgot-password");
-    }
     function isUndefined(message: string, value: string | undefined) {
         if (value === undefined){
         return message;
         } else {return value};
     }
     /*function isOwner() {
-        if (user.id === "owner") {
+        if ({user?.id} === {profile?.id}) {
             return true;
         } else {
             return false;
@@ -106,7 +110,8 @@ function ProfilePage() {
                             type="date" 
                             id="birthdate"
                             className="form__input" 
-                            defaultValue={formattedBirthdate} 
+                            value={dateValue} 
+                            onChange={(e) => setDateValue(e.target.value)} // Allows editing
                             readOnly = {!isEditing}
                         />
                         <span className="form__label-span">Birthdate</span>
@@ -116,12 +121,15 @@ function ProfilePage() {
                     <Button 
                         additionalClasses="changePassword__button button" 
                         variant="accent"
-                        onClick={changePassword}
+                        onClick={() => navigate("/forgot-password")}
                         >Change Password
                     </Button>
                     <Button 
                         additionalClasses="logout__button button" 
-                        onClick={() => logout /*dispatch(logout)*/}>
+                        onClick={() => {
+                            dispatch(logout());
+                            navigate("/login");
+                        }}>
                         Logout
                     </Button>
                     </div>
