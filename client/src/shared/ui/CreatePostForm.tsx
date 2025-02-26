@@ -16,62 +16,21 @@ function CreatePostForm() {
   const [imageFiles, setImageFiles] = useState<Map<string, File>>(new Map());
   const [tags, setTags] = useState<string[]>([]);
   const [tagOptions, setTagOptions] = useState<string[]>(initialTags);
-  const [tagSearch, setTagSearch] = useState(""); // Search input for tags
+  const [tagSearch, setTagSearch] = useState("");
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
 
   const titleInputRef = useRef<HTMLInputElement>(null);
+  const tagInputRef = useRef<HTMLInputElement>(null);
 
   const [uploadImage, { isLoading: isUploadLoading }] =
     useUploadImageMutation();
   const [createPost, { isLoading: isPostLoading }] = useCreatePostMutation();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const imageMap = new Map();
-    for (const [placeholder, file] of imageFiles) {
-      const { data: url } = await uploadImage({
-        file,
-        type: "post",
-      });
-      if (url) {
-        imageMap.set(placeholder, `http://localhost:3000/${url}`);
-      }
-    }
-
-    let updatedContent = content;
-    for (const [placeholder, url] of imageMap) {
-      updatedContent = updatedContent.replace(
-        new RegExp(`src="${placeholder}"`, "g"),
-        `src="${url}"`
-      );
-    }
-
-    await createPost({ title, content: updatedContent }); // TODO: include tags
-  };
-
-  const handleTagSelect = (tag: string) => {
-    if (!tags.includes(tag)) {
-      setTags([...tags, tag]);
-    }
-    setTagSearch(""); // Clear search input
-  };
-
-  const handleTagRemove = (tag: string) => {
-    setTags(tags.filter((t) => t !== tag));
-  };
-
-  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagSearch(e.target.value);
-  };
-
-  const handleAddNewTag = () => {
-    if (tagSearch.trim() && !tags.includes(tagSearch)) {
-      setTags([...tags, tagSearch]);
-      setTagOptions([...tagOptions, tagSearch]); // Add new tag to options
-    }
-    setTagSearch(""); // Reset input field
-  };
+  const filteredTags = tagOptions.filter((tag) =>
+    tag.toLowerCase().includes(tagSearch.toLowerCase())
+  );
 
   useEffect(() => {
     if (isEditingTitle) {
@@ -86,6 +45,15 @@ function CreatePostForm() {
     };
   }, [isEditingTitle]);
 
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      titleInputRef.current &&
+      !titleInputRef.current.contains(e.target as Node)
+    ) {
+      setIsEditingTitle(false);
+    }
+  };
+
   const handleTitleEdit = () => {
     setIsEditingTitle(true);
   };
@@ -96,14 +64,115 @@ function CreatePostForm() {
     }
   };
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      titleInputRef.current &&
-      !titleInputRef.current.contains(e.target as Node)
-    ) {
-      setIsEditingTitle(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!title.trim()) {
+      alert("Title cannot be empty.");
+      return;
+    }
+
+    const imageMap = new Map();
+    for (const [placeholder, file] of imageFiles) {
+      const { data: url } = await uploadImage({ file, type: "post" });
+      if (url) {
+        imageMap.set(placeholder, `http://localhost:3000/${url}`);
+      }
+    }
+
+    let updatedContent = content;
+    for (const [placeholder, url] of imageMap) {
+      updatedContent = updatedContent.replace(
+        new RegExp(`src="${placeholder}"`, "g"),
+        `src="${url}"`
+      );
+    }
+
+    await createPost({ title, content: updatedContent });
+  };
+
+  const handleTagSelect = (tag: string) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
+    setTagSearch("");
+    setHighlightedIndex(-1);
+  };
+
+  const handleTagRemove = (tag: string) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
+  // const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTagSearch(e.target.value);
+  //   setHighlightedIndex(-1);
+  // };
+
+  const fetchAnswers = async (query: string) => {
+    const allAnswers = [
+      "How to use React state?",
+      "What is the best way to manage CSS in React?",
+      "Differences between Next.js and React?",
+    ];
+
+    return allAnswers.filter((answer) =>
+      answer.toLowerCase().includes(query.toLowerCase())
+    );
+  };
+
+  const handleTagInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const query = e.target.value;
+    setTagSearch(query);
+
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const filtered = tagOptions.filter((tag) =>
+      tag.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const fetchedAnswers = await fetchAnswers(query);
+
+    setSearchResults(fetchedAnswers);
+  };
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev < filteredTags.length - 1 ? prev + 1 : 0
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev > 0 ? prev - 1 : filteredTags.length - 1
+      );
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (highlightedIndex >= 0 && filteredTags.length > 0) {
+        handleTagSelect(filteredTags[highlightedIndex]);
+      } else if (tagSearch.trim()) {
+        handleAddNewTag();
+      }
+    } else if (e.key === "Escape") {
+      setTagSearch("");
+      setHighlightedIndex(-1);
     }
   };
+
+  const handleAddNewTag = () => {
+    if (tagSearch.trim() && !tags.includes(tagSearch)) {
+      setTags([...tags, tagSearch]);
+      setTagOptions([...tagOptions, tagSearch]);
+    }
+    setTagSearch("");
+  };
+
   return (
     <>
       {(isPostLoading || isUploadLoading) && <Loader />}
@@ -138,38 +207,72 @@ function CreatePostForm() {
             secondaryText="UI & UX Developer"
           />
         </div>
+
         {/* Tag Selection UI */}
         <div className="tags-selector">
           <h4>Tags</h4>
           <div className="tag-input-container">
             <input
+              ref={tagInputRef}
               type="text"
               placeholder="Search or add a tag..."
               value={tagSearch}
               onChange={handleTagInputChange}
-              onKeyDown={(e) => e.key === "Enter" && handleAddNewTag()}
+              onKeyDown={handleTagKeyDown}
             />
-            <button type="button" onClick={handleAddNewTag}>
-              Add
-            </button>
           </div>
 
-          {/* Tag suggestions dropdown */}
+          {/* Tag suggestions dropdown
+          {tagSearch && filteredTags.length > 0 && (
+            <div className="tag-dropdown">
+              {filteredTags.map((tag, index) => (
+                <div
+                  key={tag}
+                  className={`tag-dropdown-item ${
+                    index === highlightedIndex ? "highlighted" : ""
+                  }`}
+                  onClick={() => handleTagSelect(tag)}
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
+          )} */}
           {tagSearch && (
             <div className="tag-dropdown">
-              {tagOptions
-                .filter((tag) =>
-                  tag.toLowerCase().includes(tagSearch.toLowerCase())
-                )
-                .map((tag) => (
-                  <div
-                    key={tag}
-                    className="tag-dropdown-item"
-                    onClick={() => handleTagSelect(tag)}
-                  >
-                    {tag}
-                  </div>
-                ))}
+              {/* Show matching tags */}
+              {filteredTags.length > 0 && (
+                <>
+                  <h5>Tags</h5>
+                  {filteredTags.map((tag, index) => (
+                    <div
+                      key={tag}
+                      className={`tag-dropdown-item ${
+                        index === highlightedIndex ? "highlighted" : ""
+                      }`}
+                      onClick={() => handleTagSelect(tag)}
+                    >
+                      {tag}
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {/* Show relevant answers */}
+              {searchResults.length > 0 && (
+                <>
+                  <h5>Answers</h5>
+                  {searchResults.map((answer) => (
+                    <div
+                      key={answer}
+                      className="tag-dropdown-item answer-item"
+                      onClick={() => console.log(`Navigating to: ${answer}`)}
+                    >
+                      {answer}
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           )}
 
@@ -188,6 +291,7 @@ function CreatePostForm() {
             ))}
           </div>
         </div>
+
         <RichTextEditor
           value={content}
           onChange={setContent}

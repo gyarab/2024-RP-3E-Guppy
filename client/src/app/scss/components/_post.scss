@@ -188,6 +188,8 @@
 }
 
 .tags-selector {
+  position: relative;
+
   margin-bottom: 15px;
 }
 
@@ -227,8 +229,10 @@
   cursor: pointer;
 }
 
-.tag-dropdown-item:hover {
-  background: #f0f0f0;
+.tag-dropdown-item:hover,
+.tag-dropdown-item.highlighted {
+  background: #007bff;
+  color: white;
 }
 
 .tags-list {
