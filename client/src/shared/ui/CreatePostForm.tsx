@@ -8,6 +8,7 @@ import Avatar from "./Avatar";
 import Button from "./Button";
 import Loader from "./Loader";
 import RichTextEditor from "./RichTextEditor";
+import { AnimatePresence, motion, Reorder } from "framer-motion";
 
 // TODO: Fetch initial tags from the server
 const initialTags = [
@@ -32,6 +33,11 @@ function CreatePostForm() {
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [draggedTag, setDraggedTag] = useState<string | null>(null); // To track the currently dragged tag
+  const [dragPosition, setDragPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagInputRef = useRef<HTMLInputElement>(null);
@@ -41,7 +47,7 @@ function CreatePostForm() {
   const [createPost, { isLoading: isPostLoading }] = useCreatePostMutation();
 
   const fuse = new Fuse(tagOptions, {
-    threshold: 0.4, // Allows minor typos
+    threshold: 0.35, // Allows minor typos
     includeScore: true,
   });
 
@@ -229,7 +235,6 @@ function CreatePostForm() {
               onKeyDown={handleTagKeyDown}
             />
           </div>
-
           {/* Tag suggestions dropdown */}
           {tagSearch && filteredTags.length > 0 && (
             <div className="tag-dropdown">
@@ -246,9 +251,8 @@ function CreatePostForm() {
               ))}
             </div>
           )}
-
           {/* Selected tags display */}
-          <div className="tags-list">
+          {/* <div className="tags-list">
             {tags.map((tag, index) => (
               <div
                 key={tag}
@@ -267,6 +271,71 @@ function CreatePostForm() {
                 </span>
               </div>
             ))}
+          </div> */}
+          {/* Selected tags display with animation */}
+          {/* <Reorder.Group
+            as="div"
+            axis="y"
+            values={tags}
+            onReorder={handleReorder}
+            className="tags-list"
+          >
+            <AnimatePresence>
+              {tags.map((tag) => (
+                <Reorder.Item
+                  key={tag}
+                  value={tag}
+                  className="tag-chip"
+                  layout
+                  drag
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.5}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  {tag}
+                  <span
+                    className="remove-tag"
+                    onClick={() => handleTagRemove(tag)}
+                  >
+                    ✕
+                  </span>
+                </Reorder.Item>
+              ))}
+            </AnimatePresence>
+          </Reorder.Group> */}
+          <div className="tags-list">
+            <AnimatePresence>
+              <Reorder.Group
+                axis="x" // Makes tags reorder horizontally
+                values={tags}
+                onReorder={setTags}
+                className="tag-container"
+              >
+                {tags.map((tag) => (
+                  <Reorder.Item
+                    key={tag}
+                    value={tag}
+                    className="tag-chip"
+                    whileDrag={{ scale: 1.1, zIndex: 10 }}
+                    dragElastic={0.3}
+                    dragTransition={{ bounceStiffness: 200, bounceDamping: 20 }}
+                    initial={{ opacity: 0, scale: 0.5 }} // Initial state for appearance
+                    animate={{ opacity: 1, scale: 1 }} // Animation on appearance
+                  >
+                    {tag}
+                    <span
+                      className="remove-tag"
+                      onClick={() => handleTagRemove(tag)}
+                    >
+                      ✕
+                    </span>
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
+            </AnimatePresence>
           </div>
         </div>
 

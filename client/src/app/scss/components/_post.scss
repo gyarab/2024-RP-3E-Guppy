@@ -187,33 +187,36 @@
   }
 }
 
+/* Container for the tag selection UI */
 .tags-selector {
   position: relative;
   margin-bottom: 15px;
 }
 
+/* Input container with button */
 .tag-input-container {
   display: flex;
   align-items: center;
   gap: 5px;
+
+  input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  button {
+    padding: 5px 10px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+  }
 }
 
-.tag-input-container input {
-  flex: 1;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.tag-input-container button {
-  padding: 5px 10px;
-  border: none;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
+/* Dropdown container */
 .tag-dropdown {
   position: absolute;
   background: white;
@@ -224,17 +227,19 @@
   z-index: 10;
 }
 
+/* Dropdown item styles */
 .tag-dropdown-item {
   padding: 5px;
   cursor: pointer;
+
+  &:hover,
+  &.highlighted {
+    background: #007bff;
+    color: white;
+  }
 }
 
-.tag-dropdown-item:hover,
-.tag-dropdown-item.highlighted {
-  background: #007bff;
-  color: white;
-}
-
+/* Container for the list of tags */
 .tags-list {
   display: flex;
   flex-wrap: wrap;
@@ -242,17 +247,25 @@
   margin-top: 10px;
 }
 
+.tag-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 10px; /* Space between tags */
+  justify-content: flex-start; /* Align tags to the start */
+}
+
 .tag-chip {
   display: flex;
   align-items: center;
   background: #007bff;
   color: white;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: grab;
+  user-select: none;
 }
 
-.tag-chip .remove-tag {
+.remove-tag {
   margin-left: 8px;
   cursor: pointer;
 }
