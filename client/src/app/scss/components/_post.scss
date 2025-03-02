@@ -1,91 +1,102 @@
 @use "../abstract" as *;
 
 .post {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
   width: 100%;
-  max-width: 600px;
+  max-width: 650px;
+  background: #fff;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
 
   &__header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.675rem 0.875rem;
-    background: #f9f9f9;
+    padding: 0.875rem 1rem;
+    background: #f8f8f8;
     border-bottom: 1px solid #eee;
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
   }
 
   &__main {
-    padding: 0.675rem 0.875rem;
+    padding: 1rem;
     background: #fff;
-    border-bottom: 1px solid #eee;
-  }
-
-  &__footer {
-    padding: 0.675rem 0.875rem;
-    background: #f9f9f9;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
   }
 
   &__title {
-    font-size: 1.25rem;
-    margin: 0 0 0.75rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #333;
+    margin-bottom: 0.5rem;
+    color: #222;
   }
 
   &__content {
     font-size: 1rem;
-    line-height: 1.5;
-    color: #555;
+    line-height: 1.6;
+    color: #444;
+    word-break: break-word;
 
     img {
-      max-height: 250px;
-      border-radius: 8px;
-      margin-right: 0.5rem;
-      margin-bottom: 0.5rem;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 0.5rem;
     }
   }
 
-  &__read-more {
-    text-align: right;
-    font-weight: bold;
-    color: var(--primary-color);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: color 0.3s;
-
-    &:hover {
-      color: var(--accent-color);
-    }
+  &__footer {
+    padding: 0.875rem 1rem;
+    background: #f8f8f8;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   &__action {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 1.2rem;
 
     .post__button {
       border: none;
       background: none;
       cursor: pointer;
-      padding: 0;
+      padding: 0.3rem;
+      transition: opacity 0.2s ease-in-out;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .like {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    .like-icon {
+      width: 24px;
+      height: 24px;
+      transition: fill 0.3s ease-in-out;
+    }
+
+    .like-count {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #444;
     }
   }
 
   &__date {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     color: #888;
-    margin-bottom: 0.5rem;
-  }
-
-  &__comment {
-    font-size: 0.9rem;
-    color: #555;
   }
 }
 
@@ -123,21 +134,6 @@
     justify-content: space-between;
     gap: 1rem;
   }
-}
-
-.like {
-  display: flex;
-  align-items: center;
-}
-
-.like-icon {
-  height: 1.5rem;
-  width: 1.5rem;
-  transition: fill 0.2s ease;
-}
-
-.like-count {
-  user-select: none;
 }
 
 .feed {
@@ -187,13 +183,11 @@
   }
 }
 
-/* Container for the tag selection UI */
 .tags-selector {
   position: relative;
   margin-bottom: 15px;
 }
 
-/* Input container with button */
 .tag-input-container {
   display: flex;
   align-items: center;
@@ -205,18 +199,8 @@
     border: 1px solid #ccc;
     border-radius: 5px;
   }
-
-  button {
-    padding: 5px 10px;
-    border: none;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
 }
 
-/* Dropdown container */
 .tag-dropdown {
   position: absolute;
   background: white;
@@ -227,7 +211,6 @@
   z-index: 10;
 }
 
-/* Dropdown item styles */
 .tag-dropdown-item {
   padding: 5px;
   cursor: pointer;
@@ -239,7 +222,6 @@
   }
 }
 
-/* Container for the list of tags */
 .tags-list {
   display: flex;
   flex-wrap: wrap;
@@ -247,25 +229,31 @@
   margin-top: 10px;
 }
 
-.tag-container {
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping */
-  gap: 10px; /* Space between tags */
-  justify-content: flex-start; /* Align tags to the start */
-}
-
 .tag-chip {
-  display: flex;
-  align-items: center;
-  background: #007bff;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 20px;
-  cursor: grab;
+  font-size: 14px;
+  color: #828282;
+  border: 1px solid #828282;
+  padding: 6px 12px;
+  border-radius: 50px;
   user-select: none;
 }
 
 .remove-tag {
   margin-left: 8px;
   cursor: pointer;
+}
+
+.title-editor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .post-form__input,
+  .post-form__button {
+    height: 35px;
+  }
+
+  .edit-icon {
+    cursor: pointer;
+  }
 }
