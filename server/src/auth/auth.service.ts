@@ -13,6 +13,7 @@ import {
 } from './types/auth.types';
 import { TokenService } from '../modules/token/token.service';
 import { UserService } from '../modules/user/user.service';
+import { MailService } from '../modules/mail/mail.service';
 import { SignupUserDto } from './dto/SignupUserDto';
 
 @Injectable()
@@ -20,6 +21,7 @@ export class AuthService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly userService: UserService,
+    private readonly mailService: MailService
   ) {}
 
   async login(loginDto: LoginUserDto): Promise<UserWithTokens> {
@@ -58,6 +60,8 @@ export class AuthService {
 
     const { password: _, ...payload } = user;
     const tokens = await this.tokenService.generateTokens(payload);
+
+    await this.mailService.sendMail(user.email, 'signup', { name: user.name });
 
     return { ...payload, ...tokens };
   }

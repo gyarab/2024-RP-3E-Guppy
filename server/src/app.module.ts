@@ -11,6 +11,7 @@ import { OrganizationModule } from './modules/organization/organization.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { join } from 'path';
 import { LikeModule } from './modules/like/like.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { LikeModule } from './modules/like/like.module';
     CommentModule,
     OrganizationModule,
     UploadModule,
+    MailModule,
   ],
 })
 export class AppModule {}

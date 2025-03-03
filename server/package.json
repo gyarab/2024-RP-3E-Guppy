@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.4.1",
@@ -31,6 +32,7 @@
     "class-validator": "^0.14.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
+    "nodemailer": "^6.10.0",
     "rxjs": "^7.8.1",
     "sharp": "^0.33.5"
   },
