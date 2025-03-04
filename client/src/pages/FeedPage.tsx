@@ -11,23 +11,51 @@ function FeedPage() {
   const [page, setPage] = useState(1);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, isLoading } = useGetPostsQuery({
-    page,
-    limit: FETCH_POSTS_LIMIT,
-  });
+  const { data, isLoading, refetch } = useGetPostsQuery(
+    {
+      page,
+      limit: FETCH_POSTS_LIMIT,
+      search: searchQuery,
+    },
+    {
+      skip: !searchQuery && page === 1,
+    }
+  );
 
   useEffect(() => {
-    if (data && data.posts.length > 0) {
-      setPosts((prevPosts) => [...prevPosts, ...data.posts]);
-      console.log(data);
+    // if (data && data.posts.length > 0) {
+    //   setPosts((prevPosts) => [...prevPosts, ...data.posts]);
+    //   console.log(data);
 
-      if (posts.length + data.posts.length >= data.count) {
-        setHasMore(false);
+    //   if (posts.length + data.posts.length >= data.count) {
+    //     setHasMore(false);
+    //   }
+    // }
+    if (data && data.posts.length > 0) {
+      if (searchQuery) {
+        setPosts(data.posts); // Replace posts with search results
+        setHasMore(false); // Disable infinite scroll for search
+      } else {
+        setPosts((prevPosts) => [...prevPosts, ...data.posts]);
+        if (posts.length + data.posts.length >= data.count) {
+          setHasMore(false);
+        }
       }
     }
-  }, [data]);
+  }, [data, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1); // Reset pagination for new search
+      setHasMore(false); // Disable infinite scroll during search
+      refetch(); // Fetch search results from the server
+    } else {
+      setHasMore(true); // Enable infinite scroll when search is cleared
+    }
+  }, [searchQuery, refetch]);
 
   const observeLastPost = useCallback(
     (node: HTMLDivElement | null) => {
@@ -43,7 +71,7 @@ function FeedPage() {
             setPage((prevPage) => prevPage + 1);
           }
         },
-        { threshold: 1.0 } // FIXME: zmenit dle potreby
+        { threshold: 1.0 }
       );
 
       if (node) {
@@ -60,6 +88,13 @@ function FeedPage() {
       <p className="section__subtitle">
         Here you can see posts from people you follow.
       </p>
+      <input
+        type="text"
+        placeholder="Search by title or tags..."
+        className="search-bar"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <div className="feed">
         {posts?.map((post, index) => (
           <Post
