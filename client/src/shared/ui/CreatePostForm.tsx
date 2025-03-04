@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Fuse from "fuse.js";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 import { useCreatePostMutation } from "../../features/post/postApi";
 import { useUploadImageMutation } from "../../features/upload/uploadApi";
