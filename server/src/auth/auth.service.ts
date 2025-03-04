@@ -96,4 +96,60 @@ export class AuthService {
     const payload = await this.tokenService.validateAccessToken(accessToken);
     return payload;
   }
+
+  async forgotPassword(email: string): Promise<void> {
+    if (!email) throw new BadRequestException('Email is required.');
+
+    const user = await this.userService.user({ email });
+    if (!user) throw new BadRequestException('User not found.');
+
+    const token = await bcrypt.hash(user.email, 10);
+    const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
+
+    await this.userService.update({
+      where: { email },
+      data: {
+        resetPasswordToken: token,
+        resetPasswordTokenExpiry: new Date(Date.now() + 3600000),
+      },
+    });
+
+    await this.mailService.sendMail(user.email, 'forgot-password', {
+      name: user.name,
+      resetLink,
+    });
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    if (!token || !newPassword)
+      throw new BadRequestException('Token and new password are required.');
+  
+    const user = await this.userService.findFirst({
+      where: { resetPasswordToken: token },
+    });
+
+    console.log(user);
+  
+    if (!user || !user.resetPasswordToken || !user.resetPasswordTokenExpiry) {
+      throw new BadRequestException('Invalid or expired token.');
+    }
+
+    const isTokenValid = (token === user.resetPasswordToken);
+  
+    if (!isTokenValid || user.resetPasswordTokenExpiry < new Date())
+      throw new BadRequestException('Invalid or expired token.');
+  
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+    await this.userService.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null,
+        resetPasswordTokenExpiry: null,
+      },
+    });
+  }
+  
+  
 }

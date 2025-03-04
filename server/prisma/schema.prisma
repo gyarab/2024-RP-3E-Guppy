@@ -36,6 +36,8 @@ model User {
   userOrganizations UserOrganization[]
   likedEntities     Like[]
   tokenVersion      Int                @default(0)
+  resetPasswordToken  String?
+  resetPasswordTokenExpiry DateTime?
 }
 
 model Role {
