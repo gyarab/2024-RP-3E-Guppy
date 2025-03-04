@@ -20,6 +20,7 @@ import { Prisma } from '@prisma/client';
 import { PostService } from './post.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserWithoutPassword } from 'src/auth/types/auth.types';
+import { CreatePostDto } from './dto/CreatePostDto';
 
 @UseGuards(AuthGuard)
 @Controller('posts')
@@ -29,7 +30,7 @@ export class PostController {
   @HttpCode(HttpStatus.CREATED)
   @Post('organization/:organizationId')
   async create(
-    @Body() data: Prisma.PostCreateInput,
+    @Body() dto: CreatePostDto,
     @Request() req,
     @Param('organizationId', ParseIntPipe) organizationId: number,
   ) {
@@ -45,7 +46,7 @@ export class PostController {
       throw new BadRequestException('User is not a member of the organization');
     }
 
-    return this.postService.create(data, user.id, organizationId);
+    return this.postService.create(dto, user.id, organizationId);
   }
 
   @HttpCode(HttpStatus.OK)

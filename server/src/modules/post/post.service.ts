@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Post, Prisma } from '@prisma/client';
 import { UserService } from '../user/user.service';
 import { LikeService } from '../like/like.service';
+import { CreatePostDto } from './dto/CreatePostDto';
 
 @Injectable()
 export class PostService {
@@ -39,6 +40,7 @@ export class PostService {
           comments: true,
           _count: { select: { likes: true } },
           likes: { where: { userId }, select: { id: true } },
+          tags: { select: { name: true } },
         },
       }),
       this.prisma.post.count({ where }),
@@ -55,19 +57,29 @@ export class PostService {
   }
 
   async create(
-    data: Prisma.PostCreateInput,
+    dto: CreatePostDto,
     userId: number,
     organizationId: number,
   ): Promise<Post> {
-    const user = await this.userService.user({ id: userId });
-    if (!user) throw new NotFoundException('User not found');
+    const { title, content, tags } = dto;
 
     return this.prisma.post.create({
       data: {
-        title: data.title,
-        content: data.content,
+        title,
+        content,
         author: { connect: { id: userId } },
         organization: { connect: { id: organizationId } },
+        tags: tags?.length
+          ? {
+              connectOrCreate: tags.map((tag) => ({
+                where: { name: tag },
+                create: { name: tag },
+              })),
+            }
+          : undefined,
+      },
+      include: {
+        tags: true,
       },
     });
   }

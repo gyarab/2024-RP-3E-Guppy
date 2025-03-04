@@ -18,18 +18,18 @@ interface Route {
 
 export const publicRoutes: Route[] = [
   { path: "/", component: HomePage },
-  { path: "/about", component: About},
-  { path: "/services", component: OurServices},
+  { path: "/about", component: About },
+  { path: "/services", component: OurServices },
   { path: "/login", component: LoginPage },
   { path: "/signup", component: SignupPage },
-  { path:"/forgot-password", component: ForgotPasswordPage },
-  { path:"/reset-password", component: ResetPasswordPage },
+  { path: "/forgot-password", component: ForgotPasswordPage },
+  { path: "/reset-password", component: ResetPasswordPage },
+  { path: "/post/create", component: CreatePostPage },
 ];
 
 export const privateRoutes: Route[] = [
   { path: "/dashboard", component: Dashboard },
   { path: "/feed", component: FeedPage },
-  { path: "/post/create", component: CreatePostPage },
   { path: "/org/create", component: CreateOrganizationPage },
   { path: "/profile", component: ProfilePage },
 ];
