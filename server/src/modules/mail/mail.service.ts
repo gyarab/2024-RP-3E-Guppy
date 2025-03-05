@@ -36,7 +36,7 @@ export class MailService {
 
   async sendMail(
     email: string,
-    type: 'signup' | 'reset_password',
+    type: 'signup' | 'forgot-password',
     variables: Record<string, string>,
   ) {
     const template = this.templates[type];

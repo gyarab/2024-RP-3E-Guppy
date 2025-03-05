@@ -53,4 +53,12 @@ export class UserService {
       where,
     });
   }
+
+  async findFirst(params: { where: Prisma.UserWhereInput }): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      where: params.where,
+    });
+  }
+  
+  
 }

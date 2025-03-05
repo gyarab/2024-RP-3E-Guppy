@@ -22,6 +22,7 @@ import {
 import { SignupUserDto } from './dto/SignupUserDto';
 import { Cookies } from 'src/common/decorators/cookie.decorator';
 import { AuthGuard } from './guards/auth.guard';
+import { ResetPasswordDto } from './dto/ResetPasswordDto';
 
 @Controller('auth')
 export class AuthController {
@@ -108,5 +109,17 @@ export class AuthController {
     const accessToken = req.headers.authorization.split(' ')[1];
     const user = await this.authService.verify(accessToken);
     return user;
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/forgot-password')
+  async forgotPassword(@Body() body: { email: string }): Promise<void> {
+    return this.authService.forgotPassword(body.email);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('reset-password')
+  async resetPassword(@Body() { token, newPassword }: ResetPasswordDto) {
+    return this.authService.resetPassword( token, newPassword);
   }
 }
