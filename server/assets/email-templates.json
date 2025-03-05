@@ -1,11 +1,10 @@
 {
-    "signup": {
-      "subject": "Welcome to our app!",
-      "body": "Hello {{name}},\n\nThank you for signing up. Enjoy our services!"
-    },
-    "forgot-password": {
-      "subject": "Password Reset Request",
-      "body": "Hello {{name}},\n\nClick the link below to reset your password:\n{{resetLink}}"
-    }
+  "signup": {
+    "subject": "Welcome to our app!",
+    "body": "Hello {{name}},\n\nThank you for signing up. Enjoy our services!"
+  },
+  "forgot-password": {
+    "subject": "Password Reset Request",
+    "body": "Hello {{name}},\n\nClick the link below to reset your password:\n{{resetLink}}"
   }
-  
+}

@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
 import { useGetPostsQuery } from "../features/post/postApi";
-
 import Post from "../shared/ui/Post";
 import Loader from "../shared/ui/Loader";
 import { Post as IPost } from "../shared/interfaces/Post";
@@ -14,11 +12,21 @@ function FeedPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const observer = useRef<IntersectionObserver | null>(null);
 
+  const parseSearchQuery = (query: string) => {
+    if (query.startsWith("@")) {
+      return { searchType: "user", query: query.slice(1) };
+    }
+    if (query.startsWith("#")) {
+      return { searchType: "tags", query: query.slice(1) };
+    }
+    return { searchType: "title", query };
+  };
+
   const { data, isLoading, refetch } = useGetPostsQuery(
     {
       page,
       limit: FETCH_POSTS_LIMIT,
-      search: searchQuery,
+      ...parseSearchQuery(searchQuery),
     },
     {
       skip: !searchQuery && page === 1,
@@ -26,18 +34,10 @@ function FeedPage() {
   );
 
   useEffect(() => {
-    // if (data && data.posts.length > 0) {
-    //   setPosts((prevPosts) => [...prevPosts, ...data.posts]);
-    //   console.log(data);
-
-    //   if (posts.length + data.posts.length >= data.count) {
-    //     setHasMore(false);
-    //   }
-    // }
     if (data && data.posts.length > 0) {
       if (searchQuery) {
-        setPosts(data.posts); // Replace posts with search results
-        setHasMore(false); // Disable infinite scroll for search
+        setPosts(data.posts);
+        setHasMore(false);
       } else {
         setPosts((prevPosts) => [...prevPosts, ...data.posts]);
         if (posts.length + data.posts.length >= data.count) {
@@ -49,11 +49,11 @@ function FeedPage() {
 
   useEffect(() => {
     if (searchQuery) {
-      setPage(1); // Reset pagination for new search
-      setHasMore(false); // Disable infinite scroll during search
-      refetch(); // Fetch search results from the server
+      setPage(1);
+      setHasMore(false);
+      refetch();
     } else {
-      setHasMore(true); // Enable infinite scroll when search is cleared
+      setHasMore(true);
     }
   }, [searchQuery, refetch]);
 
@@ -88,19 +88,21 @@ function FeedPage() {
       <p className="section__subtitle">
         Here you can see posts from people you follow.
       </p>
-      <input
-        type="text"
-        placeholder="Search by title or tags..."
-        className="search-bar"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search..."
+          className="search-bar"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       <div className="feed">
         {posts?.map((post, index) => (
           <Post
             key={post.id}
             data={post}
-            ref={index === posts.length - 1 ? observeLastPost : null} // sledovani posledniho postu
+            ref={index === posts.length - 1 ? observeLastPost : null}
           />
         ))}
       </div>

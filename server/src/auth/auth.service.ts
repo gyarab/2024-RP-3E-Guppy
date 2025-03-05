@@ -21,7 +21,7 @@ export class AuthService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly userService: UserService,
-    private readonly mailService: MailService
+    private readonly mailService: MailService,
   ) {}
 
   async login(loginDto: LoginUserDto): Promise<UserWithTokens> {
@@ -123,24 +123,24 @@ export class AuthService {
   async resetPassword(token: string, newPassword: string): Promise<void> {
     if (!token || !newPassword)
       throw new BadRequestException('Token and new password are required.');
-  
+
     const user = await this.userService.findFirst({
       where: { resetPasswordToken: token },
     });
 
     console.log(user);
-  
+
     if (!user || !user.resetPasswordToken || !user.resetPasswordTokenExpiry) {
       throw new BadRequestException('Invalid or expired token.');
     }
 
-    const isTokenValid = (token === user.resetPasswordToken);
-  
+    const isTokenValid = token === user.resetPasswordToken;
+
     if (!isTokenValid || user.resetPasswordTokenExpiry < new Date())
       throw new BadRequestException('Invalid or expired token.');
-  
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-  
+
     await this.userService.update({
       where: { id: user.id },
       data: {
@@ -150,6 +150,4 @@ export class AuthService {
       },
     });
   }
-  
-  
 }
