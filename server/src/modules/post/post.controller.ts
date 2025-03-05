@@ -52,9 +52,11 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async getAll(
+    @Request() req,
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
-    @Request() req,
+    @Query('searchType') searchType?: string,
+    @Query('query') query?: string,
   ) {
     const user = req.user as UserWithoutPassword;
     if (!user) throw new NotFoundException('User not found');
@@ -62,6 +64,8 @@ export class PostController {
     return this.postService.posts({
       skip: (page - 1) * limit,
       take: limit,
+      searchType,
+      query,
       userId: user.id,
     });
   }

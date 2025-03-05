@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGetPostsQuery } from "../features/post/postApi";
+import useDebounce from "../shared/hooks/useDebounce";
 import Post from "../shared/ui/Post";
 import Loader from "../shared/ui/Loader";
 import { Post as IPost } from "../shared/interfaces/Post";
@@ -10,9 +11,14 @@ function FeedPage() {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
   const observer = useRef<IntersectionObserver | null>(null);
 
   const parseSearchQuery = (query: string) => {
+    if (!query) return {};
+
     if (query.startsWith("@")) {
       return { searchType: "user", query: query.slice(1) };
     }
@@ -22,40 +28,52 @@ function FeedPage() {
     return { searchType: "title", query };
   };
 
-  const { data, isLoading, refetch } = useGetPostsQuery(
+  const { data, isLoading } = useGetPostsQuery(
     {
       page,
       limit: FETCH_POSTS_LIMIT,
-      ...parseSearchQuery(searchQuery),
+      ...parseSearchQuery(debouncedSearchQuery),
     },
     {
-      skip: !searchQuery && page === 1,
+      skip: !!debouncedSearchQuery && page > 1,
     }
   );
 
+  // useEffect(() => {
+  //   if (data && data.posts.length > 0) {
+  //     if (debouncedSearchQuery) {
+  //       setPosts(data.posts);
+  //       setHasMore(false);
+  //     } else {
+  //       setPosts((prevPosts) => [...prevPosts, ...data.posts]);
+  //       if (posts.length + data.posts.length >= data.count) {
+  //         setHasMore(false);
+  //       }
+  //     }
+  //   }
+  // }, [data, debouncedSearchQuery]);
+
   useEffect(() => {
-    if (data && data.posts.length > 0) {
-      if (searchQuery) {
-        setPosts(data.posts);
-        setHasMore(false);
+    if (data) {
+      // Check if posts exist
+      if (debouncedSearchQuery) {
+        if (data.posts.length > 0) {
+          setPosts(data.posts);
+          setHasMore(false); // No more results since it's a search
+        } else {
+          // No posts for the search query
+          setPosts([]); // Clear posts (or show a message for no results)
+          setHasMore(false);
+        }
       } else {
+        // Append posts if no search query
         setPosts((prevPosts) => [...prevPosts, ...data.posts]);
         if (posts.length + data.posts.length >= data.count) {
           setHasMore(false);
         }
       }
     }
-  }, [data, searchQuery]);
-
-  useEffect(() => {
-    if (searchQuery) {
-      setPage(1);
-      setHasMore(false);
-      refetch();
-    } else {
-      setHasMore(true);
-    }
-  }, [searchQuery, refetch]);
+  }, [data, debouncedSearchQuery]);
 
   const observeLastPost = useCallback(
     (node: HTMLDivElement | null) => {
@@ -82,29 +100,41 @@ function FeedPage() {
   );
 
   return (
-    <div className="container">
+    <div className="container feed-container">
       {isLoading && <Loader />}
-      <h2 className="section__title">Welcome to your feed!</h2>
-      <p className="section__subtitle">
-        Here you can see posts from people you follow.
-      </p>
       <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="search-bar"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-      <div className="feed">
-        {posts?.map((post, index) => (
-          <Post
-            key={post.id}
-            data={post}
-            ref={index === posts.length - 1 ? observeLastPost : null}
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search by title, tags, or user..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-        ))}
+          {searchQuery && (
+            <button className="clear-button" onClick={() => setSearchQuery("")}>
+              ✖
+            </button>
+          )}
+        </div>
+        <p className="search-hint">
+          Use <strong>#</strong> for tags, <strong>@</strong> for users, and
+          plain text for titles.
+        </p>
+      </div>
+
+      <div className="feed">
+        {posts.length > 0 ? (
+          posts.map((post, index) => (
+            <Post
+              key={post.id}
+              data={post}
+              ref={index === posts.length - 1 ? observeLastPost : null}
+            />
+          ))
+        ) : (
+          <p>No posts found</p>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Post, Prisma } from '@prisma/client';
 import { UserService } from '../user/user.service';
@@ -22,19 +26,47 @@ export class PostService {
   async posts(params: {
     skip?: number;
     take?: number;
+    searchType?: string;
+    query?: string;
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
     orderBy?: Prisma.PostOrderByWithRelationInput;
     userId: number;
   }): Promise<{ posts: Post[]; count: number }> {
-    const { skip, take, cursor, where, orderBy, userId } = params;
+    const { skip, take, searchType, query, cursor, where, orderBy, userId } =
+      params;
+
+    let searchWhere: Prisma.PostWhereInput = { ...where };
+    if (searchType && query) {
+      const searchQuery = { contains: query };
+
+      switch (searchType) {
+        case 'title':
+          searchWhere.title = searchQuery;
+          break;
+        case 'tags':
+          searchWhere.tags = {
+            some: {
+              name: searchQuery,
+            },
+          };
+          break;
+        case 'user':
+          searchWhere.author = {
+            name: searchQuery,
+          };
+          break;
+        default:
+          throw new BadRequestException('Invalid search type');
+      }
+    }
 
     const [posts, count] = await this.prisma.$transaction([
       this.prisma.post.findMany({
         skip,
         take,
         cursor,
-        where,
+        where: searchWhere,
         orderBy,
         include: {
           comments: true,
