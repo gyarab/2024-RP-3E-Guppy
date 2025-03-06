@@ -128,8 +128,6 @@ export class AuthService {
       where: { resetPasswordToken: token },
     });
 
-    console.log(user);
-
     if (!user || !user.resetPasswordToken || !user.resetPasswordTokenExpiry) {
       throw new BadRequestException('Invalid or expired token.');
     }

@@ -1,15 +1,10 @@
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 
-import { AppDispatch } from "../app/store";
 import { isApiError } from "../shared/utils/helpers";
 import { useResetPasswordMutation } from "../features/auth/authApi";
-import { setAuthCredentials } from "../features/auth/authSlice";
 import { ResetPasswordCredentials } from "../shared/interfaces/ResetPasswordCredentials";
 import EyeToggle from "../shared/ui/EyeToggle";
 import Button from "../shared/ui/Button";
-
 
 const DEFAULT_CREDENTIALS: ResetPasswordCredentials = {
   password: "",
@@ -19,45 +14,67 @@ const DEFAULT_CREDENTIALS: ResetPasswordCredentials = {
 function ResetPasswordPage() {
   const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [token, setToken] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
-
-  const navigate = useNavigate();
-  const dispatch: AppDispatch = useDispatch();
-
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [resetPassword, { isLoading, isSuccess }] = useResetPasswordMutation();
 
   useEffect(() => {
     setErrorMessage("");
-    setSuccessMessage("");
   }, [credentials]);
+
+  useEffect(() => {
+    const token = new URLSearchParams(window.location.search).get("token");
+
+    if (!token) {
+      setErrorMessage("Invalid reset password link");
+    }
+
+    setToken(token || "");
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (credentials.password !== credentials.confirmPassword) {
+      setErrorMessage("Passwords do not match");
+    }
+
+    if (!token) {
+      setErrorMessage("Invalid reset password link. Please try again.");
+    }
+
     try {
-      const userData = await resetPassword(credentials).unwrap();
-      dispatch(setAuthCredentials(userData));
+      await resetPassword({ newPassword: credentials.password, token });
 
       setCredentials(DEFAULT_CREDENTIALS);
-      navigate("/");
     } catch (error) {
       if (isApiError(error)) {
         setErrorMessage(error.data.message);
       }
     }
   };
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
-  function passwordCheck() {
-    if (credentials.password !== credentials.confirmPassword) {
-      setErrorMessage("Passwords do not match");
-    }
-  }
 
+  if (isSuccess) {
+    return (
+      <main className="resetPassword">
+        <div className="success-message">
+          <div className="check-icon">
+            <img src="/icons/check.svg" alt="Check icon" />
+          </div>
+          <p className="message">
+            Success! Your password has been reset. You can now log in with your
+            new password.
+          </p>
+        </div>
+      </main>
+    );
+  }
   return (
     <main className="resetPassword">
       <div className="container resetPassword__container">
@@ -77,7 +94,8 @@ function ResetPasswordPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            /> <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
+            />{" "}
+            <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
             <span className="form__label-span">Password</span>
             <i></i>
           </div>
@@ -92,22 +110,19 @@ function ResetPasswordPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            /> <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
+            />{" "}
+            <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
             <span className="form__label-span">Confirm password</span>
             <i></i>
           </div>
 
           {errorMessage && <p className="error">{errorMessage}</p>}
-          {successMessage && <p className="success">{successMessage}</p>}
 
           <Button
             type="submit"
             variant="accent"
             additionalClasses="resetPassword__button"
             disabled={isLoading}
-            onClick={() => {
-              passwordCheck();
-            }}
           >
             {isLoading ? "Loading..." : "Reset Password"}
           </Button>

@@ -34,18 +34,20 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     forgotPassword: build.mutation<User, ForgotPasswordCredentials>({
       query: (email) => ({
-        url: "/auth/forgotPassword",
+        url: "/auth/forgot-password",
         method: "POST",
         body: email,
       }),
     }),
-    resetPassword: build.mutation<User, ResetPasswordCredentials>({
-      query: (credentials) => ({
-        url: "/auth/resetPassword",
-        method: "POST",
-        body: credentials,
-      }),
-    }),
+    resetPassword: build.mutation<User, { newPassword: string; token: string }>(
+      {
+        query: (credentials) => ({
+          url: "/auth/reset-password",
+          method: "POST",
+          body: credentials,
+        }),
+      }
+    ),
     verify: build.query<User, void>({
       query: () => "/auth/verify",
     }),

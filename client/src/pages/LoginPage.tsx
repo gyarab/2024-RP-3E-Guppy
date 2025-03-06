@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
 import { AppDispatch } from "../app/store";
@@ -60,6 +60,7 @@ function LoginPage() {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
+
   function rememberMe() {
     if (isRemembered === true) {
       //remember credentials
@@ -75,9 +76,9 @@ function LoginPage() {
         <h3 className="section__subtitle">Login to use our services</h3>
         <p className="login__text">
           Don&apos;t have an account?{" "}
-          <a href="/signup" className="form__link">
+          <Link to="/signup" className="form__link">
             Sign up here!
-          </a>
+          </Link>
         </p>
 
         <form onSubmit={handleSubmit} className="form login__form">
@@ -107,7 +108,8 @@ function LoginPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            />  <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
+            />{" "}
+            <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
             <span className="form__label-span">Password</span>
             <i></i>
           </div>
@@ -117,9 +119,9 @@ function LoginPage() {
               <Checkbox checked={isRemembered} setChecked={setIsRemembered} />
               <p>Remember me</p>
             </div>
-            <a href="/ForgotPassword" className="form__link">
+            <Link to="/forgot-password" className="form__link">
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           {errorMessage && <p className="error">{errorMessage}</p>}
