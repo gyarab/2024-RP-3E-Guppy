@@ -37,11 +37,6 @@ export class AuthController {
     const { accessToken, refreshToken, ...payload } =
       await this.authService.login(loginDto);
 
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60,
-    });
-
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
@@ -59,17 +54,12 @@ export class AuthController {
     const { accessToken, refreshToken, ...payload } =
       await this.authService.signup(signupDto);
 
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
-
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
-    return payload;
+    return { ...payload, accessToken };
   }
 
   @UseGuards(AuthGuard)
@@ -120,6 +110,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('reset-password')
   async resetPassword(@Body() { token, newPassword }: ResetPasswordDto) {
-    return this.authService.resetPassword( token, newPassword);
+    return this.authService.resetPassword(token, newPassword);
   }
 }
