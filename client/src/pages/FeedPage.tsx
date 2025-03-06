@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import { useGetPostsQuery } from "../features/post/postApi";
 import useDebounce from "../shared/hooks/useDebounce";
+
 import Post from "../shared/ui/Post";
 import Loader from "../shared/ui/Loader";
 import { Post as IPost } from "../shared/interfaces/Post";
@@ -12,7 +14,7 @@ function FeedPage() {
   const [hasMore, setHasMore] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const debouncedSearchQuery = useDebounce(searchQuery, 400);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -39,38 +41,26 @@ function FeedPage() {
     }
   );
 
-  // useEffect(() => {
-  //   if (data && data.posts.length > 0) {
-  //     if (debouncedSearchQuery) {
-  //       setPosts(data.posts);
-  //       setHasMore(false);
-  //     } else {
-  //       setPosts((prevPosts) => [...prevPosts, ...data.posts]);
-  //       if (posts.length + data.posts.length >= data.count) {
-  //         setHasMore(false);
-  //       }
-  //     }
-  //   }
-  // }, [data, debouncedSearchQuery]);
-
   useEffect(() => {
     if (data) {
-      // Check if posts exist
       if (debouncedSearchQuery) {
         if (data.posts.length > 0) {
           setPosts(data.posts);
-          setHasMore(false); // No more results since it's a search
+          setHasMore(false);
         } else {
-          // No posts for the search query
-          setPosts([]); // Clear posts (or show a message for no results)
+          setPosts([]);
           setHasMore(false);
         }
       } else {
-        // Append posts if no search query
-        setPosts((prevPosts) => [...prevPosts, ...data.posts]);
-        if (posts.length + data.posts.length >= data.count) {
-          setHasMore(false);
+        if (page === 1) {
+          setPosts(data.posts);
+        } else {
+          console.log("data.posts", data.posts);
+
+          setPosts((prevPosts) => [...prevPosts, ...data.posts]);
         }
+
+        setHasMore(posts.length + data.posts.length < data.count);
       }
     }
   }, [data, debouncedSearchQuery]);
