@@ -10,4 +10,5 @@ export interface User {
   bio: string;
   phoneNumber: string;
   isVerified: boolean;
+  lastLogin: Date;
 }

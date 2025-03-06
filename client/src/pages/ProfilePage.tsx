@@ -1,141 +1,165 @@
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { AppDispatch } from "../app/store";
 import { selectUser, logout } from "../features/auth/authSlice";
+
 import Button from "../shared/ui/Button";
 import Avatar from "../shared/ui/Avatar";
+import { User } from "../shared/interfaces/User";
+import Loader from "../shared/ui/Loader";
 
 function ProfilePage() {
-    const [isEditing, setIsEditing] = useState(false);
-    const [dateValue, setDateValue] = useState("");
+  const user = useSelector(selectUser);
+  const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const user = useSelector(selectUser);
-    const birthdate = user?.birthdate ? new Date(user.birthdate) : new Date();
-    const formattedBirthdate = birthdate.toISOString().split("T")[0];
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState<User | null>(null);
 
-    const navigate = useNavigate();
-    const dispatch: AppDispatch = useDispatch();
-
-    console.log("Bday: " + user?.birthdate);
-    console.log("formatted bday: " + formattedBirthdate);
-
-    useEffect(() => {
-        if (formattedBirthdate) {
-            setDateValue(formattedBirthdate);
-        }
-    }, [formattedBirthdate]); 
-
-    function isUndefined(message: string, value: string | undefined) {
-        if (value === undefined){
-        return message;
-        } else {return value};
+  useEffect(() => {
+    if (user) {
+      setFormData(user);
     }
-    /*function isOwner() {
-        if ({user?.id} === {profile?.id}) {
-            return true;
-        } else {
-            return false;
-        }
-    }*/
-   function toggleEdit() {
-        setIsEditing(!isEditing);
-    }
-    return (
-        <main className="profile">
-            <h1 className="section__title">Your profile</h1>
-            <div className="container profile__container">
-                <div className="profile__preview">
-                    <Avatar 
-                       src={isUndefined("https://placehold.co/50", user?.profilePictureUrl)}
-                    />
-                    <div className="profile__info">
-                        <h2 className="section__subtitle">{user?.name}</h2>
-                        <span className="">{user?.email}</span>
-                    </div>
-                    <Button 
-                            additionalClasses="editProfile__button button" 
-                            variant="accent"
-                            onClick={toggleEdit}>
-                            {isEditing ? "Save Changes" : "Edit Profile"}
-                    </Button>
-                </div>
-                    <div className="form__group">
-                        <input
-                            type="text"
-                            id="name"
-                            className="form__input" 
-                            defaultValue={user?.name} 
-                            readOnly = {!isEditing}
-                        />
-                        <span className="form__label-span">Full name</span>
-                        <i></i>
-                    </div>
-                    <div className="form__group">
-                        <input 
-                            type="text" 
-                            id="bio"
-                            className="form__input" 
-                            defaultValue={user?.bio} //isUndefined("Enter Bio", user?.bio)
-                            readOnly = {!isEditing}
-                        />
-                        <span className="form__label-span">Bio</span>
-                        <i></i>
-                    </div>
-                    <div className="form__group">
-                        <input 
-                            type="email" 
-                            id="email"
-                            className="form__input" 
-                            defaultValue={user?.email} 
-                            readOnly = {!isEditing}
-                        />
-                        <span className="form__label-span">Email</span>
-                        <i></i>
-                    </div>
-                    <div className="form__group">
-                        <input
-                            type="tel" 
-                            id="phone"
-                            className="form__input" 
-                            defaultValue={user?.phoneNumber} //isUndefined("Enter Phone", user?.phoneNumber)
-                            readOnly = {!isEditing}
-                        />
-                        <span className="form__label-span">Phone</span>
-                        <i></i>
-                    </div>
-                    <div className="form__group">
-                        <input 
-                            type="date" 
-                            id="birthdate"
-                            className="form__input" 
-                            value={dateValue} 
-                            onChange={(e) => setDateValue(e.target.value)} // Allows editing
-                            readOnly = {!isEditing}
-                        />
-                        <span className="form__label-span">Birthdate</span>
-                        <i></i>
-                    </div>
-                    <div className="bottom__buttons">
-                    <Button 
-                        additionalClasses="changePassword__button button" 
-                        variant="accent"
-                        onClick={() => navigate("/forgot-password")}
-                        >Change Password
-                    </Button>
-                    <Button 
-                        additionalClasses="logout__button button" 
-                        onClick={() => {
-                            dispatch(logout());
-                            navigate("/login");
-                        }}>
-                        Logout
-                    </Button>
-                    </div>
+  }, [user]);
+
+  if (formData === null) {
+    return <Loader />;
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSave = () => {
+    // dispatch(updateUser(formData));
+    setIsEditing(false);
+  };
+
+  const handleLogout = () => {
+    // dispatch(logout());
+    // navigate("/login");
+  };
+
+  return (
+    <div className="container">
+      <h1 className="section__title">Profile</h1>
+      <div className="profile">
+        <div className="profile__header">
+          <Avatar
+            src={formData.profilePictureUrl || "https://placehold.co/100"}
+            text={formData.name}
+            secondaryText={formData.email}
+          />
+          {isEditing ? (
+            <div className="profile__actions">
+              <Button variant="primary" onClick={handleSave}>
+                Save Changes
+              </Button>
+              <Button variant="secondary" onClick={() => setIsEditing(false)}>
+                Cancel
+              </Button>
             </div>
-        </main>
-    );
+          ) : (
+            <div className="profile__actions">
+              <Button variant="primary" onClick={() => setIsEditing(true)}>
+                Edit Profile
+              </Button>
+            </div>
+          )}
+        </div>
+        {isEditing ? (
+          <div className="profile__form">
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Full Name"
+            />
+            <input
+              type="text"
+              name="bio"
+              value={formData.bio}
+              onChange={handleChange}
+              placeholder="Bio"
+            />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+            />
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              placeholder="Phone Number"
+            />
+            <input
+              type="date"
+              name="birthdate"
+              value={formData.birthdate.toISOString().split("T")[0]}
+              onChange={handleChange}
+            />
+            <Button variant="primary" onClick={handleSave}>
+              Save Changes
+            </Button>
+          </div>
+        ) : (
+          <div className="profile__details">
+            <div className="profile__detail">
+              <h3 className="profile__detail__label">Full Name</h3>
+              <p className="profile__detail__text">{formData.name}</p>
+            </div>
+            <div className="profile__detail">
+              <h3 className="profile__detail__label">Bio</h3>
+              <p className="profile__detail__text">
+                {formData.bio || "No bio provided"}
+              </p>
+            </div>
+            <div className="profile__detail">
+              <h3 className="profile__detail__label">Phone Number</h3>
+              <p className="profile__detail__text">
+                {formData.phoneNumber || "No phone number"}
+              </p>
+            </div>
+            <div className="profile__detail">
+              <h3 className="profile__detail__label">Birthdate</h3>
+              <p className="profile__detail__text">
+                {formData.birthdate
+                  ? new Date(formData.birthdate).toDateString()
+                  : "No birthdate"}
+              </p>
+            </div>
+            <div className="profile__detail">
+              <h3 className="profile__detail__label">Last Login</h3>
+              <p className="profile__detail__text">
+                {formData.lastLogin
+                  ? new Date(formData.lastLogin).toDateString()
+                  : "No login date"}
+              </p>
+            </div>
+            <div className="profile__detail">
+              <h3 className="profile__detail__label">Verification Status</h3>
+              <p className="profile__detail__text">
+                {formData.isVerified ? "Verified" : "Not Verified"}
+              </p>
+            </div>
+          </div>
+        )}
+        <div className="profile__actions">
+          <Button variant="accent">
+            <Link to="/forgot-password">Forgot Password</Link>
+          </Button>
+          <Button onClick={handleLogout}>Logout</Button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ProfilePage;

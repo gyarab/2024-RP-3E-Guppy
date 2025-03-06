@@ -1,92 +1,66 @@
 @use "../abstract" as *;
 
+$accent-color: #ff3a3a; // Define your accent color as a Sass variable
+$primary-color: #3498db; // Example primary color
+$background-color-light: #f5f5f5;
+$background-color-dark: rgb(25, 25, 25);
+
 .profile {
-    min-height: content-height();
-    display: grid;
-    grid-template-columns: 1fr;
-    justify-content: center;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  &__header {
+    display: flex;
     align-items: center;
-  
-    .section__title {
-        margin: 1rem;
-        margin-bottom: 0;
-        justify-self: center;
-        align-self: flex-start;
-        display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .avatar {
+      font-size: 1.25rem;
+
+      img {
+        width: 100px;
+        height: 100px;
+        margin-right: 0.5rem;
       }
-      &__container {
-        width: 60%;
-        height: auto;
-        border-radius: 20px;
-        background-color: #f5f5f5;
-        margin: 3rem;
-        padding: 2rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        justify-self: center;
-    .form__group {
-        display: flex;
-        flex-direction: column;
-        background-color: #ececec;
-        width: auto;
-        height: 3rem;
-        border-radius: 10px;
-      }
-        .profile__preview {
-            display: flex;
-            flex-direction: row;
-            margin-bottom: 1.5rem;
-            align-items: center;
-            .profile__info {
-                margin-right: auto;
-                margin-bottom: 0;
-                .section__subtitle {
-                    margin: 0;
-                    display: flex;
-                }
-            }
-            .avatar {
-                display: flex;
-                justify-content: flex-start;
-                margin: 1rem;
-                height: 4rem;
-            } 
-            .editProfile__button {
-                display: flex;
-                justify-self: flex-end;
-                align-self: flex-end;
-            }
-        }
-        .bottom__buttons {
-            justify-content: center;
-            display: flex;
-            flex-direction: row;
-        }
-        .button {
-            grid-column: span 2;
-            justify-self: center;
-            align-self: end;
-            display: flex;
-            height: 3rem;
-            width: auto;
-            margin: 1rem;
-        }
-        .logout__button {
-            background-color: #ff3a3a;
-            justify-self: center;
-        }
-        .logout__button:hover {
-            background-color: lighten($color: #ff3a3a, $amount: 10%);
-        }
     }
-    html[data-theme="dark"] &__container {
-        background-color: rgb(25, 25, 25);
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 1.5rem;
+    column-gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  &__detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &__label {
+      font-size: 1rem;
+      font-weight: normal;
     }
-}
-html[data-theme="dark"] .form__group {
-    background-color: rgb(34, 34, 34);
-}
-html[data-theme="dark"] .form__input{
-    color: white;
+
+    &__text {
+      padding: 0.625rem 0.875rem;
+      border: 1px solid #f9f9f9;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      color: #535353d3;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+  }
 }
