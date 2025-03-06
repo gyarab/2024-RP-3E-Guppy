@@ -1,4 +1,3 @@
-import TagList from "./TagList";
 import Button from "./Button";
 
 function Aside() {
@@ -6,9 +5,6 @@ function Aside() {
     <aside className="aside">
       <h3 className="aside__title">Side Panel</h3>
       <div className="aside__content">
-        <div className="aside__item">
-          <TagList tags={["React", "TypeScript", "Node.js", "Express"]} />
-        </div>
         <div className="aside__item">
           <h4 className="aside__subtitle">Related Links</h4>
           <ul className="aside__list">

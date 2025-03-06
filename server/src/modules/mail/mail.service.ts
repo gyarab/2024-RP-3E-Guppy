@@ -31,7 +31,10 @@ export class MailService {
   }
 
   private parseTemplate(template: string, variables: Record<string, string>) {
-    return template.replace(/\{\{(.*?)\}\}/g, (_, key) => variables[key.trim()] || '');
+    return template.replace(
+      /\{\{(.*?)\}\}/g,
+      (_, key) => variables[key.trim()] || '',
+    );
   }
 
   async sendMail(
@@ -41,7 +44,9 @@ export class MailService {
   ) {
     const template = this.templates[type];
     if (!template) {
-      throw new InternalServerErrorException(`Email template "${type}" not found`);
+      throw new InternalServerErrorException(
+        `Email template "${type}" not found`,
+      );
     }
 
     const subject = this.parseTemplate(template.subject, variables);

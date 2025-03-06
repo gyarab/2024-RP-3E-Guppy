@@ -8,7 +8,12 @@ export const postApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     getPosts: build.query<
       { posts: Post[]; count: number },
-      { page: number; limit: number }
+      {
+        page: number;
+        limit: number;
+        searchType?: string;
+        query?: string;
+      }
     >({
       query: (params) => ({
         url: "/posts",
@@ -22,7 +27,7 @@ export const postApi = apiSlice.injectEndpoints({
     }),
     createPost: build.mutation<Post, CreatePostDto>({
       query: (data) => ({
-        url: "/posts/organization/1",
+        url: "/posts/organization/2",
         method: "POST",
         body: data,
       }),

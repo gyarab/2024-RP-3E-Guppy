@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useGetPostsQuery } from "../features/post/postApi";
+import useDebounce from "../shared/hooks/useDebounce";
 
 import Post from "../shared/ui/Post";
 import Loader from "../shared/ui/Loader";
@@ -11,23 +12,58 @@ function FeedPage() {
   const [page, setPage] = useState(1);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 400);
+
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, isLoading } = useGetPostsQuery({
-    page,
-    limit: FETCH_POSTS_LIMIT,
-  });
+  const parseSearchQuery = (query: string) => {
+    if (!query) return {};
+
+    if (query.startsWith("@")) {
+      return { searchType: "user", query: query.slice(1) };
+    }
+    if (query.startsWith("#")) {
+      return { searchType: "tags", query: query.slice(1) };
+    }
+    return { searchType: "title", query };
+  };
+
+  const { data, isLoading } = useGetPostsQuery(
+    {
+      page,
+      limit: FETCH_POSTS_LIMIT,
+      ...parseSearchQuery(debouncedSearchQuery),
+    },
+    {
+      skip: !!debouncedSearchQuery && page > 1,
+    }
+  );
 
   useEffect(() => {
-    if (data && data.posts.length > 0) {
-      setPosts((prevPosts) => [...prevPosts, ...data.posts]);
-      console.log(data);
+    if (data) {
+      if (debouncedSearchQuery) {
+        if (data.posts.length > 0) {
+          setPosts(data.posts);
+          setHasMore(false);
+        } else {
+          setPosts([]);
+          setHasMore(false);
+        }
+      } else {
+        if (page === 1) {
+          setPosts(data.posts);
+        } else {
+          console.log("data.posts", data.posts);
 
-      if (posts.length + data.posts.length >= data.count) {
-        setHasMore(false);
+          setPosts((prevPosts) => [...prevPosts, ...data.posts]);
+        }
+
+        setHasMore(posts.length + data.posts.length < data.count);
       }
     }
-  }, [data]);
+  }, [data, debouncedSearchQuery]);
 
   const observeLastPost = useCallback(
     (node: HTMLDivElement | null) => {
@@ -43,7 +79,7 @@ function FeedPage() {
             setPage((prevPage) => prevPage + 1);
           }
         },
-        { threshold: 1.0 } // FIXME: zmenit dle potreby
+        { threshold: 1.0 }
       );
 
       if (node) {
@@ -54,20 +90,41 @@ function FeedPage() {
   );
 
   return (
-    <div className="container">
+    <div className="container feed-container">
       {isLoading && <Loader />}
-      <h2 className="section__title">Welcome to your feed!</h2>
-      <p className="section__subtitle">
-        Here you can see posts from people you follow.
-      </p>
-      <div className="feed">
-        {posts?.map((post, index) => (
-          <Post
-            key={post.id}
-            data={post}
-            ref={index === posts.length - 1 ? observeLastPost : null} // sledovani posledniho postu
+      <div className="search-container">
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search by title, tags, or user..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-        ))}
+          {searchQuery && (
+            <button className="clear-button" onClick={() => setSearchQuery("")}>
+              ✖
+            </button>
+          )}
+        </div>
+        <p className="search-hint">
+          Use <strong>#</strong> for tags, <strong>@</strong> for users, and
+          plain text for titles.
+        </p>
+      </div>
+
+      <div className="feed">
+        {posts.length > 0 ? (
+          posts.map((post, index) => (
+            <Post
+              key={post.id}
+              data={post}
+              ref={index === posts.length - 1 ? observeLastPost : null}
+            />
+          ))
+        ) : (
+          <p>No posts found</p>
+        )}
       </div>
     </div>
   );

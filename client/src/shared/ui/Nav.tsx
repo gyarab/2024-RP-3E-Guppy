@@ -18,17 +18,19 @@ function Nav({ isAuthenticated = false }: NavProps) {
             About
           </Link>
         </li>
-        <li className="nav__item">
-          <Link to="/services" className="nav__link">
-            Our services
-          </Link>
-        </li>
         {isAuthenticated && (
-          <li className="nav__item">
-            <Link to="/dashboard" className="nav__link">
-              Dashboard
-            </Link>
-          </li>
+          <>
+            <li className="nav__item">
+              <Link to="/feed" className="nav__link">
+                Feed
+              </Link>
+            </li>
+            <li className="nav__item">
+              <Link to="/post/create" className="nav__link">
+                Create Post
+              </Link>
+            </li>
+          </>
         )}
       </ul>
     </nav>
