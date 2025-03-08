@@ -4,7 +4,6 @@ import { User } from "../../shared/interfaces/User";
 import { LoginCredentials } from "../../shared/interfaces/LoginCredentials";
 import { SignupCredentials } from "../../shared/interfaces/SignupCredentials";
 import { ForgotPasswordCredentials } from "../../shared/interfaces/ForgotPasswordCredentials";
-import { ResetPasswordCredentials } from "../../shared/interfaces/ResetPasswordCredentials";
 
 type UserWithToken = User & {
   accessToken: string;
@@ -57,6 +56,7 @@ export const authApi = apiSlice.injectEndpoints({
 export const {
   useLoginMutation,
   useSignupMutation,
+  useLogoutMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useVerifyQuery,

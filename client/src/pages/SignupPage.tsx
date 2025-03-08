@@ -15,7 +15,6 @@ const DEFAULT_CREDENTIALS: SignupCredentials = {
   name: "",
   email: "",
   password: "",
-  birthdate: "",
 };
 
 function SignupPage() {
@@ -42,6 +41,11 @@ function SignupPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!isRemembered) {
+      setErrorMessage("You must agree to the terms and conditions");
+      return;
+    }
+
     try {
       const userData = await signup(credentials).unwrap();
       dispatch(setAuthCredentials(userData));
@@ -59,25 +63,6 @@ function SignupPage() {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
-
-  function agreeToTerms() {
-    if (isRemembered === false) {
-      setErrorMessage("You must agree to the terms and conditions");
-  }
-}
-  function minimumAge() {
-    const today = new Date();
-    const birthDate = new Date(credentials.birthdate);
-    const age = today.getFullYear() - birthDate.getFullYear();
-
-    if (birthDate > today) {
-      setErrorMessage("You can't be born in the future");
-    } else if (age < 15) {
-      setErrorMessage("You must be at least 15 years old to sign up");
-    } else if (age > 100) {
-      setErrorMessage("Yeah, we know u ain't this old")
-    }
-  }
 
   return (
     <main className="signup">
@@ -132,50 +117,29 @@ function SignupPage() {
               onChange={handleInputChange}
               autoComplete="off"
               required
-            /> <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
-            <span className="form__label-span">Password</span>
-            <i></i>
-          </div>
-
-          <div className="form__group">
-            <input
-              type="date"
-              className="form__input"
-              id="birthdate"
-              name="birthdate"
-              value={credentials.birthdate}
-              onChange={handleInputChange}
-              autoComplete="off"
-              required
             />
-            <span className="form__label-span">Birthdate</span>
+            <EyeToggle isVisible={isVisible} setIsVisible={setIsVisible} />
+            <span className="form__label-span">Password</span>
             <i></i>
           </div>
 
           <div className="form__group--horizontal">
             <div className="form__group--checkbox">
-            <Checkbox 
-              checked={isRemembered} 
-              setChecked={setIsRemembered}
-              />
+              <Checkbox checked={isRemembered} setChecked={setIsRemembered} />
               <p>I agree to the terms and conditions</p>
             </div>
           </div>
 
           {errorMessage && <p className="error">{errorMessage}</p>}
 
-            <Button
+          <Button
             type="submit"
             variant="accent"
             additionalClasses="signup__button"
             disabled={isLoading}
-            onClick={() => {
-              agreeToTerms();
-              minimumAge();
-            }}
-            >
+          >
             {isLoading ? "Loading..." : "Sign Up"}
-            </Button>
+          </Button>
         </form>
       </div>
     </main>

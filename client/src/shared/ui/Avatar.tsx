@@ -5,11 +5,18 @@ interface AvatarProps {
   text?: string;
   secondaryText?: string;
   shape?: AvatarShape;
+  onClick?: () => void;
 }
 
-function Avatar({ src, text, secondaryText, shape = "circle" }: AvatarProps) {
+function Avatar({
+  src,
+  text,
+  secondaryText,
+  shape = "circle",
+  onClick,
+}: AvatarProps) {
   return (
-    <div className={`avatar avatar--${shape}`}>
+    <div className={`avatar avatar--${shape}`} onClick={onClick}>
       <img src={src} alt="Avatar image" className="avatar__img" />
       <div className="avatar__content">
         {text && <h3 className="avatar__text">{text}</h3>}

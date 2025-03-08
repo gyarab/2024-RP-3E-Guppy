@@ -14,9 +14,9 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     // const token = (getState() as RootState).auth.token;
     const token = sessionStorage.getItem("accessToken");
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
+    // if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+    // }
     return headers;
   },
 });
