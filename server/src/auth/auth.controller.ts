@@ -96,8 +96,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Get('/verify')
   async verify(@Request() req): Promise<UserWithoutPassword> {
-    const accessToken = req.headers.authorization.split(' ')[1];
-    const user = await this.authService.verify(accessToken);
+    const [type, token] = req.headers.authorization.split(' ') ?? [];
+    if (!token) throw new UnauthorizedException('No access token provided');
+    if (type !== 'Bearer')
+      throw new UnauthorizedException('Invalid token type');
+    const user = await this.authService.verify(token);
     return user;
   }
 
