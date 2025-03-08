@@ -10,6 +10,10 @@ type RefreshToken = {
 
 export type Tokens = AccessToken & RefreshToken;
 export type UserWithoutPassword = Omit<User, 'password'>;
+export type TokenValidateResponse = UserWithoutPassword & {
+  iat: number;
+  exp: number;
+};
 
 export type UserWithTokens = UserWithoutPassword & Tokens;
 
