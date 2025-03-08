@@ -2,7 +2,11 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { Tokens, UserWithoutPassword } from '../../auth/types/auth.types';
+import {
+  Tokens,
+  TokenValidateResponse,
+  UserWithoutPassword,
+} from '../../auth/types/auth.types';
 
 @Injectable()
 export class TokenService {
@@ -24,7 +28,7 @@ export class TokenService {
     return { accessToken, refreshToken };
   }
 
-  async validateAccessToken(token: string): Promise<UserWithoutPassword> {
+  async validateAccessToken(token: string): Promise<TokenValidateResponse> {
     try {
       const decoded = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
@@ -40,7 +44,7 @@ export class TokenService {
     }
   }
 
-  async validateRefreshToken(token: string): Promise<UserWithoutPassword> {
+  async validateRefreshToken(token: string): Promise<TokenValidateResponse> {
     try {
       const decoded = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
