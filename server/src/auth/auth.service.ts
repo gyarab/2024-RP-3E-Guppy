@@ -93,7 +93,8 @@ export class AuthService {
       return null;
     }
 
-    const payload = await this.tokenService.validateAccessToken(accessToken);
+    const { iat, exp, ...payload } =
+      await this.tokenService.validateAccessToken(accessToken);
     return payload;
   }
 
