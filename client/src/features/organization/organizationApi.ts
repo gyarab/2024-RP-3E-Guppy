@@ -36,6 +36,12 @@ export const organizationApi = apiSlice.injectEndpoints({
         body: { name },
       }),
     }),
+    joinOrganization: build.mutation<Organization, string>({
+      query: (joinCode) => ({
+        url: `/organizations/join/${joinCode}`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
@@ -44,4 +50,5 @@ export const {
   useGetOrganizationsQuery,
   useCreateOrganizationMutation,
   useCheckOrgNameMutation,
+  useJoinOrganizationMutation,
 } = organizationApi;

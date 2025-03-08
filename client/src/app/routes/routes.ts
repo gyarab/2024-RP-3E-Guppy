@@ -8,6 +8,7 @@ import SignupPage from "../../pages/SignupPage";
 import ForgotPasswordPage from "../../pages/ForgotPassword";
 import ResetPasswordPage from "../../pages/ResetPassword";
 import ProfilePage from "../../pages/ProfilePage";
+import OrganizationPage from "../../pages/OrganizationPage";
 
 interface Route {
   path: string;
@@ -21,12 +22,13 @@ export const publicRoutes: Route[] = [
   { path: "/signup", component: SignupPage },
   { path: "/forgot-password", component: ForgotPasswordPage },
   { path: "/reset-password", component: ResetPasswordPage },
-  { path: "/post/create", component: CreatePostPage },
 ];
 
 export const privateRoutes: Route[] = [
+  { path: "/orgs", component: OrganizationPage },
+  { path: "/orgs/create", component: CreateOrganizationPage },
   { path: "/feed", component: FeedPage },
-  { path: "/org/create", component: CreateOrganizationPage },
+  { path: "/post/create", component: CreatePostPage },
   { path: "/profile", component: ProfilePage },
 ];
 

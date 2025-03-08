@@ -4,7 +4,6 @@ export interface Organization {
   id: number;
   name: string;
   description: string;
-  creatorId: number;
   joinCode: string;
   logoUrl: string;
   posts?: Post[];

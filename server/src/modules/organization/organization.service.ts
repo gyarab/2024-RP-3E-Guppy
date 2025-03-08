@@ -335,7 +335,7 @@ export class OrganizationService {
   ): Promise<Organization> {
     const organization = await this.organization({ joinCode: joinCode });
     if (!organization) {
-      throw new NotFoundException('Organization not found');
+      throw new NotFoundException('Invalid join code');
     }
 
     const user = await this.userService.user({ id: userId });

@@ -10,14 +10,9 @@ interface OrganizationListProps {
 function OrganizationList({ organizations }: OrganizationListProps) {
   const navigateWithParams = useNavigateWithParams();
 
-  const handleOrgClick = (orgId: number) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigateWithParams("/org", { id: orgId.toString() });
-  };
-
   const handleCreateOrgClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigateWithParams("/org/create", {});
+    navigateWithParams("/orgs/create", {});
   };
 
   if (!organizations || organizations.length === 0) {
@@ -32,7 +27,6 @@ function OrganizationList({ organizations }: OrganizationListProps) {
           name={org.name}
           description={org.description}
           logo={"http://localhost:3000/" + org.logoUrl}
-          onClick={handleOrgClick(org.id)}
         />
       ))}
       <li className="org-card org-card--create" onClick={handleCreateOrgClick}>

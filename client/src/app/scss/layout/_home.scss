@@ -1,7 +1,88 @@
-.main {
-  &__title {
+.home-page {
+  color: #333;
+
+  .hero {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+
+    &__title {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    &__subtitle {
+      margin-top: 10px;
+      font-size: 1.5rem;
+    }
+
+    &__buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    &__button {
+      background-color: white;
+      color: #2575fc;
+      transition: 0.3s;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+    }
+  }
+
+  .features {
+    background: #f9f9f9;
+    padding: 60px 20px;
+    text-align: center;
+
+    &__grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+  }
+
+  .feature-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+
+    &__icon img {
+      width: 2rem;
+      height: 2rem;
+      margin-top: 1rem;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  }
+
+  .section-title {
     font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .testimonials {
+    padding: 60px 20px;
+    text-align: center;
+    background: white;
+
+    &__author {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
   }
 }

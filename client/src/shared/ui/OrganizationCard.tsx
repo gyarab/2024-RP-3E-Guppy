@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
 import { extractColor } from "../utils/extractColor";
+import Button from "./Button";
+import { useJoinOrganizationMutation } from "../../features/organization/organizationApi";
+import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
+import { isApiError } from "../utils/helpers";
 
 interface OrganizationCardProps {
   name?: string;
@@ -17,7 +22,14 @@ function OrganizationCard({
 }: OrganizationCardProps) {
   const [headerColor, setHeaderColor] = useState("#4a4a4a");
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const imgRef = useRef<HTMLImageElement>(null);
+
+  const navigate = useNavigate();
+  const [joinOrganization, { isLoading }] = useJoinOrganizationMutation();
 
   useEffect(() => {
     const img = imgRef.current;
@@ -49,6 +61,35 @@ function OrganizationCard({
     }
   }, [logo]);
 
+  useEffect(() => {
+    setErrorMessage("");
+  }, [code]);
+
+  const handleChange = (index: number, value: string) => {
+    if (!/^[a-zA-Z0-9]?$/.test(value)) return;
+
+    const newCode = [...code];
+    newCode[index] = value.toUpperCase();
+    setCode(newCode);
+
+    if (value && index < code.length - 1) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (
+    index: number,
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Backspace" && !code[index] && index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    } else if (event.key === "ArrowLeft" && index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    } else if (event.key === "ArrowRight" && index < code.length - 1) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
   const handleExtractColor = () => {
     const img = imgRef.current;
     if (!img) return;
@@ -57,32 +98,105 @@ function OrganizationCard({
     setHeaderColor(color);
   };
 
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+    setCode(["", "", "", "", "", ""]);
+  };
+
+  const handleJoin = async () => {
+    try {
+      const joinCode = code.join("");
+      const data = await joinOrganization(joinCode).unwrap();
+      console.log(data);
+
+      navigate("/feed");
+      setIsPopupOpen(false);
+      setCode(["", "", "", "", "", ""]);
+    } catch (error) {
+      if (isApiError(error)) {
+        setErrorMessage(error.data.message);
+      }
+    }
+  };
+
   const imgSrc =
     objectUrl || (typeof logo === "string" ? logo : "/images/default-logo.png");
 
   return (
-    <div className="org-card" onClick={onClick}>
-      <div
-        className="org-card__header"
-        style={{ backgroundColor: headerColor }}
-      ></div>
-      <div className="org-card__separator">
-        <div className="org-card__icon">
-          <img
-            ref={imgRef}
-            src={imgSrc}
-            crossOrigin="anonymous"
-            alt="Organization Icon"
-          />
+    <>
+      {isLoading && <Loader />}
+      <div className="org-card" onClick={onClick}>
+        <div
+          className="org-card__header"
+          style={{ backgroundColor: headerColor }}
+        ></div>
+        <div className="org-card__separator">
+          <div className="org-card__icon">
+            <img
+              ref={imgRef}
+              src={imgSrc}
+              crossOrigin="anonymous"
+              alt="Organization Icon"
+            />
+          </div>
+        </div>
+        <div className="org-card__body">
+          <h4 className="org-card__name">{name || "Organization Name"}</h4>
+          <p className="org-card__description">
+            {description || "Some Description"}
+          </p>
+          <Button
+            variant="primary"
+            onClick={() => setIsPopupOpen(true)}
+            noArrow
+          >
+            Join
+          </Button>
         </div>
       </div>
-      <div className="org-card__body">
-        <h4 className="org-card__name">{name || "Organization Name"}</h4>
-        <p className="org-card__description">
-          {description || "Some Description"}
-        </p>
-      </div>
-    </div>
+      {isPopupOpen && (
+        <div className="org-card__popup">
+          <div className="org-card__popup-content">
+            <img
+              ref={imgRef}
+              src={imgSrc}
+              crossOrigin="anonymous"
+              alt="Organization Icon"
+              className="org-card__popup-icon"
+            />
+            <h4>Would like to join {name}?</h4>
+            <div className="join-code-input-container">
+              {code.map((char, index) => (
+                <input
+                  key={index}
+                  ref={(el) => (inputsRef.current[index] = el)}
+                  type="text"
+                  maxLength={1}
+                  className="join-code-input"
+                  value={char}
+                  onChange={(e) => handleChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                />
+              ))}
+            </div>
+            {errorMessage && <p className="error-text">{errorMessage}</p>}
+            <div className="org-card__popup-actions">
+              <Button variant="secondary" onClick={handleClosePopup} noArrow>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleJoin}
+                noArrow
+                disabled={code.join("").length < 6}
+              >
+                Join
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

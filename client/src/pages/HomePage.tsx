@@ -1,91 +1,133 @@
-import { useState } from "react";
-
-import { useGetOrganizationsQuery } from "../features/organization/organizationApi";
-
-import Loader from "../shared/ui/Loader";
-import OrganizationList from "../shared/ui/OrganizationList";
-import { FETCH_ORGS_LIMIT } from "../shared/constants/organization";
+import { Link } from "react-router-dom";
+import Button from "../shared/ui/Button";
+import { motion } from "framer-motion";
 
 function HomePage() {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { data, isLoading } = useGetOrganizationsQuery({
-    page: currentPage,
-    limit: FETCH_ORGS_LIMIT,
-  });
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (data && currentPage < Math.ceil(data.count / FETCH_ORGS_LIMIT)) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePageClick = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="container">
-        <Loader />
-      </div>
-    );
-  }
-
-  const organizations = data?.organizations || [];
-  const totalPages = Math.ceil((data?.count || 0) / FETCH_ORGS_LIMIT);
-
   return (
-    <div className="container">
-      <main className="main">
-        <h1 className="main__title">Organizations</h1>
+    <div className="home-page">
+      <section className="hero">
+        <motion.h1
+          className="hero__title"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          Welcome to Our Platform
+        </motion.h1>
+        <motion.p
+          className="hero__subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+        >
+          Connecting people with technology like never before.
+        </motion.p>
+        <motion.div
+          className="hero__buttons"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Button additionalClasses="hero__button" noArrow>
+            <Link to="/orgs">Join Organizations</Link>
+          </Button>
+          <Button additionalClasses="hero__button" noArrow>
+            <Link to="/signup">Sign Up</Link>
+          </Button>
+        </motion.div>
+      </section>
 
-        <OrganizationList organizations={organizations} />
+      <section className="features">
+        <h2 className="section-title">Why Choose Us?</h2>
+        <motion.div
+          className="features__grid"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+        >
+          <FeatureCard
+            icon={
+              <motion.img
+                src="/icons/suitcase.svg"
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5 }}
+              />
+            }
+            title="Reliable"
+            description="Our platform is built for reliability and performance."
+          />
+          <FeatureCard
+            icon={
+              <motion.img
+                src="/icons/profile.svg"
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              />
+            }
+            title="Community"
+            description="Join a thriving community of like-minded individuals."
+          />
+          <FeatureCard
+            icon={
+              <motion.img
+                src="/icons/star.svg"
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              />
+            }
+            title="Support"
+            description="24/7 support to help you whenever you need it."
+          />
+        </motion.div>
+      </section>
 
-        {/* TODO: Create a reusable <Pagination> component instead */}
-        {totalPages > 1 && (
-          <div className="pagination">
-            <button
-              className="pagination__button"
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-
-            {[...Array(totalPages)].map((_, index) => {
-              const pageNumber = index + 1;
-              return (
-                <button
-                  key={pageNumber}
-                  className={`pagination__button ${
-                    pageNumber === currentPage ? "active" : ""
-                  }`}
-                  onClick={() => handlePageClick(pageNumber)}
-                >
-                  {pageNumber}
-                </button>
-              );
-            })}
-
-            <button
-              className="pagination__button"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        )}
-      </main>
+      <section className="testimonials">
+        <h2 className="section-title">What People Say</h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+        >
+          "This platform has changed the way I work and collaborate! Absolutely
+          amazing."
+        </motion.p>
+        <motion.p
+          className="testimonials__author"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+        >
+          - Happy User
+        </motion.p>
+      </section>
     </div>
   );
 }
 
 export default HomePage;
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: JSX.Element;
+  title: string;
+  description: string;
+}) {
+  return (
+    <motion.div
+      className="feature-card"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+    >
+      <div className="feature-card__icon">{icon}</div>
+      <h3 className="feature-card__title">{title}</h3>
+      <p className="feature-card__description">{description}</p>
+    </motion.div>
+  );
+}
