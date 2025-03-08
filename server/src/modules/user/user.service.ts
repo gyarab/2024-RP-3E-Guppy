@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { TokenService } from '../token/token.service';
+import { UserWithTokens } from 'src/auth/types/auth.types';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
@@ -40,12 +45,18 @@ export class UserService {
   async update(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
-  }): Promise<User> {
+  }): Promise<UserWithTokens> {
     const { where, data } = params;
-    return this.prisma.user.update({
+
+    const user = await this.prisma.user.update({
       data,
       where,
     });
+
+    const { password, ...payload } = user;
+    const tokens = await this.tokenService.generateTokens(payload);
+
+    return { ...payload, ...tokens };
   }
 
   async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
@@ -54,11 +65,11 @@ export class UserService {
     });
   }
 
-  async findFirst(params: { where: Prisma.UserWhereInput }): Promise<User | null> {
+  async findFirst(params: {
+    where: Prisma.UserWhereInput;
+  }): Promise<User | null> {
     return this.prisma.user.findFirst({
       where: params.where,
     });
   }
-  
-  
 }

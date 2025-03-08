@@ -9,12 +9,15 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Prisma, User } from '@prisma/client';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RolesGuard } from 'src/auth/guards/role.guard';
+import { Response } from 'express';
+import { SignInResponse } from 'src/auth/types/auth.types';
 
 @UseGuards(AuthGuard, RolesGuard)
 @Controller('users')
@@ -50,13 +53,21 @@ export class UserController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: Prisma.UserUpdateInput,
-  ): Promise<User> {
-    return this.userService.update({
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<SignInResponse> {
+    const { refreshToken, ...payload } = await this.userService.update({
       where: {
         id,
       },
       data,
     });
+
+    response.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
+    return payload;
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
