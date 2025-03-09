@@ -18,7 +18,7 @@ export const authApi = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
-    signup: build.mutation<User, SignupCredentials>({
+    signup: build.mutation<UserWithToken, SignupCredentials>({
       query: (credentials) => ({
         url: "/auth/signup",
         method: "POST",

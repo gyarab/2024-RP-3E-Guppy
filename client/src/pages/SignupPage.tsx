@@ -48,7 +48,9 @@ function SignupPage() {
 
     try {
       const userData = await signup(credentials).unwrap();
-      dispatch(setAuthCredentials(userData));
+      const { accessToken, ...payload } = userData;
+      sessionStorage.setItem("accessToken", accessToken);
+      dispatch(setAuthCredentials(payload));
 
       setCredentials(DEFAULT_CREDENTIALS);
       navigate("/");

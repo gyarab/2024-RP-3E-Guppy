@@ -42,7 +42,6 @@ function LoginPage() {
 
     try {
       const userData = await login(credentials).unwrap();
-      // dispatch(setAuthCredentials(userData));
       const { accessToken, ...payload } = userData;
       sessionStorage.setItem("accessToken", accessToken);
       dispatch(setAuthCredentials(payload));
