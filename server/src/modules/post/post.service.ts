@@ -4,10 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Post, Prisma } from '@prisma/client';
+import { Post, Prisma, Tag } from '@prisma/client';
 import { UserService } from '../user/user.service';
 import { LikeService } from '../like/like.service';
 import { CreatePostDto } from './dto/CreatePostDto';
+import { Role } from 'src/auth/enum/roles.enum';
 
 @Injectable()
 export class PostService {
@@ -73,6 +74,7 @@ export class PostService {
           _count: { select: { likes: true } },
           likes: { where: { userId }, select: { id: true } },
           tags: { select: { name: true } },
+          author: { select: { name: true, profilePictureUrl: true } },
         },
       }),
       this.prisma.post.count({ where }),
@@ -141,6 +143,7 @@ export class PostService {
       where: {
         organizationId,
         userId,
+        role: { name: { in: [Role.MEMBER, Role.OWNER] } },
       },
     });
     return !!membership;
