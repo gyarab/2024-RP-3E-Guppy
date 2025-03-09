@@ -5,7 +5,10 @@ export interface Post {
   id: number;
   title: string;
   content: string;
-  authorId: number;
+  author: {
+    name: string;
+    profilePictureUrl: string;
+  };
   organizationId: number;
   comments: Comment[];
   tags: Tag[];

@@ -44,8 +44,8 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
     <article className="post" ref={ref}>
       <header className="post__header">
         <Avatar
-          src="https://placehold.co/50"
-          text="Milan Tucek"
+          src={data.author.profilePictureUrl || "/images/avatar.png"}
+          text={data.author.name}
           secondaryText={timeAgo}
         />
       </header>

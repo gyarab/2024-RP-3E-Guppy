@@ -10,6 +10,8 @@ import Button from "./Button";
 import Loader from "./Loader";
 import RichTextEditor from "./RichTextEditor";
 import TagChip from "./TagChip";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/auth/authSlice";
 
 // TODO: Fetch initial tags from the server
 const initialTags = [
@@ -37,6 +39,8 @@ function CreatePostForm() {
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagInputRef = useRef<HTMLInputElement>(null);
+
+  const user = useSelector(selectUser);
 
   const [uploadImage, { isLoading: isUploadLoading }] =
     useUploadImageMutation();
@@ -218,9 +222,9 @@ function CreatePostForm() {
             )}
           </div>
           <Avatar
-            src="https://i.pravatar.cc/50"
-            text="Milan Tucek"
-            secondaryText="UI & UX Developer"
+            src={user?.profilePictureUrl || "/images/avatar.png"}
+            text={user?.name}
+            secondaryText={user?.email}
           />
         </div>
 
