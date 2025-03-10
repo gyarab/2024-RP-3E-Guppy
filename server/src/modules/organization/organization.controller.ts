@@ -25,6 +25,22 @@ import { CreateOrganizationDto } from './dto/CreateOrganizationDto';
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
+  @Get('user')
+  async getUserOrganizations(
+    @Request() req,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
+    @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
+  ) {
+    const user = req.user as UserWithoutPassword;
+    return this.organizationService.userOrganizations({
+      userId: user.id,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy,
+    });
+  }
+
   @Get(':id')
   async getOne(@Param('id', ParseIntPipe) id: number) {
     return this.organizationService.organization({ id });

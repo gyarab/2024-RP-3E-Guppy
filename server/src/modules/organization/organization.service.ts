@@ -86,6 +86,56 @@ export class OrganizationService {
     return { organizations, count: totalCount };
   }
 
+  async userOrganizations(params: {
+    userId: number;
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.OrganizationWhereUniqueInput;
+    orderBy?: Prisma.OrganizationOrderByWithRelationInput;
+  }) {
+    const { userId, skip, take, cursor, orderBy } = params;
+
+    // Find organizations where the user is a member
+    const where = {
+      users: {
+        some: {
+          userId,
+        },
+      },
+    };
+
+    const [organizations, totalCount] = await this.prisma.$transaction([
+      this.prisma.organization.findMany({
+        skip,
+        take,
+        cursor,
+        where,
+        orderBy,
+        include: {
+          users: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  email: true,
+                  name: true,
+                },
+              },
+              role: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.organization.count({ where }),
+    ]);
+
+    return { organizations, count: totalCount };
+  }
+
   // async create(
   //   organizationCreateDto: CreateOrganizationDto,
   //   userId: number,

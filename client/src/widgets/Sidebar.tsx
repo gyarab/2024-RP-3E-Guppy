@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import OrgLogo from "../shared/ui/OrgLogo";
 import CreateOrgButton from "../shared/ui/CreateOrgButton";
 import { selectIsSidebarOpen } from "../features/ui/uiSlice";
-import { useGetOrganizationsQuery } from "../features/organization/organizationApi";
+import { useGetUserOrganizationsQuery } from "../features/organization/organizationApi";
 import { Organization } from "../shared/interfaces/Organization";
 import { extractColor } from "../shared/utils/extractColor";
 import Loader from "../shared/ui/Loader";
 
 function Sidebar() {
   const isSidebarOpen = useSelector(selectIsSidebarOpen);
-  const { data, isLoading, error, isError } = useGetOrganizationsQuery({
+  const { data, isLoading, error, isError } = useGetUserOrganizationsQuery({
     page: 1,
     limit: 10,
   });
@@ -23,14 +23,14 @@ function Sidebar() {
 
   useEffect(() => {
     if (data?.organizations) {
-      const orgsWithDefaultColors = data.organizations.map((org) => ({
+      const orgsWithDefaultColors = data.organizations.map((org: Organization) => ({
         ...org,
         mainColor: "#4a4a4a",
       }));
 
       setOrganizationsWithColors(orgsWithDefaultColors);
 
-      data.organizations.forEach((org, index) => {
+      data.organizations.forEach((org: Organization, index: number) => {
         if (org.logoUrl) {
           const img = new Image();
           img.crossOrigin = "anonymous";
@@ -45,7 +45,15 @@ function Sidebar() {
           img.onerror = () => {
             console.error(`Failed to load image for ${org.name}`);
           };
-          img.src = org.logoUrl;
+          // Check if the URL is absolute or relative
+          if (org.logoUrl.startsWith('http')) {
+            img.src = org.logoUrl;
+          } else {
+            // For relative URLs, prepend the API base URL
+            // Ensure there's a slash between the base URL and the path
+            const hasLeadingSlash = org.logoUrl.startsWith('/');
+            img.src = `http://localhost:3000${hasLeadingSlash ? '' : '/'}${org.logoUrl}`;
+          }
         }
       });
     }
@@ -68,7 +76,16 @@ function Sidebar() {
           <OrgLogo
             key={org.id}
             orgName={org.name}
-            orgLogo={org.logoUrl || "/images/default-logo.png"}
+            orgLogo={
+              org.logoUrl
+                ? org.logoUrl.startsWith('http')
+                  ? org.logoUrl
+                  : (() => {
+                      const hasLeadingSlash = org.logoUrl.startsWith('/');
+                      return `http://localhost:3000${hasLeadingSlash ? '' : '/'}${org.logoUrl}`;
+                    })()
+                : "/images/default-logo.png"
+            }
             orgLink={`/organization/${org.id}`}
             mainColor={org.mainColor}
           />

@@ -65,7 +65,7 @@ function CreateOrganizationPage() {
   /** Handle form submission */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!logo || nameAvailable === false) return;
+    if (!logo || nameAvailable !== true) return;
 
     try {
       const { data: url } = await uploadImage({

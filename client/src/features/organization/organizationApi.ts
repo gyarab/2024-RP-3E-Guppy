@@ -22,6 +22,12 @@ export const organizationApi = apiSlice.injectEndpoints({
     >({
       query: (params) => ({ url: "/organizations", params }),
     }),
+    getUserOrganizations: build.query<
+      GetOrganizationsResponse,
+      GetOrganizationsParams
+    >({
+      query: (params) => ({ url: "/organizations/user", params }),
+    }),
     createOrganization: build.mutation<Organization, Partial<Organization>>({
       query: (body) => ({
         url: "/organizations",
@@ -48,6 +54,7 @@ export const organizationApi = apiSlice.injectEndpoints({
 export const {
   useGetOrganizationQuery,
   useGetOrganizationsQuery,
+  useGetUserOrganizationsQuery,
   useCreateOrganizationMutation,
   useCheckOrgNameMutation,
   useJoinOrganizationMutation,
