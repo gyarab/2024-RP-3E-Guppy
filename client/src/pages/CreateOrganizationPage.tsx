@@ -74,7 +74,11 @@ function CreateOrganizationPage() {
       });
       if (!url) return;
 
-      await createOrganization({ name, description, logoUrl: url });
+      await createOrganization({
+        name,
+        description,
+        logoUrl: `http://localhost:3000/${url}`,
+      });
     } catch (error) {
       console.error("Error creating organization:", error);
     }
