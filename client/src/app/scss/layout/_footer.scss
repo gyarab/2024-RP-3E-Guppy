@@ -1,0 +1,138 @@
+@use "../abstract" as *;
+@use "../themes/themes.scss" as *;
+
+.footer {
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+  border-top: $default-border;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__brand {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__logo {
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  &__tagline {
+    font-size: $font-size-medium;
+    margin-bottom: 1rem;
+  }
+
+  &__section {
+    min-width: 150px;
+  }
+
+  &__heading {
+    font-size: $font-size-large;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.5rem;
+
+      a {
+        text-decoration: none;
+        transition: color $transition-duration $transition-ease;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: $default-border;
+
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  &__social {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all $transition-duration $transition-ease;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  &__copyright {
+    font-size: $font-size-small;
+  }
+}
+
+// Theme-specific styles
+@each $theme, $colors in $themes {
+  .#{$theme}-theme {
+    .footer {
+      background-color: map-get($colors, background);
+      color: map-get($colors, text);
+
+      &__list {
+        li {
+          a {
+            color: map-get($colors, text);
+
+            &:hover {
+              color: map-get($colors, primary);
+            }
+          }
+        }
+      }
+
+      &__social-link {
+        color: map-get($colors, text);
+        background-color: rgba(map-get($colors, primary), 0.1);
+
+        &:hover {
+          color: map-get($colors, background);
+          background-color: map-get($colors, primary);
+        }
+      }
+    }
+  }
+}
