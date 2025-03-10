@@ -1,48 +1,78 @@
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 import OrgLogo from "../shared/ui/OrgLogo";
 import CreateOrgButton from "../shared/ui/CreateOrgButton";
 import { selectIsSidebarOpen } from "../features/ui/uiSlice";
+import { useGetOrganizationsQuery } from "../features/organization/organizationApi";
+import { Organization } from "../shared/interfaces/Organization";
+import { extractColor } from "../shared/utils/extractColor";
+import Loader from "../shared/ui/Loader";
 
 function Sidebar() {
   const isSidebarOpen = useSelector(selectIsSidebarOpen);
+  const { data, isLoading, error, isError } = useGetOrganizationsQuery({
+    page: 1,
+    limit: 10,
+  });
+  const [organizationsWithColors, setOrganizationsWithColors] = useState<
+    (Organization & { mainColor: string })[]
+  >([]);
 
   const toggleClass = isSidebarOpen ? "" : "sidebar-closed";
+
+  useEffect(() => {
+    if (data?.organizations) {
+      const orgsWithDefaultColors = data.organizations.map((org) => ({
+        ...org,
+        mainColor: "#4a4a4a",
+      }));
+
+      setOrganizationsWithColors(orgsWithDefaultColors);
+
+      data.organizations.forEach((org, index) => {
+        if (org.logoUrl) {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.onload = () => {
+            const color = extractColor(img);
+            setOrganizationsWithColors((prev) => {
+              const updated = [...prev];
+              updated[index] = { ...updated[index], mainColor: color };
+              return updated;
+            });
+          };
+          img.onerror = () => {
+            console.error(`Failed to load image for ${org.name}`);
+          };
+          img.src = org.logoUrl;
+        }
+      });
+    }
+  }, [data]);
 
   return (
     <aside className={`${toggleClass} sidebar`}>
       <div className="organizations">
         <CreateOrgButton />
-        <OrgLogo
-          orgName="Twitter"
-          orgLogo="https://e7.pngegg.com/pngimages/708/311/png-clipart-icon-logo-twitter-logo-twitter-logo-blue-social-media-thumbnail.png"
-          orgLink="/"
-          mainColor="rgb(29, 161, 242)"
-        />
-        <OrgLogo
-          orgName="Netflix"
-          orgLogo="https://image.pmgstatic.com/cache/resized/w960h634/files/images/news/article/166/318/166318830_4c6e50.png"
-          orgLink="/"
-          mainColor="#E50914"
-        />
-        <OrgLogo
-          orgName="Twitch"
-          orgLogo="https://img.freepik.com/premium-vector/twitch-logo_578229-259.jpg?semt=ais_hybrid"
-          orgLink="/"
-          mainColor="#6441a5 "
-        />
-        <OrgLogo
-          orgName="Spotify"
-          orgLogo="https://play-lh.googleusercontent.com/4Yqe9IEyqK1E8FmtSMW-dxNLz4G-uMb07nIkmAy6ppk-Sj3oTx6-EFNEeeZmvpjJ72Q"
-          orgLink="/"
-          mainColor="#1ED760"
-        />
-        <OrgLogo
-          orgName="HBO Max"
-          orgLogo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSelMaZGLLpn2bFzF09E-qrtuQkMllGpS1iMA&s"
-          orgLink="/"
-          mainColor="#330551"
-        />
+
+        {isLoading && <Loader />}
+
+        {isError && (
+          <div className="error-message">
+            Failed to load organizations. Please try again later.
+          </div>
+        )}
+
+        {organizationsWithColors.map((org) => (
+          <OrgLogo
+            key={org.id}
+            orgName={org.name}
+            orgLogo={org.logoUrl || "/images/default-logo.png"}
+            orgLink={`/organization/${org.id}`}
+            mainColor={org.mainColor}
+          />
+        ))}
       </div>
     </aside>
   );
