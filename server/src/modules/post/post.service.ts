@@ -71,7 +71,7 @@ export class PostService {
         orderBy,
         include: {
           comments: true,
-          _count: { select: { likes: true } },
+          _count: { select: { likes: true, comments: true } },
           likes: { where: { userId }, select: { id: true } },
           tags: { select: { name: true } },
           author: { select: { name: true, profilePictureUrl: true } },
@@ -84,6 +84,7 @@ export class PostService {
       posts: posts.map(({ _count, likes, ...post }) => ({
         ...post,
         likes: _count.likes,
+        commentsCount: _count.comments,
         hasLiked: likes.length > 0,
       })),
       count,

@@ -19,7 +19,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserWithoutPassword } from 'src/auth/types/auth.types';
 
 @UseGuards(AuthGuard)
-@Controller('comment')
+@Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
@@ -31,8 +31,19 @@ export class CommentController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getAll(): Promise<Comment[]> {
-    return this.commentService.comments({});
+  async getAll(@Request() req): Promise<Comment[]> {
+    const user = req.user as UserWithoutPassword;
+    return this.commentService.comments({ userId: user.id });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('post/:postId')
+  async getByPostId(
+    @Param('postId', ParseIntPipe) postId: number,
+    @Request() req,
+  ): Promise<Comment[]> {
+    const user = req.user as UserWithoutPassword;
+    return this.commentService.comments({ where: { postId }, userId: user.id });
   }
 
   @HttpCode(HttpStatus.CREATED)
@@ -44,15 +55,6 @@ export class CommentController {
   ): Promise<Comment> {
     const user = req.user as UserWithoutPassword;
     return this.commentService.create(data, postId, user.id);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Put(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('data') data: Prisma.CommentUpdateInput,
-  ): Promise<Comment> {
-    return this.commentService.update({ where: { id }, data });
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
