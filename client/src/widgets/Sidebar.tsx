@@ -23,10 +23,12 @@ function Sidebar() {
 
   useEffect(() => {
     if (data?.organizations) {
-      const orgsWithDefaultColors = data.organizations.map((org: Organization) => ({
-        ...org,
-        mainColor: "#4a4a4a",
-      }));
+      const orgsWithDefaultColors = data.organizations.map(
+        (org: Organization) => ({
+          ...org,
+          mainColor: "#4a4a4a",
+        })
+      );
 
       setOrganizationsWithColors(orgsWithDefaultColors);
 
@@ -45,15 +47,7 @@ function Sidebar() {
           img.onerror = () => {
             console.error(`Failed to load image for ${org.name}`);
           };
-          // Check if the URL is absolute or relative
-          if (org.logoUrl.startsWith('http')) {
-            img.src = org.logoUrl;
-          } else {
-            // For relative URLs, prepend the API base URL
-            // Ensure there's a slash between the base URL and the path
-            const hasLeadingSlash = org.logoUrl.startsWith('/');
-            img.src = `http://localhost:3000${hasLeadingSlash ? '' : '/'}${org.logoUrl}`;
-          }
+          img.src = org.logoUrl;
         }
       });
     }
@@ -78,11 +72,13 @@ function Sidebar() {
             orgName={org.name}
             orgLogo={
               org.logoUrl
-                ? org.logoUrl.startsWith('http')
+                ? org.logoUrl.startsWith("http")
                   ? org.logoUrl
                   : (() => {
-                      const hasLeadingSlash = org.logoUrl.startsWith('/');
-                      return `http://localhost:3000${hasLeadingSlash ? '' : '/'}${org.logoUrl}`;
+                      const hasLeadingSlash = org.logoUrl.startsWith("/");
+                      return `http://localhost:3000${
+                        hasLeadingSlash ? "" : "/"
+                      }${org.logoUrl}`;
                     })()
                 : "/images/default-logo.png"
             }
