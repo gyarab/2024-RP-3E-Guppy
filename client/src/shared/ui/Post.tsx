@@ -92,7 +92,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
           </button>
         </div>
 
-        <CommentSection comments={data.comments} onLoadMore={() => {}} />
+        <CommentSection postId={data.id} />
       </footer>
     </article>
   );

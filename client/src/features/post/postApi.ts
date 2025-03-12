@@ -1,6 +1,7 @@
 import { apiSlice } from "../../shared/api/apiSlice";
 
 import { Post } from "../../shared/interfaces/Post";
+import { Comment } from "../../shared/interfaces/Comment";
 import { CreatePostDto } from "../../shared/interfaces/CreatePostDto";
 import { providesList } from "../../shared/utils/helpers";
 
@@ -24,6 +25,12 @@ export const postApi = apiSlice.injectEndpoints({
     getPost: build.query<Post, number>({
       query: (id) => `/posts/${id}`,
       providesTags: (_, __, id) => [{ type: "Post", id }],
+    }),
+    getPostComments: build.query<
+      { comments: Comment[]; count: number },
+      number
+    >({
+      query: (id) => `/posts/${id}/comments`,
     }),
     createPost: build.mutation<Post, CreatePostDto>({
       query: (data) => ({
@@ -54,6 +61,7 @@ export const postApi = apiSlice.injectEndpoints({
 export const {
   useGetPostQuery,
   useGetPostsQuery,
+  useGetPostCommentsQuery,
   useCreatePostMutation,
   useDeletePostMutation,
   useLikePostMutation,

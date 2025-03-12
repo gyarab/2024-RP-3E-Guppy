@@ -11,8 +11,8 @@ interface CommentProps {
 }
 
 function Comment({ data }: CommentProps) {
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(123048);
+  const [isLiked, setIsLiked] = useState(data.hasLiked);
+  const [likeCount, setLikeCount] = useState(data.likes);
 
   const handleLikeClick = () => {
     setIsLiked((prev) => !prev);
@@ -23,15 +23,15 @@ function Comment({ data }: CommentProps) {
 
   return (
     <div className="comment">
-      <Avatar src={data.author.avatar} />
+      <Avatar src={data.author.profilePictureUrl} />
       <div className="comment__body">
         <div className="comment__header">
           <span className="comment__author">{data.author.name}</span>
           <time
-            dateTime={data.createdAt.toISOString()}
+            dateTime={new Date(data.createdAt).toISOString()}
             className="comment__date"
           >
-            {formatRelativeDate(data.createdAt)}
+            {formatRelativeDate(new Date(data.createdAt))}
           </time>
         </div>
         <p className="comment__content">

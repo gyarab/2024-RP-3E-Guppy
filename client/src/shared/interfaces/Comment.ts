@@ -5,6 +5,8 @@ export interface Comment {
   createdAt: Date;
   author: {
     name: string;
-    avatar: string;
+    profilePictureUrl: string;
   };
+  likes: number;
+  hasLiked: boolean;
 }
