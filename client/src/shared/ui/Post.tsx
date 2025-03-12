@@ -3,12 +3,13 @@ import DOMPurify from "dompurify";
 
 import Avatar from "./Avatar";
 import Button from "./Button";
+import TagChip from "./TagChip";
 import CommentSection from "./CommentSection";
 
 import { Post as IPost } from "../interfaces/Post";
 import { useLikePostMutation } from "../../features/post/postApi";
 import { formatRelativeDate } from "../utils/formatRelativeDate";
-import TagChip from "./TagChip";
+import LikeIcon from "./LikeIcon";
 
 interface PostProps {
   data: IPost;
@@ -21,6 +22,7 @@ const createMarkup = (dirty: string) => ({
 const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
   const [isLiked, setIsLiked] = useState(data.hasLiked);
   const [likeCount, setLikeCount] = useState(data.likes);
+  const [showComments, setShowComments] = useState(false);
 
   const [likePost] = useLikePostMutation();
 
@@ -36,6 +38,10 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
       setIsLiked(!newLikedState);
       setLikeCount((prev) => (newLikedState ? prev - 1 : prev + 1));
     }
+  };
+
+  const toggleComments = () => {
+    setShowComments((prev) => !prev);
   };
 
   const timeAgo = formatRelativeDate(new Date(data.createdAt));
@@ -69,30 +75,21 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
       <footer className="post__footer">
         <div className="post__action">
           <Button variant="basic" size="small" onClick={handleLikeClick}>
-            <div className="like">
-              <svg
-                className="like-icon"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ fill: isLiked ? "#fc4e4e" : "#505050" }}
-                aria-hidden="true"
-              >
-                <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z"></path>
-              </svg>
-            </div>
+            <LikeIcon isLiked={isLiked} />
             <span className="like-count">{likeCount}</span>
           </Button>
 
-          <button className="post__button" aria-label="Comment">
-            <img src="/icons/comment.svg" alt="Comment" />
-          </button>
+          <Button variant="basic" size="small" onClick={toggleComments}>
+            <img src="/icons/comment.svg" alt="Comment Icon" />
+            <span className="like-count">{data.commentsCount}</span>
+          </Button>
 
-          <button className="post__button" aria-label="Share">
-            <img src="/icons/share.svg" alt="Share" />
-          </button>
+          <Button variant="basic" size="small">
+            <img src="/icons/share.svg" alt="Share Icon" />
+          </Button>
         </div>
 
-        <CommentSection comments={data.comments} onLoadMore={() => {}} />
+        {showComments && <CommentSection postId={data.id} />}
       </footer>
     </article>
   );

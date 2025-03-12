@@ -13,6 +13,7 @@ export interface Post {
   comments: Comment[];
   tags: Tag[];
   likes: number;
+  commentsCount: number;
   hasLiked: boolean;
   createdAt: Date;
   updatedAt: Date;

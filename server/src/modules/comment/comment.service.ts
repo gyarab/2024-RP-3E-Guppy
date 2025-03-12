@@ -24,15 +24,28 @@ export class CommentService {
     cursor?: Prisma.CommentWhereUniqueInput;
     where?: Prisma.CommentWhereInput;
     orderBy?: Prisma.CommentOrderByWithRelationInput;
+    userId: number;
   }): Promise<Comment[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.comment.findMany({
+    const { skip, take, cursor, where, orderBy, userId } = params;
+
+    const comments = await this.prisma.comment.findMany({
       skip,
       take,
       cursor,
       where,
       orderBy,
+      include: {
+        author: { select: { name: true, profilePictureUrl: true } },
+        _count: { select: { likes: true } },
+        likes: { where: { userId }, select: { id: true } },
+      },
     });
+
+    return comments.map(({ _count, likes, ...comment }) => ({
+      ...comment,
+      hasLiked: likes.length > 0,
+      likes: _count.likes,
+    }));
   }
 
   async create(
@@ -57,17 +70,6 @@ export class CommentService {
     });
   }
 
-  async update(params: {
-    where: Prisma.CommentWhereUniqueInput;
-    data: Prisma.CommentUpdateInput;
-  }): Promise<Comment> {
-    const { where, data } = params;
-    return this.prisma.comment.update({
-      data,
-      where,
-    });
-  }
-
   async delete(where: Prisma.CommentWhereUniqueInput): Promise<Comment> {
     return this.prisma.comment.delete({
       where,
@@ -84,31 +86,5 @@ export class CommentService {
     }
 
     await this.likeService.toggleCommentLike(userId, commentId);
-    // const comment = await this.prisma.comment.findUnique({
-    //   where: { id: commentId },
-    //   include: { likedBy: true },
-    // });
-
-    // if (!comment) {
-    //   throw new NotFoundException('Comment not found');
-    // }
-
-    // if (comment.likedBy.some((user) => user.id === userId)) {
-    //   return this.prisma.comment.update({
-    //     where: { id: commentId },
-    //     data: {
-    //       likes: { decrement: 1 },
-    //       likedBy: { disconnect: { id: userId } },
-    //     },
-    //   });
-    // }
-
-    // return this.prisma.comment.update({
-    //   where: { id: commentId },
-    //   data: {
-    //     likes: { increment: 1 },
-    //     likedBy: { connect: { id: userId } },
-    //   },
-    // });
   }
 }
