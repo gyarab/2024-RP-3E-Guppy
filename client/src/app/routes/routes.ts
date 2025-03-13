@@ -2,7 +2,7 @@ import CreateOrganizationPage from "../../pages/CreateOrganizationPage";
 import CreatePostPage from "../../pages/CreatePostPage";
 import FeedPage from "../../pages/FeedPage";
 import HomePage from "../../pages/HomePage";
-import About from "../../pages/About";
+import AboutPage from "../../pages/AboutPage";
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
 import ForgotPasswordPage from "../../pages/ForgotPassword";
@@ -17,7 +17,7 @@ interface Route {
 
 export const publicRoutes: Route[] = [
   { path: "/", component: HomePage },
-  { path: "/about", component: About },
+  { path: "/about", component: AboutPage },
   { path: "/login", component: LoginPage },
   { path: "/signup", component: SignupPage },
   { path: "/forgot-password", component: ForgotPasswordPage },

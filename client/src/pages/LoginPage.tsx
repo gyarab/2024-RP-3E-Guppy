@@ -60,14 +60,6 @@ function LoginPage() {
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
 
-  function rememberMe() {
-    if (isRemembered === true) {
-      //remember credentials
-    } else {
-      //forget credentials
-    }
-  }
-
   return (
     <main className="login">
       <div className="container login__container">
@@ -130,7 +122,6 @@ function LoginPage() {
             variant="accent"
             additionalClasses="login__button"
             disabled={isLoading}
-            onClick={rememberMe}
           >
             {isLoading ? "Loading..." : "Login"}
           </Button>

@@ -6,8 +6,6 @@ import { useJoinOrganizationMutation } from "../../features/organization/organiz
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { isApiError } from "../utils/helpers";
-import { useDispatch } from "react-redux";
-import { setOrgId } from "../../features/organization/organizationSlice";
 
 interface OrganizationCardProps {
   name?: string;
@@ -30,7 +28,6 @@ function OrganizationCard({
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [joinOrganization, { isLoading }] = useJoinOrganizationMutation();
 
@@ -110,7 +107,6 @@ function OrganizationCard({
     try {
       const joinCode = code.join("");
       const data = await joinOrganization(joinCode).unwrap();
-      // dispatch(setOrgId(data.id));
       sessionStorage.setItem("orgId", data.id.toString());
 
       navigate("/feed");

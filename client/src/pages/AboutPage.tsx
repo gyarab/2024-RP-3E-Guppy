@@ -1,10 +1,13 @@
-import { motion } from 'framer-motion'; // For animations
-import Card from '../shared/ui/AboutCard'; // Import Card component
+import { motion } from "framer-motion";
+import Card from "../shared/ui/AboutCard";
 
-const About = () => {
+function AboutPage() {
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.8, staggerChildren: 0.3 } },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.8, staggerChildren: 0.3 },
+    },
   };
 
   const itemVariants = {
@@ -33,20 +36,36 @@ const About = () => {
         <motion.div className="about-section" variants={itemVariants}>
           <h2>What can you do with Guppy?</h2>
           <div className="feature-cards">
-            <Card header="Build Organizations" text="Set up your own dedicated space." iconPath=""/>
-            <Card header="Share Information" text="Keep everyone informed." iconPath=""/>
-            <Card header="Share Memes" text="Have some fun!" iconPath=""/>
-            <Card header="Connect with Others" text="Stay in touch." iconPath=""/>
-            <Card header="Customization (Coming Soon)" text="Tailor your organization." iconPath=""/>
+            <Card
+              header="Build Organizations"
+              text="Set up your own dedicated space."
+              iconPath=""
+            />
+            <Card
+              header="Share Information"
+              text="Keep everyone informed."
+              iconPath=""
+            />
+            <Card header="Share Memes" text="Have some fun!" iconPath="" />
+            <Card
+              header="Connect with Others"
+              text="Stay in touch."
+              iconPath=""
+            />
+            <Card
+              header="Customization (Coming Soon)"
+              text="Tailor your organization."
+              iconPath=""
+            />
           </div>
         </motion.div>
 
         <motion.div className="about-section" variants={itemVariants}>
-        <h2>Why Guppy?</h2>
+          <h2>Why Guppy?</h2>
           <p>
             In a world of cluttered social media, Guppy offers refreshing
-            simplicity. We believe in a focused environment, connecting you
-            with the people who matter most.
+            simplicity. We believe in a focused environment, connecting you with
+            the people who matter most.
           </p>
         </motion.div>
 
@@ -68,6 +87,6 @@ const About = () => {
       </div>
     </motion.div>
   );
-};
+}
 
-export default About;
+export default AboutPage;

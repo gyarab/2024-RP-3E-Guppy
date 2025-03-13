@@ -48,8 +48,6 @@ function SignupPage() {
 
     try {
       const userData = await signup(credentials).unwrap();
-      
-      // Store the access token in sessionStorage and dispatch user data
       const { accessToken, ...payload } = userData;
       sessionStorage.setItem("accessToken", accessToken);
       dispatch(setAuthCredentials(payload));

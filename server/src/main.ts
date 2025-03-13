@@ -13,8 +13,8 @@ async function bootstrap() {
     credentials: true,
     origin: process.env.CORS_ORIGIN,
   });
-  app.use(compression()); // for enabling gzip compression
-  app.use(cookieParser()); // for parsing cookies
+  app.use(compression());
+  app.use(cookieParser());
 
   await app.listen(process.env.PORT || 3000);
 }

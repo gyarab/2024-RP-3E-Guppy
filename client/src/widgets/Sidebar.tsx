@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import OrgLogo from "../shared/ui/OrgLogo";
@@ -8,7 +8,6 @@ import { useGetUserOrganizationsQuery } from "../features/organization/organizat
 import { Organization } from "../shared/interfaces/Organization";
 import { extractColor } from "../shared/utils/extractColor";
 import Loader from "../shared/ui/Loader";
-import { setOrgId } from "../features/organization/organizationSlice";
 import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
@@ -21,7 +20,6 @@ function Sidebar() {
     (Organization & { mainColor: string })[]
   >([]);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggleClass = isSidebarOpen ? "" : "sidebar-closed";
 

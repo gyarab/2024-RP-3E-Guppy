@@ -72,8 +72,6 @@ function FeedPage() {
         if (page === 1) {
           setPosts(data.posts);
         } else {
-          console.log("data.posts", data.posts);
-
           setPosts((prevPosts) => [...prevPosts, ...data.posts]);
         }
 

@@ -122,7 +122,7 @@ function ProfilePage() {
             <div className="profile-picture-editor">
               <div className="profile-picture__preview">
                 <img
-                  src={formData.profilePictureUrl || "https://placehold.co/100"}
+                  src={formData.profilePictureUrl || "/images/avatar.png"}
                   alt="Profile Preview"
                 />
                 <div className="profile-picture__overlay">
@@ -145,7 +145,7 @@ function ProfilePage() {
             </div>
           ) : (
             <Avatar
-              src={formData.profilePictureUrl || "https://placehold.co/100"}
+              src={formData.profilePictureUrl || "/images/avatar.png"}
               text={formData.name}
               secondaryText={formData.email}
             />

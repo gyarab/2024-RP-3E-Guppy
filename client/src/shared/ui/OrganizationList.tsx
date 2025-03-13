@@ -15,10 +15,6 @@ function OrganizationList({ organizations }: OrganizationListProps) {
     navigateWithParams("/orgs/create", {});
   };
 
-  // if (!organizations || organizations.length === 0) {
-  //   return <p>No organizations found.</p>;
-  // }
-
   return (
     <ul className="org-list">
       {organizations.map((org) => (

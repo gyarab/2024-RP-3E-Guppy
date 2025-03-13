@@ -95,7 +95,6 @@ export class OrganizationService {
   }) {
     const { userId, skip, take, cursor, orderBy } = params;
 
-    // Find organizations where the user is a member
     const where = {
       users: {
         some: {
@@ -135,74 +134,6 @@ export class OrganizationService {
 
     return { organizations, count: totalCount };
   }
-
-  // async create(
-  //   organizationCreateDto: CreateOrganizationDto,
-  //   userId: number,
-  // ): Promise<Organization> {
-  //   const { name, description, logoUrl, userIds } = organizationCreateDto;
-
-  //   const creator = await this.userService.user({ id: userId });
-  //   if (!creator) {
-  //     throw new NotFoundException('Creator user not found');
-  //   }
-
-  //   const memberRole = await this.prisma.role.findUnique({
-  //     where: { name: 'Member' },
-  //   });
-  //   if (!memberRole) {
-  //     await this.prisma.role.create({
-  //       data: {
-  //         name: 'Member',
-  //       },
-  //     });
-  //   }
-
-  //   let usersToAdd = [];
-  //   if (userIds && userIds.length > 0) {
-  //     const users = await this.userService.users({
-  //       where: { id: { in: userIds } },
-  //     });
-
-  //     if (users.length !== userIds.length) {
-  //       throw new BadRequestException('Some users not found');
-  //     }
-
-  //     usersToAdd = users.map((user) => ({
-  //       user: { connect: { id: user.id } },
-  //       role: { connect: { name: 'Member' } },
-  //     }));
-  //   }
-
-  //   const joinCodes = await this.prisma.organization.findMany({
-  //     select: { joinCode: true },
-  //   });
-  //   const existingCodes = joinCodes.map(({ joinCode }) => joinCode);
-
-  //   let uniqueCode = '';
-  //   do {
-  //     uniqueCode = await generateRandomString(6);
-  //   } while (existingCodes.includes(uniqueCode));
-
-  //   return this.prisma.organization.create({
-  //     data: {
-  //       name,
-  //       description,
-  //       logoUrl,
-  //       creatorId: userId,
-  //       joinCode: uniqueCode,
-  //       users: {
-  //         create: [
-  //           {
-  //             user: { connect: { id: userId } },
-  //             role: { connect: { name: 'Member' } },
-  //           },
-  //           ...usersToAdd,
-  //         ],
-  //       },
-  //     },
-  //   });
-  // }
 
   async create(
     organizationCreateDto: CreateOrganizationDto,

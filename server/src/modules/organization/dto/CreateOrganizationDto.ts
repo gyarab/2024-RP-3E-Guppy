@@ -16,6 +16,6 @@ export class CreateOrganizationDto {
 
   @IsArray()
   @IsInt({ each: true })
-  @IsOptional() // Pokud chcete, aby bylo volitelné, např. prázdné pole uživatelů.
+  @IsOptional()
   userIds: number[];
 }

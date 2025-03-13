@@ -1,10 +1,9 @@
 interface CardProps {
   header: string;
   text: string;
-  iconPath: string;
 }
 
-const Card = ({header, text, iconPath}: CardProps) => {
+const Card = ({ header, text }: CardProps) => {
   return (
     <div className="card sweeperCard o-hidden">
       <div className="containers">
@@ -33,9 +32,7 @@ const Card = ({header, text, iconPath}: CardProps) => {
           </svg>
         </div>
         <div className="title my-3">{header}</div>
-        <div className="subtitle">
-          {text}
-        </div>
+        <div className="subtitle">{text}</div>
       </div>
     </div>
   );

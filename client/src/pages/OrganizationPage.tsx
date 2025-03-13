@@ -14,7 +14,6 @@ function OrganizationPage() {
   });
 
   const user = useSelector(selectUser);
-  // if (!user) return null;
 
   useEffect(() => {
     if (data) {

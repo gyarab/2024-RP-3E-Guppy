@@ -26,8 +26,6 @@ export class AuthGuard implements CanActivate {
     const user = await this.userService.user({ id: payload.id });
 
     if (user.tokenVersion !== payload.tokenVersion) {
-      console.log('Token version mismatch');
-
       throw new UnauthorizedException('Invalid access token');
     }
 
@@ -38,7 +36,5 @@ export class AuthGuard implements CanActivate {
   private extractTokenFromRequest(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
-    // const token = request.cookies?.accessToken;
-    // return token;
   }
 }

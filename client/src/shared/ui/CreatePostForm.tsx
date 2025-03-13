@@ -59,7 +59,7 @@ function CreatePostForm() {
   const [createPost, { isLoading: isPostLoading }] = useCreatePostMutation();
 
   const fuse = new Fuse(tagOptions, {
-    threshold: 0.35, // Allows minor typos
+    threshold: 0.35,
     includeScore: true,
   });
 
@@ -77,7 +77,6 @@ function CreatePostForm() {
     };
   }, []);
 
-  // Close the dropdown when clicking outside
   const handleClickOutside = (e: MouseEvent) => {
     if (
       tagInputRef.current &&
