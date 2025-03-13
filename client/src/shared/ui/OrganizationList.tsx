@@ -15,9 +15,9 @@ function OrganizationList({ organizations }: OrganizationListProps) {
     navigateWithParams("/orgs/create", {});
   };
 
-  if (!organizations || organizations.length === 0) {
-    return <p>No organizations found.</p>;
-  }
+  // if (!organizations || organizations.length === 0) {
+  //   return <p>No organizations found.</p>;
+  // }
 
   return (
     <ul className="org-list">
@@ -26,7 +26,7 @@ function OrganizationList({ organizations }: OrganizationListProps) {
           key={org.id}
           name={org.name}
           description={org.description}
-          logo={"http://localhost:3000/" + org.logoUrl}
+          logo={org.logoUrl}
         />
       ))}
       <li className="org-card org-card--create" onClick={handleCreateOrgClick}>

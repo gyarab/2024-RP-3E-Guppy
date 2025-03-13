@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import OrgLogo from "../shared/ui/OrgLogo";
@@ -8,10 +8,12 @@ import { useGetUserOrganizationsQuery } from "../features/organization/organizat
 import { Organization } from "../shared/interfaces/Organization";
 import { extractColor } from "../shared/utils/extractColor";
 import Loader from "../shared/ui/Loader";
+import { setOrgId } from "../features/organization/organizationSlice";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const isSidebarOpen = useSelector(selectIsSidebarOpen);
-  const { data, isLoading, error, isError } = useGetUserOrganizationsQuery({
+  const { data, isLoading, isError } = useGetUserOrganizationsQuery({
     page: 1,
     limit: 10,
   });
@@ -19,6 +21,8 @@ function Sidebar() {
     (Organization & { mainColor: string })[]
   >([]);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toggleClass = isSidebarOpen ? "" : "sidebar-closed";
 
   useEffect(() => {
@@ -53,6 +57,12 @@ function Sidebar() {
     }
   }, [data]);
 
+  const hnadleOrgLogoClick = (orgId: number) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    sessionStorage.setItem("orgId", orgId.toString());
+    navigate("/feed");
+  };
+
   return (
     <aside className={`${toggleClass} sidebar`}>
       <div className="organizations">
@@ -70,20 +80,9 @@ function Sidebar() {
           <OrgLogo
             key={org.id}
             orgName={org.name}
-            orgLogo={
-              org.logoUrl
-                ? org.logoUrl.startsWith("http")
-                  ? org.logoUrl
-                  : (() => {
-                      const hasLeadingSlash = org.logoUrl.startsWith("/");
-                      return `http://localhost:3000${
-                        hasLeadingSlash ? "" : "/"
-                      }${org.logoUrl}`;
-                    })()
-                : "/images/default-logo.png"
-            }
-            orgLink={`/organization/${org.id}`}
+            orgLogo={org.logoUrl}
             mainColor={org.mainColor}
+            onClick={hnadleOrgLogoClick(org.id)}
           />
         ))}
       </div>

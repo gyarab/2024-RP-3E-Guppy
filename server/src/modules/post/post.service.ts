@@ -33,11 +33,24 @@ export class PostService {
     where?: Prisma.PostWhereInput;
     orderBy?: Prisma.PostOrderByWithRelationInput;
     userId: number;
+    orgId: number;
   }): Promise<{ posts: Post[]; count: number }> {
-    const { skip, take, searchType, query, cursor, where, orderBy, userId } =
-      params;
+    const {
+      skip,
+      take,
+      searchType,
+      query,
+      cursor,
+      where,
+      orderBy,
+      userId,
+      orgId,
+    } = params;
 
-    let searchWhere: Prisma.PostWhereInput = { ...where };
+    let searchWhere: Prisma.PostWhereInput = {
+      ...where,
+      organizationId: orgId,
+    };
     if (searchType && query) {
       const searchQuery = { contains: query };
 
@@ -77,7 +90,7 @@ export class PostService {
           author: { select: { id: true, name: true, profilePictureUrl: true } },
         },
       }),
-      this.prisma.post.count({ where }),
+      this.prisma.post.count({ where: { ...where, organizationId: orgId } }),
     ]);
 
     return {

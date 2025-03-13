@@ -3,18 +3,8 @@ import { useGetOrganizationsQuery } from "../features/organization/organizationA
 import OrganizationList from "../shared/ui/OrganizationList";
 import Loader from "../shared/ui/Loader";
 import { Organization } from "../shared/interfaces/Organization";
-
-// const organizations = [
-//   {
-//     id: 1,
-//     name: "Organization 1",
-//     description: "This is the first organization.",
-//     joinCode: "abc123",
-//     logoUrl:
-//       "uploads/organization/5d8e8d9d6cef86ebcdeeb14c23b6eb4b28d15b492643c77118d56fc321547f90.jpg",
-//     createdAt: new Date(),
-//   },
-// ];
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/auth/authSlice";
 
 function OrganizationPage() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -23,9 +13,16 @@ function OrganizationPage() {
     limit: 10,
   });
 
+  const user = useSelector(selectUser);
+  // if (!user) return null;
+
   useEffect(() => {
     if (data) {
-      setOrganizations(data.organizations);
+      const filteredOrganizations = data.organizations.filter(
+        (org) => !org.users.some((userOrg) => userOrg.userId === user?.id)
+      );
+
+      setOrganizations(filteredOrganizations);
     }
   }, [data]);
 

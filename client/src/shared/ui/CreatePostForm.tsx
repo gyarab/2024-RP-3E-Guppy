@@ -41,6 +41,18 @@ function CreatePostForm() {
   const tagInputRef = useRef<HTMLInputElement>(null);
 
   const user = useSelector(selectUser);
+  const orgId = sessionStorage.getItem("orgId");
+
+  if (!orgId) {
+    return (
+      <div className="container feed-container">
+        <p>
+          No organization selected. Please select an organization to create a
+          post.
+        </p>
+      </div>
+    );
+  }
 
   const [uploadImage, { isLoading: isUploadLoading }] =
     useUploadImageMutation();
@@ -175,7 +187,12 @@ function CreatePostForm() {
       );
     }
 
-    await createPost({ title, content: updatedContent, tags });
+    await createPost({
+      title,
+      content: updatedContent,
+      tags,
+      orgId: parseInt(orgId),
+    });
   };
 
   const handleEditClick = () => {

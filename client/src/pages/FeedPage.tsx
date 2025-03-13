@@ -17,6 +17,22 @@ function FeedPage() {
   const debouncedSearchQuery = useDebounce(searchQuery, 400);
 
   const observer = useRef<IntersectionObserver | null>(null);
+  const orgId = sessionStorage.getItem("orgId");
+
+  if (!orgId) {
+    return (
+      <div className="container feed-container">
+        <p>
+          No organization selected. Please select an organization to view posts.
+        </p>
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    setPosts([]);
+    setPage(1);
+  }, [orgId]);
 
   const parseSearchQuery = (query: string) => {
     if (!query) return {};
@@ -35,6 +51,7 @@ function FeedPage() {
       page,
       limit: FETCH_POSTS_LIMIT,
       ...parseSearchQuery(debouncedSearchQuery),
+      orgId,
     },
     {
       skip: !!debouncedSearchQuery && page > 1,

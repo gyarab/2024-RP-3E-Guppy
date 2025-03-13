@@ -50,9 +50,10 @@ export class PostController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get()
+  @Get('organization/:organizationId')
   async getAll(
     @Request() req,
+    @Param('organizationId', ParseIntPipe) organizationId: number,
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
     @Query('searchType') searchType?: string,
@@ -67,11 +68,12 @@ export class PostController {
       searchType,
       query,
       userId: user.id,
+      orgId: organizationId,
     });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get(':id')
+  @Get(':id/organization/:organizationId')
   async getOne(@Param('id', ParseIntPipe) id: number) {
     return this.postService.post({ id });
   }

@@ -11,25 +11,26 @@ export const postApi = apiSlice.injectEndpoints({
       {
         page: number;
         limit: number;
+        orgId: string;
         searchType?: string;
         query?: string;
       }
     >({
-      query: (params) => ({
-        url: "/posts",
+      query: ({ orgId, ...params }) => ({
+        url: `/posts/organization/${orgId}`,
         params,
       }),
       providesTags: (result) => providesList(result?.posts, "Post"),
     }),
     getPost: build.query<Post, number>({
-      query: (id) => `/posts/${id}`,
+      query: (id) => `/posts/${id}/organization/2`,
       providesTags: (_, __, id) => [{ type: "Post", id }],
     }),
     createPost: build.mutation<Post, CreatePostDto>({
-      query: (data) => ({
-        url: "/posts/organization/2",
+      query: ({ orgId, ...payload }) => ({
+        url: `/posts/organization/${orgId}`,
         method: "POST",
-        body: data,
+        body: payload,
       }),
       invalidatesTags: [{ type: "Post", id: "LIST" }],
     }),

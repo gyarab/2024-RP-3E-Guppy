@@ -34,7 +34,7 @@ function Comment({ data }: CommentProps) {
 
   return (
     <div className="comment">
-      <Avatar src={data.author.profilePictureUrl} />
+      <Avatar src={data.author.profilePictureUrl || "/images/avatar.png"} />
       <div className="comment__body">
         <div className="comment__header">
           <span className="comment__author">{data.author.name}</span>
