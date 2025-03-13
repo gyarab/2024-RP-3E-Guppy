@@ -74,7 +74,7 @@ export class PostService {
           _count: { select: { likes: true, comments: true } },
           likes: { where: { userId }, select: { id: true } },
           tags: { select: { name: true } },
-          author: { select: { name: true, profilePictureUrl: true } },
+          author: { select: { id: true, name: true, profilePictureUrl: true } },
         },
       }),
       this.prisma.post.count({ where }),

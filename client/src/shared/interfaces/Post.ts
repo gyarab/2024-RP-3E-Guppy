@@ -6,6 +6,7 @@ export interface Post {
   title: string;
   content: string;
   author: {
+    id: number;
     name: string;
     profilePictureUrl: string;
   };

@@ -52,9 +52,6 @@ function Comment({ data }: CommentProps) {
             <span className="like-count">{likeCount}</span>
           </Button>
         </p>
-        <div className="comment__actions">
-          <Button variant="basic">Reply</Button>
-        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 
 import Avatar from "./Avatar";
@@ -10,6 +10,9 @@ import { Post as IPost } from "../interfaces/Post";
 import { useLikePostMutation } from "../../features/post/postApi";
 import { formatRelativeDate } from "../utils/formatRelativeDate";
 import LikeIcon from "./LikeIcon";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/auth/authSlice";
 
 interface PostProps {
   data: IPost;
@@ -23,8 +26,30 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
   const [isLiked, setIsLiked] = useState(data.hasLiked);
   const [likeCount, setLikeCount] = useState(data.likes);
   const [showComments, setShowComments] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [likePost] = useLikePostMutation();
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
 
   const handleLikeClick = async () => {
     const newLikedState = !isLiked;
@@ -44,6 +69,10 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
     setShowComments((prev) => !prev);
   };
 
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev);
+  };
+
   const timeAgo = formatRelativeDate(new Date(data.createdAt));
 
   return (
@@ -54,6 +83,41 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
           text={data.author.name}
           secondaryText={timeAgo}
         />
+        <div className="post__header__actions" ref={dropdownRef}>
+          <button
+            className="post__header__actions-button"
+            onClick={toggleDropdown}
+          >
+            ⋮
+          </button>
+
+          {showDropdown && (
+            <div className="post__dropdown">
+              {user?.id === data.author.id && (
+                <>
+                  <Link
+                    className="post__dropdown__item"
+                    to={`/edit/${data.id}`}
+                  >
+                    Edit
+                  </Link>
+                  <Link
+                    className="post__dropdown__item"
+                    to={`/edit/${data.id}`}
+                  >
+                    Delete
+                  </Link>
+                </>
+              )}
+              <Link
+                className="post__dropdown__item post__dropdown__item--danger"
+                to={`/edit/${data.id}`}
+              >
+                Report
+              </Link>
+            </div>
+          )}
+        </div>
       </header>
 
       <main className="post__main">
@@ -73,7 +137,7 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
       </main>
 
       <footer className="post__footer">
-        <div className="post__action">
+        <div className="post__actions">
           <Button variant="basic" size="small" onClick={handleLikeClick}>
             <LikeIcon isLiked={isLiked} />
             <span className="like-count">{likeCount}</span>
