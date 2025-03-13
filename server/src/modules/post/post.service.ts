@@ -68,7 +68,7 @@ export class PostService {
         take,
         cursor,
         where: searchWhere,
-        orderBy,
+        orderBy: orderBy || { createdAt: 'desc' },
         include: {
           comments: true,
           _count: { select: { likes: true, comments: true } },
