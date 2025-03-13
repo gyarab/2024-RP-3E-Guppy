@@ -7,7 +7,6 @@ import {
 import { isApiError } from "../utils/helpers";
 
 import Comment from "./Comment";
-import Loader from "./Loader";
 import Button from "./Button";
 
 interface CommentSectionProps {
@@ -18,7 +17,7 @@ function CommentSection({ postId }: CommentSectionProps) {
   const [commentText, setCommentText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { data: comments, isLoading } = useGetCommentsByPostIdQuery(postId);
+  const { data: comments } = useGetCommentsByPostIdQuery(postId);
   const [addComment, { isLoading: isAdding }] = useAddCommentMutation();
 
   const handleAddComment = async () => {
@@ -34,15 +33,21 @@ function CommentSection({ postId }: CommentSectionProps) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !isAdding && commentText.trim()) {
+      handleAddComment();
+    }
+  };
+
   return (
     <div className="comment-section">
-      {isLoading && <Loader />}
       <div className="comment-input">
         <input
           type="text"
           placeholder="Write a comment..."
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
+          onKeyDown={handleKeyDown}
           disabled={isAdding}
           className="comment-input__field"
         />
@@ -59,9 +64,7 @@ function CommentSection({ postId }: CommentSectionProps) {
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-      {isLoading ? (
-        <Loader />
-      ) : comments?.length ? (
+      {comments?.length ? (
         comments.map((comment) => <Comment key={comment.id} data={comment} />)
       ) : (
         <p className="no-comments">No comments yet. Be the first to comment!</p>

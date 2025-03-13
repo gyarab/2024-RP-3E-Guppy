@@ -9,9 +9,8 @@ export const formatRelativeDate = (inputDate: Date): string => {
   const diffInWeeks = Math.floor(diffInDays / 7);
 
   if (diffInSeconds < 60) return "just now";
-  if (diffInMinutes < 60) return `${diffInMinutes} min. ago`;
-  if (diffInHours < 24) return `${diffInHours} h. ago`;
-  if (diffInDays < 7) return `${diffInDays} d. ago`;
-  if (diffInWeeks < 4) return `${diffInWeeks} w. ago`;
-  return inputDate.toLocaleDateString(); // kdyz je to dyl jak 4 tydny, zobrazi se datum
+  if (diffInMinutes < 60) return `${diffInMinutes}m`;
+  if (diffInHours < 24) return `${diffInHours}h`;
+  if (diffInDays < 7) return `${diffInDays}d`;
+  return `${diffInWeeks}w`;
 };
