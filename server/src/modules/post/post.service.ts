@@ -174,4 +174,10 @@ export class PostService {
 
     await this.likeService.togglePostLike(userId, postId);
   }
+
+  async getAllTags(): Promise<Partial<Tag>[]> {
+    return this.prisma.tag.findMany({
+      select: { name: true },
+    });
+  }
 }

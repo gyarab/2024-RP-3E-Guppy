@@ -47,6 +47,9 @@ export const postApi = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    getAllTags: build.query<{ name: string }[], void>({
+      query: () => "/posts/tags",
+    }),
   }),
 });
 
@@ -56,4 +59,5 @@ export const {
   useCreatePostMutation,
   useDeletePostMutation,
   useLikePostMutation,
+  useGetAllTagsQuery,
 } = postApi;

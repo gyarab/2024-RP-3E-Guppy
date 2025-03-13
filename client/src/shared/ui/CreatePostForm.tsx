@@ -1,37 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import Fuse from "fuse.js";
+import { useSelector } from "react-redux";
 import { AnimatePresence } from "framer-motion";
 
-import { useCreatePostMutation } from "../../features/post/postApi";
+import {
+  useCreatePostMutation,
+  useGetAllTagsQuery,
+} from "../../features/post/postApi";
 import { useUploadImageMutation } from "../../features/upload/uploadApi";
+import { selectUser } from "../../features/auth/authSlice";
 
 import Avatar from "./Avatar";
 import Button from "./Button";
 import Loader from "./Loader";
 import RichTextEditor from "./RichTextEditor";
 import TagChip from "./TagChip";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../features/auth/authSlice";
-
-// TODO: Fetch initial tags from the server
-const initialTags = [
-  "React",
-  "JavaScript",
-  "CSS",
-  "UI/UX",
-  "Next.js",
-  "Science",
-  "Machine Learning",
-  "Frontend",
-  "Backend",
-];
 
 function CreatePostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageFiles, setImageFiles] = useState<Map<string, File>>(new Map());
   const [tags, setTags] = useState<string[]>([]);
-  const [tagOptions, setTagOptions] = useState<string[]>(initialTags);
   const [tagSearch, setTagSearch] = useState("");
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -57,8 +46,16 @@ function CreatePostForm() {
   const [uploadImage, { isLoading: isUploadLoading }] =
     useUploadImageMutation();
   const [createPost, { isLoading: isPostLoading }] = useCreatePostMutation();
+  const { data: fetchedTags, isLoading: isTagsLoading } = useGetAllTagsQuery(
+    undefined,
+    {
+      refetchOnMountOrArgChange: false,
+    }
+  );
 
-  const fuse = new Fuse(tagOptions, {
+  const tagOptions = fetchedTags?.map((tag) => tag.name) ?? [];
+
+  const fuse = new Fuse(tagOptions ?? [], {
     threshold: 0.35,
     includeScore: true,
   });
@@ -156,7 +153,6 @@ function CreatePostForm() {
   const handleAddNewTag = () => {
     if (tagSearch.trim() && !tags.includes(tagSearch)) {
       setTags([...tags, tagSearch]);
-      setTagOptions([...tagOptions, tagSearch]);
     }
     setTagSearch("");
     setFilteredTags([]);
@@ -201,7 +197,7 @@ function CreatePostForm() {
 
   return (
     <>
-      {(isPostLoading || isUploadLoading) && <Loader />}
+      {(isPostLoading || isUploadLoading || isTagsLoading) && <Loader />}
       <form className="post-form" onSubmit={handleSubmit}>
         <div className="post-form__header">
           <div className="title-editor">

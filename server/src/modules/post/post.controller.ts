@@ -101,4 +101,10 @@ export class PostController {
 
     return this.postService.likePost(id, user.id);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('tags')
+  async getAllTags() {
+    return this.postService.getAllTags();
+  }
 }
