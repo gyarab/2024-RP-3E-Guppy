@@ -27,27 +27,32 @@ async function main() {
 
   const organizations = await Promise.all(
     [...Array(4)].map(async (_, i) => {
+      const hasUsers = i % 2 === 0;
       return prisma.organization.create({
         data: {
           name: `Organization ${i + 1}`,
           description: `However, modern generators let you add personality to your placeholder text while maintaining the same benefits. From pirate speak to cupcake ingredients, these specialized generators help your mockups feel more aligned ${i + 1}`,
           joinCode: `JOINC${i + 1}`,
-          users: {
-            create: [
-              {
-                user: { connect: { id: user1.id } },
-                role: { connect: { id: ownerRole.id } },
-              },
-              {
-                user: { connect: { id: user2.id } },
-                role: { connect: { id: memberRole.id } },
-              },
-            ],
-          },
+          users: hasUsers
+            ? {
+                create: [
+                  {
+                    user: { connect: { id: user1.id } },
+                    role: { connect: { id: ownerRole.id } },
+                  },
+                  {
+                    user: { connect: { id: user2.id } },
+                    role: { connect: { id: memberRole.id } },
+                  },
+                ],
+              }
+            : undefined,
         },
       });
     }),
   );
+
+  const users = [user1, user2];
 
   for (const orgPromise of organizations) {
     const org = await orgPromise;
@@ -73,17 +78,25 @@ async function main() {
         }),
       );
 
+      const postLikes = Math.min(
+        Math.floor(Math.random() * 10) + 1,
+        users.length,
+      );
       await prisma.like.createMany({
-        data: [...Array(Math.floor(Math.random() * 10) + 1)].map(() => ({
-          userId: user2.id,
+        data: users.slice(0, postLikes).map((user) => ({
+          userId: user.id,
           postId: post.id,
         })),
       });
 
       for (const comment of comments) {
+        const commentLikes = Math.min(
+          Math.floor(Math.random() * 5) + 1,
+          users.length,
+        );
         await prisma.like.createMany({
-          data: [...Array(Math.floor(Math.random() * 5) + 1)].map(() => ({
-            userId: user1.id,
+          data: users.slice(0, commentLikes).map((user) => ({
+            userId: user.id,
             commentId: comment.id,
           })),
         });
