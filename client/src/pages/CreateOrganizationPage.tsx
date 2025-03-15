@@ -28,23 +28,19 @@ function CreateOrganizationPage() {
     useCreateOrganizationMutation();
   const [checkOrgName] = useCheckOrgNameMutation();
 
-  /** Handle organization name change */
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
     setNameAvailable(null);
   };
 
-  /** Handle file input click */
   const handleFileButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  /** Handle file selection */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLogo(e.target.files?.[0] || null);
   };
 
-  /** Check organization name availability */
   useEffect(() => {
     if (!debouncedName.trim()) {
       setNameAvailable(null);
@@ -62,22 +58,24 @@ function CreateOrganizationPage() {
     })();
   }, [debouncedName, checkOrgName]);
 
-  /** Handle form submission */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!logo || nameAvailable !== true) return;
+    if (nameAvailable !== true) return;
 
     try {
-      const { data: url } = await uploadImage({
-        file: logo,
-        type: "organization",
-      });
-      if (!url) return;
+      let logoUrl = "/images/default-logo.png";
+      if (logo) {
+        const { data: url } = await uploadImage({
+          file: logo,
+          type: "organization",
+        });
+        logoUrl = `http://localhost:3000/${url}`;
+      }
 
       await createOrganization({
         name,
         description,
-        logoUrl: `http://localhost:3000/${url}`,
+        logoUrl,
       });
     } catch (error) {
       console.error("Error creating organization:", error);
@@ -168,7 +166,12 @@ function CreateOrganizationPage() {
           </Button>
         </form>
 
-        <OrganizationCard name={name} description={description} logo={logo} />
+        <OrganizationCard
+          name={name}
+          description={description}
+          logo={logo}
+          simplified
+        />
       </div>
     </div>
   );

@@ -19,6 +19,11 @@ function FeedPage() {
   const observer = useRef<IntersectionObserver | null>(null);
   const orgId = sessionStorage.getItem("orgId");
 
+  useEffect(() => {
+    setPosts([]);
+    setPage(1);
+  }, [orgId]);
+
   if (!orgId) {
     return (
       <div className="container feed-container">
@@ -28,11 +33,6 @@ function FeedPage() {
       </div>
     );
   }
-
-  useEffect(() => {
-    setPosts([]);
-    setPage(1);
-  }, [orgId]);
 
   const parseSearchQuery = (query: string) => {
     if (!query) return {};

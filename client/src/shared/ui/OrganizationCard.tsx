@@ -11,14 +11,18 @@ interface OrganizationCardProps {
   name?: string;
   description?: string;
   logo?: File | string | null;
+  userJoined?: boolean;
   onClick?: (e: React.MouseEvent) => void;
+  simplified?: boolean;
 }
 
 function OrganizationCard({
   name,
   description,
   logo,
+  userJoined,
   onClick,
+  simplified,
 }: OrganizationCardProps) {
   const [headerColor, setHeaderColor] = useState("#4a4a4a");
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
@@ -145,20 +149,28 @@ function OrganizationCard({
           <p className="org-card__description">
             {description || "Some Description"}
           </p>
-          <Button
-            variant="primary"
-            onClick={() => setIsPopupOpen(true)}
-            noArrow
-          >
-            Join
-          </Button>
+          {!simplified && (
+            <>
+              {userJoined ? (
+                <p className="org-card__already-joined">Already Joined</p>
+              ) : (
+                <Button
+                  variant="primary"
+                  additionalClasses="org-card__join-btn"
+                  onClick={() => setIsPopupOpen(true)}
+                  noArrow
+                >
+                  Join
+                </Button>
+              )}
+            </>
+          )}
         </div>
       </div>
       {isPopupOpen && (
         <div className="org-card__popup">
           <div className="org-card__popup-content">
             <img
-              ref={imgRef}
               src={imgSrc}
               crossOrigin="anonymous"
               alt="Organization Icon"

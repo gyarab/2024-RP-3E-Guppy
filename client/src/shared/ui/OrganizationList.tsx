@@ -1,10 +1,10 @@
 import OrganizationCard from "./OrganizationCard";
 
-import { Organization } from "../interfaces/Organization";
+import { OrgnizationWithJoin } from "../interfaces/Organization";
 import { useNavigateWithParams } from "../hooks/useNavigateParams";
 
 interface OrganizationListProps {
-  organizations: Organization[];
+  organizations: OrgnizationWithJoin[];
 }
 
 function OrganizationList({ organizations }: OrganizationListProps) {
@@ -23,6 +23,7 @@ function OrganizationList({ organizations }: OrganizationListProps) {
           name={org.name}
           description={org.description}
           logo={org.logoUrl}
+          userJoined={org.userJoined}
         />
       ))}
       <li className="org-card org-card--create" onClick={handleCreateOrgClick}>

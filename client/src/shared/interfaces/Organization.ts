@@ -20,3 +20,7 @@ export interface Organization {
   createdAt: Date;
   users: UserOrganization[];
 }
+
+export interface OrgnizationWithJoin extends Organization {
+  userJoined: boolean;
+}
