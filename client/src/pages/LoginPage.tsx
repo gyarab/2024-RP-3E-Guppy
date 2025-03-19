@@ -42,9 +42,7 @@ function LoginPage() {
 
     try {
       const userData = await login(credentials).unwrap();
-      const { accessToken, ...payload } = userData;
-      sessionStorage.setItem("accessToken", accessToken);
-      dispatch(setAuthCredentials(payload));
+      dispatch(setAuthCredentials(userData));
 
       setCredentials(DEFAULT_CREDENTIALS);
       navigate("/");

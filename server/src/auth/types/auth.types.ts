@@ -17,6 +17,6 @@ export type TokenValidateResponse = UserWithoutPassword & {
 
 export type UserWithTokens = UserWithoutPassword & Tokens;
 
-export type SignInResponse = UserWithoutPassword & AccessToken;
-export type SignUpResponse = UserWithoutPassword & AccessToken;
-export type RefreshResponse = AccessToken;
+export type SignInResponse = UserWithoutPassword & Partial<AccessToken>;
+export type SignUpResponse = UserWithoutPassword & Partial<AccessToken>;
+export type RefreshResponse = Partial<AccessToken> | { success: boolean };

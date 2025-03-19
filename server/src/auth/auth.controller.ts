@@ -39,10 +39,15 @@ export class AuthController {
 
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
+    
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 15, // 15 minutes
     });
 
-    return { ...payload, accessToken };
+    return { ...payload };
   }
 
   @HttpCode(HttpStatus.OK)
@@ -56,10 +61,15 @@ export class AuthController {
 
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
+    
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 15, // 15 minutes
     });
 
-    return { ...payload, accessToken };
+    return { ...payload };
   }
 
   @UseGuards(AuthGuard)
@@ -72,6 +82,7 @@ export class AuthController {
     const user = req.user as UserWithoutPassword;
     await this.authService.logout(user.id);
     response.clearCookie('refreshToken');
+    response.clearCookie('accessToken');
 
     return 'Logged out successfully';
   }
@@ -87,20 +98,29 @@ export class AuthController {
 
     response.cookie('refreshToken', newRefreshToken, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
+    
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 15, // 15 minutes
     });
 
-    return { accessToken };
+    return { success: true };
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('/verify')
-  async verify(@Request() req): Promise<UserWithoutPassword> {
-    const [type, token] = req.headers.authorization.split(' ') ?? [];
-    if (!token) throw new UnauthorizedException('No access token provided');
-    if (type !== 'Bearer')
-      throw new UnauthorizedException('Invalid token type');
-    const user = await this.authService.verify(token);
+  async verify(@Cookies('accessToken') accessToken, @Request() req): Promise<UserWithoutPassword> {
+    if (!accessToken) {
+      const [type, token] = req.headers.authorization?.split(' ') ?? [];
+      if (!token) throw new UnauthorizedException('No access token provided');
+      if (type !== 'Bearer')
+        throw new UnauthorizedException('Invalid token type');
+      accessToken = token;
+    }
+    
+    const user = await this.authService.verify(accessToken);
     return user;
   }
 
