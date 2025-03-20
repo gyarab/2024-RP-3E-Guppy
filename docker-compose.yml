@@ -1,40 +1,43 @@
 services:
-  # client:
-  #   image: node:23-alpine
-  #   working_dir: /app
-  #   volumes:
-  #     - ./client:/app
-  #     - /app/node_modules
-  #   ports:
-  #     - "5173:5173"
-  #   command: sh -c "npm install && npm run dev"
-
-  # server:
-  #   image: node:23-alpine
-  #   working_dir: /app
-  #   volumes:
-  #     - ./server:/app
-  #     - /app/node_modules
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - DATABASE_URL=mysql://user:password@database:3306/mydb
-  #   command: sh -c "npm install && npx prisma db push && npm run dev"
-  #   depends_on:
-  #     - database
-
   database:
-    image: mysql:9
+    image: mysql:8
     container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-    volumes:
-      - mysql_data:/var/lib/mysql
+    restart: always
+    env_file:
+      - ./server/.env
     ports:
       - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file:
+      - ./server/.env
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server/uploads:/app/uploads
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: always
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    restart: always
 
 volumes:
-  mysql_data:
+  db-data:

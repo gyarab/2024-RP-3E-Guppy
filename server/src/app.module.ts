@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ServeStaticModule } from '@nestjs/serve-static';
+// import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { TokenModule } from './modules/token/token.module';
@@ -9,7 +9,7 @@ import { PostModule } from './modules/post/post.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { UploadModule } from './modules/upload/upload.module';
-import { join } from 'path';
+// import { join } from 'path';
 import { LikeModule } from './modules/like/like.module';
 import { MailModule } from './modules/mail/mail.module';
 
@@ -18,10 +18,10 @@ import { MailModule } from './modules/mail/mail.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'uploads'),
-      serveRoot: '/uploads',
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(process.cwd(), 'uploads'),
+    //   serveRoot: '/uploads',
+    // }),
     PrismaModule,
     TokenModule,
     UserModule,

@@ -8,7 +8,11 @@ import {
 import { logout } from "../../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5173/api",
+  // Set baseUrl based on environment (dev or prod)
+  baseUrl:
+    process.env.NODE_ENV === "production"
+      ? "http://localhost:5000/api" // backend API in production (Docker)
+      : "http://localhost:5173/api", // Vite development server in local dev
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = sessionStorage.getItem("accessToken");
