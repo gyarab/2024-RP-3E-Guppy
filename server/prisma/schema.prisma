@@ -38,6 +38,10 @@ model User {
   tokenVersion      Int                @default(0)
   resetPasswordToken  String?
   resetPasswordTokenExpiry DateTime?
+
+  willAttend     Attendance[] @relation("WillAttend")
+  dontKnow       Attendance[] @relation("DontKnow")
+  wontAttend     Attendance[] @relation("WontAttend")
 }
 
 model Role {
@@ -71,7 +75,9 @@ model Post {
   likes          Like[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  attendance     Attendance?  // Remove fields and references
 }
+
 
 model Comment {
   id        Int      @id @default(autoincrement())
@@ -100,4 +106,13 @@ model Like {
   commentId Int?
 
   @@unique([userId, postId, commentId])
+}
+
+model Attendance {
+  id             Int          @id @default(autoincrement())
+  post           Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId         Int          @unique
+  willAttend     User[]       @relation("WillAttend")
+  dontKnow       User[]       @relation("DontKnow")
+  wontAttend     User[]       @relation("WontAttend")
 }
