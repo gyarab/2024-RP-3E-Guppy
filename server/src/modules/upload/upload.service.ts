@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
-import * as sharp from 'sharp';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -21,15 +20,13 @@ export class UploadService {
       .update(file.originalname)
       .digest('hex');
 
-    let resizedImage = await sharp(file.buffer).resize(800).toBuffer();
-
     const dirPath = path.resolve(__dirname, '../../../uploads', type);
 
     await fs.promises.mkdir(dirPath, { recursive: true });
 
     const uploadPath = path.join(dirPath, `${hash}.jpg`);
 
-    await fs.promises.writeFile(uploadPath, resizedImage);
+    await fs.promises.writeFile(uploadPath, file.buffer);
 
     const relativePath = path.join('uploads', type, `${hash}.jpg`);
     return { path: relativePath };
