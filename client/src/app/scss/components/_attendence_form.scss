@@ -1,0 +1,60 @@
+.attendance-form {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  text-align: center;
+
+  .event-title {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+
+  .options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 12px;
+
+    .option {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #f0f0f0;
+
+      &.selected {
+        font-weight: bold;
+      }
+
+      &.attending.selected {
+        background: #28a745;
+        color: white;
+      }
+
+      &.maybe.selected {
+        background: #ffc107;
+        color: white;
+      }
+
+      &.not-attending.selected {
+        background: #dc3545;
+        color: white;
+      }
+    }
+  }
+
+  .submit-btn {
+    background: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+}

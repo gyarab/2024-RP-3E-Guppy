@@ -17,6 +17,7 @@ import RichTextEditor from "./RichTextEditor";
 import TagChip from "./TagChip";
 
 import { imageUrl } from "../utils/imageUrl";
+import AttendanceForm from "./AttendanceForm";
 
 function CreatePostForm() {
   const [title, setTitle] = useState("");
@@ -292,6 +293,9 @@ function CreatePostForm() {
           onChange={setContent}
           onImageFilesChange={setImageFiles}
         />
+
+        <AttendanceForm eventName="Neco" />
+
         <Button type="submit">Create Post</Button>
       </form>
     </>
