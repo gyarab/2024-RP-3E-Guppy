@@ -13,7 +13,6 @@ import { join } from 'path';
 import { LikeModule } from './modules/like/like.module';
 import { MailModule } from './modules/mail/mail.module';
 import { AttendanceModule } from './modules/attendance/attendance.module';
-import { AttendanceController } from './modues/attendance/attendance.controller';
 
 @Module({
   imports: [
@@ -36,6 +35,5 @@ import { AttendanceController } from './modues/attendance/attendance.controller'
     MailModule,
     AttendanceModule,
   ],
-  controllers: [AttendanceController],
 })
 export class AppModule {}
