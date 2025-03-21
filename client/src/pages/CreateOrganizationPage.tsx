@@ -6,6 +6,7 @@ import Loader from "../shared/ui/Loader";
 import OrganizationCard from "../shared/ui/OrganizationCard";
 
 import { truncate } from "../shared/utils/truncate";
+import { imageUrl } from "../shared/utils/imageUrl";
 import { formatFileSize } from "../shared/utils/formatFileSize";
 import { useUploadImageMutation } from "../features/upload/uploadApi";
 import {
@@ -69,7 +70,7 @@ function CreateOrganizationPage() {
           file: logo,
           type: "organization",
         });
-        logoUrl = `http://localhost:3000/${url}`;
+        logoUrl = imageUrl(url);
       }
 
       await createOrganization({

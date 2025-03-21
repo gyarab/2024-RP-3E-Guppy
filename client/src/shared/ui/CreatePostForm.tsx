@@ -16,6 +16,8 @@ import Loader from "./Loader";
 import RichTextEditor from "./RichTextEditor";
 import TagChip from "./TagChip";
 
+import { imageUrl } from "../utils/imageUrl";
+
 function CreatePostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -170,7 +172,7 @@ function CreatePostForm() {
     for (const [placeholder, file] of imageFiles) {
       const { data: url } = await uploadImage({ file, type: "post" });
       if (url) {
-        imageMap.set(placeholder, `http://localhost:3000/${url}`);
+        imageMap.set(placeholder, imageUrl(url));
       }
     }
 
