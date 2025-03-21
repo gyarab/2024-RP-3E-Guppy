@@ -15,9 +15,9 @@ import Button from "./Button";
 import Loader from "./Loader";
 import RichTextEditor from "./RichTextEditor";
 import TagChip from "./TagChip";
+import PollForm from "./PollForm";
 
 import { imageUrl } from "../utils/imageUrl";
-import AttendanceForm from "./AttendanceForm";
 
 function CreatePostForm() {
   const [title, setTitle] = useState("");
@@ -28,6 +28,7 @@ function CreatePostForm() {
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isPollActive, setIsPollActive] = useState(false);
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagInputRef = useRef<HTMLInputElement>(null);
@@ -198,6 +199,10 @@ function CreatePostForm() {
     titleInputRef.current?.focus();
   };
 
+  const handlePollToggle = () => {
+    setIsPollActive((prev) => !prev);
+  };
+
   return (
     <>
       {(isPostLoading || isUploadLoading || isTagsLoading) && <Loader />}
@@ -294,8 +299,19 @@ function CreatePostForm() {
           onImageFilesChange={setImageFiles}
         />
 
-        <AttendanceForm eventName="Neco" />
-
+        {isPollActive ? (
+          <PollForm onClose={handlePollToggle} />
+        ) : (
+          <Button
+            type="button"
+            size="small"
+            additionalClasses="add-poll-button"
+            onClick={handlePollToggle}
+            noArrow
+          >
+            Add Poll
+          </Button>
+        )}
         <Button type="submit">Create Post</Button>
       </form>
     </>
