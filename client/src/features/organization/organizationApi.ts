@@ -9,6 +9,8 @@ type GetOrganizationsResponse = {
 type GetOrganizationsParams = {
   page?: number;
   limit?: number;
+  searchType?: string;
+  query?: string;
 };
 
 export const organizationApi = apiSlice.injectEndpoints({

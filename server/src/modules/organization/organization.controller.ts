@@ -51,12 +51,52 @@ export class OrganizationController {
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
     @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
+    @Query('searchType') searchType?: string,
+    @Query('query') query?: string,
   ) {
     return this.organizationService.organizations({
       skip: (page - 1) * limit,
       take: limit,
       orderBy,
+      where: query ? this.getSearchCondition(searchType, query) : undefined,
     });
+  }
+
+  private getSearchCondition(searchType: string, query: string): Prisma.OrganizationWhereInput {
+    if (!query) return {};
+
+    // Convert query to lowercase for case-insensitive search
+    const lowercaseQuery = query.toLowerCase();
+
+    switch (searchType) {
+      case 'name':
+        return {
+          name: {
+            contains: lowercaseQuery,
+          },
+        };
+      case 'description':
+        return {
+          description: {
+            contains: lowercaseQuery,
+          },
+        };
+      default:
+        return {
+          OR: [
+            {
+              name: {
+                contains: lowercaseQuery,
+              },
+            },
+            {
+              description: {
+                contains: lowercaseQuery,
+              },
+            },
+          ],
+        };
+    }
   }
 
   @Post()
