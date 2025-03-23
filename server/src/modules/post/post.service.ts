@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Post, Prisma, Tag } from '@prisma/client';
-import { UserService } from '../user/user.service';
 import { LikeService } from '../like/like.service';
 import { CreatePostDto } from './dto/CreatePostDto';
 import { Role } from 'src/auth/enum/roles.enum';
@@ -14,7 +13,6 @@ import { Role } from 'src/auth/enum/roles.enum';
 export class PostService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly userService: UserService,
     private readonly likeService: LikeService,
   ) {}
 
@@ -88,17 +86,31 @@ export class PostService {
           likes: { where: { userId }, select: { id: true } },
           tags: { select: { name: true } },
           author: { select: { id: true, name: true, profilePictureUrl: true } },
+          poll: { include: { options: { include: { votes: true } } } },
         },
       }),
       this.prisma.post.count({ where: { ...where, organizationId: orgId } }),
     ]);
 
     return {
-      posts: posts.map(({ _count, likes, ...post }) => ({
+      posts: posts.map(({ _count, likes, poll, ...post }) => ({
         ...post,
         likes: _count.likes,
         commentsCount: _count.comments,
         hasLiked: likes.length > 0,
+        poll: poll
+          ? {
+              ...poll,
+              options: poll.options.map((option) => ({
+                ...option,
+                votes: option.votes.length,
+              })),
+              userVote:
+                poll.options.find((option) =>
+                  option.votes.some((vote) => vote.userId === userId),
+                )?.id || null,
+            }
+          : null,
       })),
       count,
     };
@@ -109,7 +121,7 @@ export class PostService {
     userId: number,
     organizationId: number,
   ): Promise<Post> {
-    const { title, content, tags } = dto;
+    const { title, content, tags, pollData } = dto;
 
     return this.prisma.post.create({
       data: {
@@ -123,6 +135,19 @@ export class PostService {
                 where: { name: tag },
                 create: { name: tag },
               })),
+            }
+          : undefined,
+        poll: pollData
+          ? {
+              create: {
+                options: {
+                  createMany: {
+                    data: pollData.options.map((option) => ({
+                      name: option.name,
+                    })),
+                  },
+                },
+              },
             }
           : undefined,
       },

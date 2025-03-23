@@ -19,4 +19,13 @@ export class CreatePostDto {
   @IsArray()
   @ArrayNotEmpty({ message: 'Tags cannot be an empty array', each: true })
   tags?: string[];
+
+  @IsOptional()
+  pollData?: {
+    options: {
+      id: number;
+      name: string;
+      votes: number;
+    }[];
+  };
 }

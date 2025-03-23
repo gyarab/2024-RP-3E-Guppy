@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@nestjs/mapped-types": "^2.1.0",
-    "framer-motion": "^12.4.2"
-  }
-}

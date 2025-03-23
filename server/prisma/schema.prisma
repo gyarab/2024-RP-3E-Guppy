@@ -19,29 +19,26 @@ model Organization {
 }
 
 model User {
-  id                Int                @id @default(autoincrement())
-  email             String             @unique
-  password          String  
-  name              String?
-  birthdate         DateTime?
-  profilePictureUrl String?            
-  bio               String?
-  phoneNumber       String?
-  isVerified        Boolean            @default(false)
-  lastLogin         DateTime?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  posts             Post[]
-  comments          Comment[]
-  userOrganizations UserOrganization[]
-  likedEntities     Like[]
-  tokenVersion      Int                @default(0)
-  resetPasswordToken  String?
+  id                       Int                @id @default(autoincrement())
+  email                    String             @unique
+  password                 String
+  name                     String?
+  birthdate                DateTime?
+  profilePictureUrl        String?
+  bio                      String?
+  phoneNumber              String?
+  isVerified               Boolean            @default(false)
+  lastLogin                DateTime?
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  posts                    Post[]
+  comments                 Comment[]
+  userOrganizations        UserOrganization[]
+  likedEntities            Like[]
+  tokenVersion             Int                @default(0)
+  resetPasswordToken       String?
   resetPasswordTokenExpiry DateTime?
-
-  willAttend     Attendance[] @relation("WillAttend")
-  dontKnow       Attendance[] @relation("DontKnow")
-  wontAttend     Attendance[] @relation("WontAttend")
+  pollVotes                PollVote[]
 }
 
 model Role {
@@ -75,9 +72,8 @@ model Post {
   likes          Like[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  attendance     Attendance?  // Remove fields and references
+  poll           Poll?
 }
-
 
 model Comment {
   id        Int      @id @default(autoincrement())
@@ -108,11 +104,25 @@ model Like {
   @@unique([userId, postId, commentId])
 }
 
-model Attendance {
-  id             Int          @id @default(autoincrement())
-  post           Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId         Int          @unique
-  willAttend     User[]       @relation("WillAttend")
-  dontKnow       User[]       @relation("DontKnow")
-  wontAttend     User[]       @relation("WontAttend")
+model Poll {
+  id      Int          @id @default(autoincrement())
+  post    Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  Int          @unique
+  options PollOption[]
+}
+
+model PollOption {
+  id     Int        @id @default(autoincrement())
+  poll   Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  pollId Int
+  name   String
+  votes  PollVote[]
+}
+
+model PollVote {
+  id           Int        @id @default(autoincrement())
+  pollOption   PollOption @relation(fields: [pollOptionId], references: [id], onDelete: Cascade)
+  pollOptionId Int
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int        @unique
 }

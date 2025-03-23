@@ -12,7 +12,6 @@ import { UploadModule } from './modules/upload/upload.module';
 import { join } from 'path';
 import { LikeModule } from './modules/like/like.module';
 import { MailModule } from './modules/mail/mail.module';
-import { AttendanceModule } from './modules/attendance/attendance.module';
 
 @Module({
   imports: [
@@ -33,7 +32,7 @@ import { AttendanceModule } from './modules/attendance/attendance.module';
     OrganizationModule,
     UploadModule,
     MailModule,
-    AttendanceModule,
+    PostModule,
   ],
 })
 export class AppModule {}
