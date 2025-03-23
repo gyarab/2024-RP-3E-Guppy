@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "./Button";
 
 interface PollOption {
   id: number;
@@ -59,6 +60,15 @@ function PollForm({ onClose }: PollFormProps) {
           </label>
         );
       })}
+      {selectedOption && (
+        <Button
+          variant="basic"
+          additionalClasses="vote-button"
+          onClick={() => setSelectedOption(null)}
+        >
+          Remove vote
+        </Button>
+      )}
     </div>
   );
 }
