@@ -35,6 +35,7 @@ const baseQueryWithReAuth: BaseQueryFn<
     if (refreshResult?.data) {
       result = await baseQuery(args, api, extraOptions);
     } else {
+      localStorage.removeItem("isAuthenticated");
       api.dispatch(logout());
     }
   }

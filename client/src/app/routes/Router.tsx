@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 import { publicRoutes, privateRoutes, adminRoutes } from "./routes";
 
 interface RouterProps {
@@ -9,6 +9,29 @@ interface RouterProps {
 
 function Router({ isAuthenticated, isAdmin }: RouterProps) {
   const location = useLocation();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [cachedAuth, setCachedAuth] = useState(false);
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    if (storedAuth === "true") {
+      setCachedAuth(true);
+    }
+    setIsCheckingAuth(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isCheckingAuth) {
+      localStorage.setItem("isAuthenticated", isAuthenticated.toString());
+      setCachedAuth(isAuthenticated);
+    }
+  }, [isAuthenticated, isCheckingAuth]);
+
+  if (isCheckingAuth) {
+    return <div>Loading...</div>;
+  }
+
+  const effectiveAuth = isAuthenticated || cachedAuth;
 
   return (
     <div className="router">
@@ -24,7 +47,7 @@ function Router({ isAuthenticated, isAdmin }: RouterProps) {
             key={index}
             path={path}
             element={
-              isAuthenticated ? (
+              effectiveAuth ? (
                 <Component />
               ) : (
                 <Navigate to="/login" state={{ from: location }} replace />
@@ -39,7 +62,7 @@ function Router({ isAuthenticated, isAdmin }: RouterProps) {
             key={index}
             path={path}
             element={
-              isAuthenticated && isAdmin ? (
+              effectiveAuth && isAdmin ? (
                 <Component />
               ) : (
                 <Navigate to="/" state={{ from: location }} replace />

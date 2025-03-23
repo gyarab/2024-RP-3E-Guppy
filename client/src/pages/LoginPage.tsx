@@ -43,6 +43,8 @@ function LoginPage() {
     try {
       const userData = await login(credentials).unwrap();
       dispatch(setAuthCredentials(userData));
+      
+      localStorage.setItem("isAuthenticated", "true");
 
       setCredentials(DEFAULT_CREDENTIALS);
       navigate("/");

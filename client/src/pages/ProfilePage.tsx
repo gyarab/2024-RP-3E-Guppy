@@ -103,6 +103,7 @@ function ProfilePage() {
   const handleLogout = async () => {
     await logoutApi();
     sessionStorage.removeItem("accessToken");
+    localStorage.removeItem("isAuthenticated");
     dispatch(logout());
     navigate("/login");
   };

@@ -10,8 +10,8 @@ import Router from "./routes/Router";
 import Sidebar from "../widgets/Sidebar";
 import Aside from "../shared/ui/Aside";
 import { useVerifyQuery } from "../features/auth/authApi";
-import { setAuthCredentials } from "../features/auth/authSlice";
-import { useEffect } from "react";
+import { setAuthCredentials, setIsAuth } from "../features/auth/authSlice";
+import { useEffect, useState } from "react";
 
 function App() {
   const isSidebarOpen = useSelector(selectIsSidebarOpen);
@@ -19,15 +19,33 @@ function App() {
 
   const { isAuth, isAdmin } = useAuth();
   const { showAside, showSidebar } = useShowElements();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const dispatch = useDispatch();
-  const { data: user, isLoading } = useVerifyQuery();
+  const { data: user, isLoading, isError } = useVerifyQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+    refetchOnFocus: true,
+
+    skip: !isInitialized && localStorage.getItem("isAuthenticated") !== "true",
+  });
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated") === "true";
+    if (storedAuth) {
+      dispatch(setIsAuth({ isAuth: true, user: null }));
+    }
+    setIsInitialized(true);
+  }, [dispatch]);
 
   useEffect(() => {
     if (user && !isLoading) {
       dispatch(setAuthCredentials(user));
+    } else if (isError && isInitialized) {
+      localStorage.removeItem("isAuthenticated");
+      dispatch(setIsAuth({ isAuth: false, user: null }));
     }
-  }, [user, isLoading, dispatch]);
+  }, [user, isLoading, isError, isInitialized, dispatch]);
 
   const layoutClass = [
     showSidebar ? "show-sidebar" : "hide-sidebar",
