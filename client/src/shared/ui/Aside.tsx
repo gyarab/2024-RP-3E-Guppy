@@ -1,40 +1,62 @@
-import Button from "./Button";
+import { useState } from "react";
+
+import { useGetOrganizationInfoQuery } from "../../features/organization/organizationApi";
+import Loader from "./Loader";
 
 function Aside() {
+  const [copied, setCopied] = useState(false);
+
+  const orgId = sessionStorage.getItem("orgId");
+  if (!orgId) return;
+
+  const { data: orgInfo, isLoading } = useGetOrganizationInfoQuery(
+    Number(orgId)
+  );
+
+  console.log(orgInfo);
+
+  const handleCopy = () => {
+    if (!orgInfo?.joinCode) return;
+    navigator.clipboard.writeText(orgInfo.joinCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <aside className="aside">
-      <h3 className="aside__title">Side Panel</h3>
-      <div className="aside__content">
-        <div className="aside__item">
-          <h4 className="aside__subtitle">Related Links</h4>
-          <ul className="aside__list">
-            <li className="aside__list-item">
-              <Button>React Documentation</Button>
-            </li>
-            <li className="aside__list-item">
-              <Button>TypeScript Documentation</Button>
-            </li>
-            <li className="aside__list-item">
-              <Button>Node.js Documentation</Button>
-            </li>
-            <li className="aside__list-item">
-              <Button>Express Documentation</Button>
-            </li>
-          </ul>
+    <>
+      {isLoading && <Loader />}
+      <aside className="aside">
+        <h3 className="aside__title">{orgInfo?.name}</h3>
+        <div className="aside__content">
+          <div className="aside__item">
+            <p className="aside__text">
+              <strong>Description:</strong> {orgInfo?.description}
+            </p>
+            <p className="aside__text">
+              <strong>Owner:</strong> @{orgInfo?.owner.name}
+            </p>
+            <p className="aside__text">
+              <strong>Total Users:</strong> {orgInfo?.totalMembers}
+            </p>
+            <p className="aside__text">
+              <strong>Total Posts:</strong> {orgInfo?.totalPosts}
+            </p>
+            <div className="join-code-container">
+              <p className="aside__text">
+                <strong>Join Code:</strong> {orgInfo?.joinCode}
+              </p>
+              <button className="copy-button" onClick={handleCopy}>
+                {copied ? (
+                  <img src="/icons/check.svg" alt="Check Icon" />
+                ) : (
+                  <img src="/icons/copy-icon.svg" alt="Clipboard Icon" />
+                )}
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="aside__item">
-          <h4 className="aside__subtitle">Contact</h4>
-          <p className="aside__text">
-            Email:
-            <a href="mailto:example@mail.com">example@mail.com</a>
-          </p>
-          <p className="aside__text">
-            Phone:
-            <a href="tel:+1234567890">+1234567890</a>
-          </p>
-        </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 

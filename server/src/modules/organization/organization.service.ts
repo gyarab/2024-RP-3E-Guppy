@@ -45,6 +45,37 @@ export class OrganizationService {
     });
   }
 
+  async organizationInfo(id: number) {
+    const organization = await this.prisma.organization.findUnique({
+      where: { id },
+      include: {
+        users: {
+          include: { user: true, role: true },
+        },
+        posts: true,
+      },
+    });
+
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    const members = organization.users.map(({ user, role }) => ({
+      user,
+      role,
+    }));
+
+    return {
+      // id: organization.id,
+      name: organization.name,
+      description: organization.description,
+      totalPosts: organization.posts.length,
+      totalMembers: members.length,
+      owner: members.find((member) => member.role.name === Role.OWNER).user,
+      joinCode: organization.joinCode,
+    };
+  }
+
   async organizations(params: {
     skip?: number;
     take?: number;

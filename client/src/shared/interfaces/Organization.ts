@@ -24,3 +24,12 @@ export interface Organization {
 export interface OrgnizationWithJoin extends Organization {
   userJoined: boolean;
 }
+
+export interface OrganizationInfo {
+  name: string;
+  description: string;
+  owner: User;
+  totalMembers: number;
+  totalPosts: number;
+  joinCode: string;
+}

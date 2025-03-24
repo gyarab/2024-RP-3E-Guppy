@@ -46,6 +46,11 @@ export class OrganizationController {
     return this.organizationService.organization({ id });
   }
 
+  @Get(':id/info')
+  async getOrganizationInfo(@Param('id', ParseIntPipe) id: number) {
+    return this.organizationService.organizationInfo(id);
+  }
+
   @Get()
   async getAll(
     @Query('page', ParseIntPipe) page: number,
@@ -62,7 +67,10 @@ export class OrganizationController {
     });
   }
 
-  private getSearchCondition(searchType: string, query: string): Prisma.OrganizationWhereInput {
+  private getSearchCondition(
+    searchType: string,
+    query: string,
+  ): Prisma.OrganizationWhereInput {
     if (!query) return {};
 
     // Convert query to lowercase for case-insensitive search
