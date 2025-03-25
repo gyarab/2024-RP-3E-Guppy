@@ -2,18 +2,16 @@ import { useState } from "react";
 
 import { useGetOrganizationInfoQuery } from "../../features/organization/organizationApi";
 import Loader from "./Loader";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 function Aside() {
   const [copied, setCopied] = useState(false);
 
   const orgId = sessionStorage.getItem("orgId");
-  if (!orgId) return;
 
   const { data: orgInfo, isLoading } = useGetOrganizationInfoQuery(
-    Number(orgId)
+    orgId ? Number(orgId) : skipToken
   );
-
-  console.log(orgInfo);
 
   const handleCopy = () => {
     if (!orgInfo?.joinCode) return;
