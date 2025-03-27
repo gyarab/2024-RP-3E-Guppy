@@ -14,11 +14,11 @@ export interface Organization {
   id: number;
   name: string;
   description: string;
-  joinCode: string;
+  // joinCode: string;
   logoUrl: string;
   posts?: Post[];
   createdAt: Date;
-  users: UserOrganization[];
+  // users: UserOrganization[];
 }
 
 export interface OrgnizationWithJoin extends Organization {

@@ -2,11 +2,11 @@ import { apiSlice } from "../../shared/api/apiSlice";
 import {
   Organization,
   OrganizationInfo,
+  OrgnizationWithJoin,
 } from "../../shared/interfaces/Organization";
 
 type GetOrganizationsResponse = {
-  organizations: Organization[];
-  count: number;
+  organizations: OrgnizationWithJoin[];
 };
 
 type GetOrganizationsParams = {

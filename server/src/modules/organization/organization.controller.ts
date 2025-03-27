@@ -55,11 +55,15 @@ export class OrganizationController {
   async getAll(
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
+    @Request() req,
     @Query('orderBy') orderBy?: Prisma.OrganizationOrderByWithRelationInput,
     @Query('searchType') searchType?: string,
     @Query('query') query?: string,
   ) {
+    const user = req.user as UserWithoutPassword;
+
     return this.organizationService.organizations({
+      userId: user.id,
       skip: (page - 1) * limit,
       take: limit,
       orderBy,
