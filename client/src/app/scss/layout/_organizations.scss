@@ -1,0 +1,48 @@
+@use "../abstract" as *;
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-type-wrapper {
+  position: relative;
+  min-width: 120px;
+}
+
+.search-type-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 1.5rem;
+  border: 2px solid #ddd;
+  background-color: #f9f9f9;
+  font-size: 0.875rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1em;
+  padding-right: 2rem;
+
+  &:focus {
+    border-color: var(--secondary-color);
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+  }
+}

@@ -21,11 +21,15 @@ import { PostService } from './post.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserWithoutPassword } from 'src/auth/types/auth.types';
 import { CreatePostDto } from './dto/CreatePostDto';
+import { PollService } from '../poll/poll.service';
 
 @UseGuards(AuthGuard)
 @Controller('posts')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(
+    private readonly postService: PostService,
+    private readonly pollService: PollService,
+  ) {}
 
   @HttpCode(HttpStatus.CREATED)
   @Post('organization/:organizationId')
@@ -106,5 +110,30 @@ export class PostController {
   @Get('tags')
   async getAllTags() {
     return this.postService.getAllTags();
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post(':postId/poll/:optionId')
+  async votePoll(
+    @Param('postId', ParseIntPipe) postId: number,
+    @Param('optionId', ParseIntPipe) optionId: number,
+    @Request() req,
+  ) {
+    const user = req.user as UserWithoutPassword;
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.pollService.votePoll(user.id, postId, optionId);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':postId/poll')
+  async removeVote(
+    @Param('postId', ParseIntPipe) postId: number,
+    @Request() req,
+  ) {
+    const user = req.user as UserWithoutPassword;
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.pollService.removeVote(user.id, postId);
   }
 }

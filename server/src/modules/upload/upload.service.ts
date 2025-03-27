@@ -20,7 +20,8 @@ export class UploadService {
       .update(file.originalname)
       .digest('hex');
 
-    const dirPath = path.resolve(__dirname, '../../../uploads', type);
+    // const dirPath = path.resolve(__dirname, '../../../uploads', type);
+    const dirPath = path.join(process.cwd(), 'uploads', type);
 
     await fs.promises.mkdir(dirPath, { recursive: true });
 
@@ -33,7 +34,8 @@ export class UploadService {
   }
 
   async delete(name: string) {
-    const filePath = path.join(__dirname, '../../../uploads', name);
+    // const filePath = path.join(__dirname, '../../../uploads', name);
+    const filePath = path.join(process.cwd(), 'uploads', name);
     await fs.promises.unlink(filePath);
     return filePath;
   }

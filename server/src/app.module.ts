@@ -32,6 +32,7 @@ import { MailModule } from './modules/mail/mail.module';
     OrganizationModule,
     UploadModule,
     MailModule,
+    PostModule,
   ],
 })
 export class AppModule {}

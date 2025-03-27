@@ -11,6 +11,7 @@ import { UserService } from '../user/user.service';
 import { CreateOrganizationDto } from './dto/CreateOrganizationDto';
 import { generateRandomString } from '../../common/utils/randomString';
 import { Role } from '../../auth/enum/roles.enum';
+import { log } from 'console';
 
 @Injectable()
 export class OrganizationService {
@@ -45,45 +46,73 @@ export class OrganizationService {
     });
   }
 
+  async organizationInfo(id: number) {
+    const organization = await this.prisma.organization.findUnique({
+      where: { id },
+      include: {
+        users: {
+          include: { user: true, role: true },
+        },
+        posts: true,
+      },
+    });
+
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    const members = organization.users.map(({ user, role }) => ({
+      user,
+      role,
+    }));
+
+    return {
+      name: organization.name,
+      description: organization.description,
+      totalPosts: organization.posts.length,
+      totalMembers: members.length,
+      owner: members.find((member) => member.role.name === Role.OWNER).user,
+      joinCode: organization.joinCode,
+    };
+  }
+
   async organizations(params: {
+    userId: number;
     skip?: number;
     take?: number;
     cursor?: Prisma.OrganizationWhereUniqueInput;
     where?: Prisma.OrganizationWhereInput;
     orderBy?: Prisma.OrganizationOrderByWithRelationInput;
   }) {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { skip, take, cursor, where, orderBy, userId } = params;
 
-    const [organizations, totalCount] = await this.prisma.$transaction([
-      this.prisma.organization.findMany({
-        skip,
-        take,
-        cursor,
-        where,
-        orderBy,
-        include: {
-          users: {
-            include: {
-              user: {
-                select: {
-                  id: true,
-                  email: true,
-                  name: true,
-                },
-              },
-              role: {
-                select: {
-                  name: true,
-                },
-              },
-            },
+    const organizations = await this.prisma.organization.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      include: {
+        users: {
+          select: {
+            userId: true,
           },
         },
-      }),
-      this.prisma.organization.count({ where }),
-    ]);
+      },
+    });
 
-    return { organizations, count: totalCount };
+    const processedOrganizations = organizations
+      .map((org) => ({
+        id: org.id,
+        name: org.name,
+        description: org.description,
+        logoUrl: org.logoUrl,
+        createdAt: org.createdAt,
+        userJoined: org.users.some((userOrg) => userOrg.userId === userId),
+      }))
+      .sort((a, b) => Number(a.userJoined) - Number(b.userJoined));
+
+    return { organizations: processedOrganizations };
   }
 
   async userOrganizations(params: {

@@ -78,7 +78,7 @@ function Sidebar() {
           <OrgLogo
             key={org.id}
             orgName={org.name}
-            orgLogo={org.logoUrl}
+            orgLogo={org.logoUrl || "/images/default-logo.png"}
             mainColor={org.mainColor}
             onClick={hnadleOrgLogoClick(org.id)}
           />

@@ -39,6 +39,7 @@ model User {
   tokenVersion             Int                @default(0)
   resetPasswordToken       String?
   resetPasswordTokenExpiry DateTime?
+  pollVotes                PollVote[]
 }
 
 model Role {
@@ -72,6 +73,7 @@ model Post {
   likes          Like[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  poll           Poll?
 }
 
 model Comment {
@@ -101,4 +103,27 @@ model Like {
   commentId Int?
 
   @@unique([userId, postId, commentId])
+}
+
+model Poll {
+  id      Int          @id @default(autoincrement())
+  post    Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  Int          @unique
+  options PollOption[]
+}
+
+model PollOption {
+  id     Int        @id @default(autoincrement())
+  poll   Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  pollId Int
+  name   String
+  votes  PollVote[]
+}
+
+model PollVote {
+  id           Int        @id @default(autoincrement())
+  pollOption   PollOption @relation(fields: [pollOptionId], references: [id], onDelete: Cascade)
+  pollOptionId Int
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int        @unique
 }
