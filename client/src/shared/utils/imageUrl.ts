@@ -1,4 +1,4 @@
-export const imageUrl = (url: string | undefined) => {
+export const imageUrl = (url: string | undefined): string => {
   if (!url) return "";
   
   const isDev = import.meta.env.DEV;
@@ -15,4 +15,6 @@ export const imageUrl = (url: string | undefined) => {
   if (url.startsWith('uploads/')) {
     return `${baseUrl}/${url}`;
   }
+  
+  return url;
 };

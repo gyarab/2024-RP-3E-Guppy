@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useDebounce from "../shared/hooks/useDebounce";
 
 import Button from "../shared/ui/Button";
@@ -15,6 +16,7 @@ import {
 } from "../features/organization/organizationApi";
 
 function CreateOrganizationPage() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [logo, setLogo] = useState<File | null>(null);
@@ -73,11 +75,17 @@ function CreateOrganizationPage() {
         logoUrl = imageUrl(url);
       }
 
-      await createOrganization({
+      const response = await createOrganization({
         name,
         description,
         logoUrl,
       });
+
+      if (response && response.data) {
+        const orgId = response.data.id.toString();
+        sessionStorage.setItem("orgId", orgId);
+        navigate("/feed");
+      }
     } catch (error) {
       console.error("Error creating organization:", error);
     }
