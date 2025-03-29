@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
 import {
@@ -21,6 +22,7 @@ import { imageUrl } from "../utils/imageUrl";
 import { PollOption } from "../interfaces/Post";
 
 function CreatePostForm() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageFiles, setImageFiles] = useState<Map<string, File>>(new Map());
@@ -199,13 +201,17 @@ function CreatePostForm() {
       );
     }
 
-    await createPost({
+    const response = await createPost({
       title,
       content: updatedContent,
       tags,
       orgId: parseInt(orgId),
       pollData,
     });
+    
+    if (response) {
+      navigate("/feed");
+    }
   };
 
   const handleEditClick = () => {

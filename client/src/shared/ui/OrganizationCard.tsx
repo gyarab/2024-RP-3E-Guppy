@@ -15,6 +15,7 @@ interface OrganizationCardProps {
   userJoined?: boolean;
   onClick?: (e: React.MouseEvent) => void;
   simplified?: boolean;
+  mainColor?: string;
 }
 
 function OrganizationCard({
@@ -24,8 +25,9 @@ function OrganizationCard({
   userJoined,
   onClick,
   simplified,
+  mainColor,
 }: OrganizationCardProps) {
-  const [headerColor, setHeaderColor] = useState("#4a4a4a");
+  const [headerColor, setHeaderColor] = useState(mainColor || "#4a4a4a");
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,21 +39,52 @@ function OrganizationCard({
   const [joinOrganization, { isLoading }] = useJoinOrganizationMutation();
 
   useEffect(() => {
-    const img = imgRef.current;
-    if (img) {
-      if (img.complete) {
-        handleExtractColor();
+    if (mainColor) {
+      return;
+    }
+    
+    if (typeof logo === 'string' && logo.startsWith('data:')) {
+      const img = imgRef.current;
+      if (img) {
+        if (img.complete) {
+          handleExtractColor();
+        } else {
+          img.onload = handleExtractColor;
+        }
+      }
+    } else if (typeof logo === 'string' && logo.includes('/')) {
+      const orgCard = document.querySelector('.org-card');
+      const dataMainColor = orgCard?.getAttribute('data-main-color');
+      if (dataMainColor) {
+        setHeaderColor(dataMainColor);
       } else {
-        img.onload = handleExtractColor;
+        const img = imgRef.current;
+        if (img) {
+          if (img.complete) {
+            handleExtractColor();
+          } else {
+            img.onload = handleExtractColor;
+          }
+        }
+      }
+    } else {
+      const img = imgRef.current;
+      if (img) {
+        if (img.complete) {
+          handleExtractColor();
+        } else {
+          img.onload = handleExtractColor;
+        }
       }
     }
 
     return () => {
+      const img = imgRef.current;
       if (img) {
         img.onload = null;
       }
     };
-  }, [objectUrl]);
+  }, [objectUrl, mainColor]);
 
   useEffect(() => {
     if (logo instanceof File) {
