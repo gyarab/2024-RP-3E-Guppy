@@ -13,6 +13,7 @@ model Organization {
   description String             @db.Text
   joinCode    String             @unique
   logoUrl     String?
+  mainColor   String?
   users       UserOrganization[]
   posts       Post[]
   createdAt   DateTime           @default(now())

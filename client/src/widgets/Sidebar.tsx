@@ -25,17 +25,15 @@ function Sidebar() {
 
   useEffect(() => {
     if (data?.organizations) {
-      const orgsWithDefaultColors = data.organizations.map(
-        (org: Organization) => ({
-          ...org,
-          mainColor: "#4a4a4a",
-        })
-      );
+      const orgsWithColors = data.organizations.map((org: Organization) => ({
+        ...org,
+        mainColor: org.mainColor || "#4a4a4a",
+      }));
 
-      setOrganizationsWithColors(orgsWithDefaultColors);
+      setOrganizationsWithColors(orgsWithColors);
 
       data.organizations.forEach((org: Organization, index: number) => {
-        if (org.logoUrl) {
+        if (org.logoUrl && !org.mainColor) {
           const img = new Image();
           img.crossOrigin = "anonymous";
           img.onload = () => {
