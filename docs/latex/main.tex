@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[left=3cm, top=2.5cm, right=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{caption}
+\usepackage{indentfirst}
+\usepackage{minted}
+\usepackage{biblatex}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+\usepackage{hyperref}
+\graphicspath{ {./resources/} }
+\addbibresource{bibliography/resources.bib}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue
+    }
+\urlstyle{same}
+
+\begin{document}
+
+\input{title_page}
+
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\makeatletter
+\renewenvironment{abstract}{%
+    \if@twocolumn
+      \section*{\abstractname}%
+    \else %% <- here I've removed \small
+    
+        {\bfseries \Large\abstractname\vspace{\z@}}%  %% <- here I've added \Large
+        
+      \quotation
+    \fi}
+    {\if@twocolumn\else\endquotation\fi}
+\makeatother
+
+\input{abstract}
+
+\newpage
+
+\renewcommand{\contentsname}{Obsah}
+\large{\tableofcontents}
+
+%\input{sections/nejaka_sekce}
+
+\input{bibliography/resources}
+
+\end{document}
