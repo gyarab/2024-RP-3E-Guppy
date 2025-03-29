@@ -7,7 +7,31 @@
 
 
 
-\subsection{Volba technologie}
+\subsection{Volba technologie}  
+Při návrhu technologického stacku pro tento projekt jsme se zaměřili na moderní a osvědčené technologie, které umožňují efektivní vývoj. Zvolené technologie pokrývají jak frontendovou, tak backendovou část, včetně databázové vrstvy a kontejnerizace pro zajištění stabilního provozu.  
+
+Pro vývoj frontendové části jsme se rozhodli pro React.js, zatímco backendovou logiku spravuje NestJS. Pro práci s databází využíváme MySQL spolu s ORM nástrojem Prisma, což usnadňuje správu datového modelu, tedy nemusíme ručně psát SQL dotazy. K zajištění jednotného vývojového prostředí jsme zvolili Docker.  
+
+Následující podkapitoly podrobně popisuje důvody, které vedly k výběru těchto technologií.
+\subsubsection{React.js}
+React je v podstatě JavaScriptová knihovna vytvořená a spravovaná Facebookem. Podle tvůrce React.js Jordana Walke je React efektivní a flexibilní open-source JavaScript knihovna pro vytváření jednoduchých, rychlých a škálovatelných frontendů webových aplikací.
+
+Programovací jazyk JavaScript, na kterém je React postavený, je dynamicky typovaný stejně tak jako Python nebo PHP. To znamená, že může často docházet k chybám týkajících se špatného formátu proměnných či dat. Proto jsme si při vývoji projektu zvolili jeho staticky typovanou alternativu - \textbf{TypeScript}. Jelikož každý člen našeho týmu dobře ovládá JavaScript, nebyl problém s použitím této technologie.
+
+\textbf{React.js} jsem zvolili z několika důvodů. Prvním z nich je jeho snadná naučitelnost – React má jednoduchou syntaxi založenou na komponentách a využívá koncepty, které jsou intuitivní pro vývojáře se zkušenostmi s JavaScriptem. Dalším důvodem je široká adopce této technologie ve velkých firmách, jako jsou Meta, Netflix či Airbnb, to zajišťuje dlouhodobou podporu a bohatý ekosystém nástrojů a knihoven. Další výhodou Reactu je možnost znovu použít komponenty, což urychluje vývoj a zlepšuje udržování kódu.
+
+\subsubsection{NestJS}
+NestJS je open-source backendový framework Node.js založený na Express.js, který využívá jak TypeScript, tak JavaScript. Poprvé jej navrhl a spustil \textit{Kamil Myśliwiec} pro vývoj aplikací na straně serveru. V současné době má NestJS na GitHubu kolem 23 tisíc hvězdiček a průměrná míra týdenního stahování npm je asi 180 tisíc. \cite{nestjs_definition}
+
+Použili jsme ho v podstatě z podobných důvodů jako React.js. Nest nabízí snadné postupy pro řešení typických úloh, jako je například získávání dat z databáze nebo naopak jejich ukládání. Navíc NestJS stejně jako React využívá programovací jazyk TypeScript. To znamená, že celá logika naší aplikace je psaná v jednom jazyce a vývojáři se nemusí přepínat mezi různými technologiemi, což zjednodušuje údržbu i spolupráci v týmu. Dalším důvodem pro použití NestJS je jeho modulární architektura, díky které lze aplikaci snadno rozšiřovat a rozdělovat do samostatných modulů
+
+\subsubsection{MySQL + Prisma}
+Co se týče ukládání uživatelských dat, rozhodli jsme se pro relační databázi \textbf{MySQL}. Toto rozhodnutí nebylo výsledkem dlouhého zvažování, protože MySQL patří mezi nejpoužívanější databázové systémy. Je zvláště oblíbená a často preferovaná pro projekty menšího až středně velkého rozsahu. Dalším důvodem bylo totiž to, že jsme se tím již zabývali ve škole na hodinách programování, a proto jsme měli docela dobrou představa jak s ní zacházet.
+
+\subsubsection{Docker}
+Docker je otevřená platforma pro vývoj, odesílání a spouštění aplikací. Docker vám umožňuje oddělit vaše aplikace od vaší infrastruktury, abyste mohli rychle dodávat software. \cite{docker_docs}
+
+Ve stádiu vývoje samotného projektu se u nás Docker primárně používal pro spuštění databázového serveru, abychom si nemuseli stahovat jiné softwary. Zkusili jsme kontejnerizovat i celou aplikaci, nicméně průběh práce nebyl vyhovující, poněvadž se nedaly v reálném čase zobrazit provedené změny ve zdrojovém kódu a musel se kontejner pokaždé restartovat. Teď, když je projekt hotový, stačí jen spustit vytvořený kontejner a aplikace poběží plynule, aniž by se muselo provést cokoliv jiného.
 
 \subsection{Klient - Server komunikace}
 
