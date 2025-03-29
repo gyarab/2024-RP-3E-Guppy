@@ -1,0 +1,60 @@
+\newpage
+
+\section{Popis problému}
+
+
+\subsection{Historie sociálních sítí}
+
+
+
+\subsection{Volba technologie}
+
+\subsection{Klient - Server komunikace}
+
+Většina moderních webových, mobilních i desktopových aplikací je postavena na architektuře klient-server, která umožňuje efektivní distribuci výpočetních zdrojů a centralizovanou správu dat. \\
+Server jako klíčový prvek komunikace lze chápat dvěma způsoby:
+\begin{itemize}
+    \item \textbf{Z hardwarového hlediska} je to fyzické zařízení, které poskytuje služby jiným zařízením v síti. Typicky se jedná o výkonnější počítač, optimalizovaný pro běh nepřetržitých úloh.
+    \item \textbf{Z softwarového hlediska} je server aplikační program, který naslouchá požadavkům klientů a poskytuje jim odpovídající služby prostřednictvím síťové komunikace.
+\end{itemize}
+Server je vždy \textbf{pasivní} – čeká na příchozí požadavky klientů a odpovídá na ně. Moderní servery jsou navrženy tak, aby zvládaly souběžnou obsluhu více klientů prostřednictvím \textbf{asynchronní komunikace} nebo \textbf{vícevláknového zpracování} požadavků.\\\\
+Klient jako iniciátor komunikace je oproti serveru \textbf{aktivní} – odesílá požadavky a očekává odpověď. Klient může komunikovat s více servery současně a využívat různé služby paralelně. V praxi klienti často implementují \textbf{kešování dat}, aby minimalizovali množství dotazů na server a zvýšili výkon aplikace.
+
+\subsubsection{Typy komunikace mezi klientem a serverem}
+V komunikaci mezi klientem a serverem existuje několik populárních metod:
+\begin{itemize}
+    \item \textbf{HTTP REST API} – klient odesílá požadavek a čeká na odpověď. Tento model se často využívá v tradičních webových aplikacích. Zpravidla u tohoto typu komunikace odpovědí ze serveru bývají data ve formátu JSON. 
+    \item \textbf{Polling} – klient se v pravidelných intervalech dotazuje serveru, zda jsou dostupná nová data. Tato metoda je jednoduchá, ale méně efektivní, protože generuje zbytečnou síťovou zátěž.
+    \item \textbf{Long Polling} – klient odešle požadavek a server odpoví až ve chvíli, kdy má k dispozici nová data. Tento přístup redukuje zbytečné požadavky oproti běžnému pollingu.
+    \item \textbf{Push} – server aktivně zasílá data klientovi ve chvíli, kdy dojde ke změně. Tento přístup je efektivnější pro aplikace vyžadující \textbf{reálnou odezvu}, například chatovací aplikace nebo notifikační systémy.
+    \item \textbf{WebSockets} – umožňuje obousměrnou komunikaci mezi klientem a serverem v reálném čase. Používá se například u chatovacích aplikací, online her nebo finančních aplikací.
+    \item \textbf{Message Queue (MQ)} – zprostředkovaná komunikace pomocí zpráv, kde klienti a servery komunikují asynchronně skrze zprostředkovatele jako RabbitMQ nebo Kafka.
+\end{itemize}
+
+Tato architektura je základním kamenem většiny síťových aplikací a její správná implementace výrazně ovlivňuje výkon a škálovatelnost systému. V tomto projektu je zvoleno REST API, protože plně pokrývá všechny požadavky a komunikace v reálném čase není nutná.
+
+\subsubsection{Protokol HTTP}
+\textbf{HTTP (HyperText Transfer Protocol)} je základní protokol používaný pro komunikaci mezi klientem a serverem v rámci webových aplikací. Funguje na principu request-response – klient odešle požadavek a server na něj odpoví. HTTP pracuje nad protokolem TCP/IP a je bezstavový, což znamená, že každý požadavek je nezávislý a neuchovává informaci o předchozích požadavcích (pokud není použito např. cookies nebo tokeny). \\\\
+Základní metody HTTP:
+\begin{itemize}
+    \item \textbf{GET} - Slouží k získání dat ze serveru. Používá se pro načítání webových stránek nebo získání informací z API.
+    \item \textbf{POST} - Slouží k odeslání dat na server, například při vytváření nového záznamu v databázi.
+    \item \textbf{PUT} - Aktualizuje existující zdroj na serveru nebo jej vytvoří, pokud neexistuje.
+    \item \textbf{PATCH} - Částečná aktualizace existujícího zdroje, na rozdíl od PUT, který nahrazuje celý zdroj.
+    \item \textbf{DELETE} - Slouží k odstranění zdroje na serveru.
+    \item \textbf{OPTIONS} - Vrací informace o tom, jaké metody a možnosti jsou na daném serveru dostupné.
+\end{itemize}
+\newpage
+Každá odpověď od serveru zahrnuje \textbf{stavový kód}, jenž popisuje požadavek a jeho výsledek:
+\begin{itemize}
+    \item 2xx (Úspěch) - 200 OK, 201 Created
+    \item 3xx (Přesměrování) - 301 Moved Permanently, 304 Not Modified
+    \item 4xx (Chyba na klientu) - 400 Bad Request, 401 Unauthorized, 404 Not Found
+    \item 5xx (Chyba na serveru) - 500 Internal Server Error, 503 Service Unavailable
+\end{itemize}
+
+
+
+
+\href{https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/HTTP-methods}{HTTP metody}
+\href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status}{HTTP stavové kódy}
