@@ -21,7 +21,7 @@ Server je vždy \textbf{pasivní} – čeká na příchozí požadavky klientů 
 Klient jako iniciátor komunikace je oproti serveru \textbf{aktivní} – odesílá požadavky a očekává odpověď. Klient může komunikovat s více servery současně a využívat různé služby paralelně. V praxi klienti často implementují \textbf{kešování dat}, aby minimalizovali množství dotazů na server a zvýšili výkon aplikace.
 
 \subsubsection{Typy komunikace mezi klientem a serverem}
-V komunikaci mezi klientem a serverem existuje několik populárních metod:
+V komunikaci mezi klientem a serverem existuje několik populárních metod: \cite{client_server_communication}
 \begin{itemize}
     \item \textbf{HTTP REST API} – klient odesílá požadavek a čeká na odpověď. Tento model se často využívá v tradičních webových aplikacích. Zpravidla u tohoto typu komunikace odpovědí ze serveru bývají data ve formátu JSON. 
     \item \textbf{Polling} – klient se v pravidelných intervalech dotazuje serveru, zda jsou dostupná nová data. Tato metoda je jednoduchá, ale méně efektivní, protože generuje zbytečnou síťovou zátěž.
@@ -35,26 +35,19 @@ Tato architektura je základním kamenem většiny síťových aplikací a její
 
 \subsubsection{Protokol HTTP}
 \textbf{HTTP (HyperText Transfer Protocol)} je základní protokol používaný pro komunikaci mezi klientem a serverem v rámci webových aplikací. Funguje na principu request-response – klient odešle požadavek a server na něj odpoví. HTTP pracuje nad protokolem TCP/IP a je bezstavový, což znamená, že každý požadavek je nezávislý a neuchovává informaci o předchozích požadavcích (pokud není použito např. cookies nebo tokeny). \\\\
-Základní metody HTTP:
+Základní metody HTTP: \cite{http_methods}
 \begin{itemize}
     \item \textbf{GET} - Slouží k získání dat ze serveru. Používá se pro načítání webových stránek nebo získání informací z API.
     \item \textbf{POST} - Slouží k odeslání dat na server, například při vytváření nového záznamu v databázi.
     \item \textbf{PUT} - Aktualizuje existující zdroj na serveru nebo jej vytvoří, pokud neexistuje.
-    \item \textbf{PATCH} - Částečná aktualizace existujícího zdroje, na rozdíl od PUT, který nahrazuje celý zdroj.
+    \item \textbf{PATCH} - Na rozdíl od PUT, částečně aktualizuje existující data.
     \item \textbf{DELETE} - Slouží k odstranění zdroje na serveru.
     \item \textbf{OPTIONS} - Vrací informace o tom, jaké metody a možnosti jsou na daném serveru dostupné.
 \end{itemize}
-\newpage
-Každá odpověď od serveru zahrnuje \textbf{stavový kód}, jenž popisuje požadavek a jeho výsledek:
+Každá odpověď od serveru zahrnuje \textbf{stavový kód}, jenž popisuje výsledek požadavku: \cite{http_codes}
 \begin{itemize}
     \item 2xx (Úspěch) - 200 OK, 201 Created
     \item 3xx (Přesměrování) - 301 Moved Permanently, 304 Not Modified
     \item 4xx (Chyba na klientu) - 400 Bad Request, 401 Unauthorized, 404 Not Found
     \item 5xx (Chyba na serveru) - 500 Internal Server Error, 503 Service Unavailable
 \end{itemize}
-
-
-
-
-\href{https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/HTTP-methods}{HTTP metody}
-\href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status}{HTTP stavové kódy}
