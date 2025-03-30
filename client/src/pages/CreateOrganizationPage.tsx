@@ -9,7 +9,6 @@ import OrganizationCard from "../shared/ui/OrganizationCard";
 import { truncate } from "../shared/utils/truncate";
 import { imageUrl } from "../shared/utils/imageUrl";
 import { formatFileSize } from "../shared/utils/formatFileSize";
-import { extractColor } from "../shared/utils/extractColor";
 import { useUploadImageMutation } from "../features/upload/uploadApi";
 import {
   useCreateOrganizationMutation,
@@ -22,7 +21,6 @@ function CreateOrganizationPage() {
   const [description, setDescription] = useState("");
   const [logo, setLogo] = useState<File | null>(null);
   const [nameAvailable, setNameAvailable] = useState<null | boolean>(null);
-  const [logoColor, setLogoColor] = useState<string>("#4a4a4a");
 
   const debouncedName = useDebounce(name, 400);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -43,23 +41,7 @@ function CreateOrganizationPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setLogo(file);
-    
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          const color = extractColor(img);
-          setLogoColor(color);
-        };
-        img.src = event.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setLogoColor("#4a4a4a");
-    }
+    setLogo(e.target.files?.[0] || null);
   };
 
   useEffect(() => {
@@ -97,7 +79,6 @@ function CreateOrganizationPage() {
         name,
         description,
         logoUrl,
-        mainColor: logoColor,
       });
 
       if (response && response.data) {

@@ -13,10 +13,6 @@ export class CreateOrganizationDto {
 
   description: string;
   logoUrl: string;
-  
-  @IsString()
-  @IsOptional()
-  mainColor: string;
 
   @IsArray()
   @IsInt({ each: true })

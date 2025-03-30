@@ -16,7 +16,6 @@ export interface Organization {
   description: string;
   // joinCode: string;
   logoUrl: string;
-  mainColor?: string;
   posts?: Post[];
   createdAt: Date;
   // users: UserOrganization[];
