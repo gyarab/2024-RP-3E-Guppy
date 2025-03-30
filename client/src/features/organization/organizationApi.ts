@@ -32,6 +32,7 @@ export const organizationApi = apiSlice.injectEndpoints({
       GetOrganizationsParams
     >({
       query: (params) => ({ url: "/organizations/user", params }),
+      providesTags: ["Organization"],
     }),
     createOrganization: build.mutation<Organization, Partial<Organization>>({
       query: (body) => ({
@@ -39,6 +40,7 @@ export const organizationApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Organization"],
     }),
     checkOrgName: build.mutation<{ available: boolean }, string>({
       query: (name) => ({
@@ -52,6 +54,7 @@ export const organizationApi = apiSlice.injectEndpoints({
         url: `/organizations/join/${joinCode}`,
         method: "PUT",
       }),
+      invalidatesTags: ["Organization"],
     }),
   }),
 });
