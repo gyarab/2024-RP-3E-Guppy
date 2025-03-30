@@ -1,43 +1,66 @@
 .create-org {
-  background: transparent;
   position: relative;
-  padding: 5px 8px;
+  padding: 8px 12px;
   display: inline-flex;
   align-items: center;
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  border-radius: 25px;
+  border-radius: 12px;
   outline: none;
   overflow: hidden;
   color: white;
-  transition: color 0.3s 0.1s ease-out;
+  transition: all 0.3s ease;
   text-align: center;
-  box-shadow: inset 0 0 0 10em #1ed760;
+  background-color: #1ed760;
+  width: 100%;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(30, 215, 96, 0.3);
 
   .create-icon {
-    width: 29px;
-    height: 29px;
-    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 28px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
   }
 
   .create-text {
     margin: 0 10px;
+    white-space: nowrap;
   }
 
   &:hover {
-    box-shadow: inset 0 0 0 10em #1edf00;
+    background-color: #1edf00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 215, 96, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(30, 215, 96, 0.3);
   }
 }
 
 .sidebar-closed {
   .create-org {
-    padding: 5px 5px;
+    padding: 8px;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+    transition: all 0.3s ease;
+    
+    .create-icon {
+      margin: 0;
+      font-size: 24px;
+      transition: all 0.3s ease;
+    }
   }
   .create-text {
     display: none;
