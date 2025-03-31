@@ -1,19 +1,24 @@
 #!/bin/bash
 
-echo "Installing dependencies for client..."
-cd client
+# Start Docker Compose
+echo "Starting Docker Compose..."
+sudo docker compose up -d
+
+# Navigate to client directory and run commands
+echo "Setting up client..."
+cd client || { echo "Client directory not found!" ; exit 1; }
 npm install
-echo "Client dependencies installed."
+npm run dev &
 cd ..
 
-echo "Installing dependencies for server..."
-cd server
+# Navigate to server directory and run commands
+echo "Setting up server..."
+cd server || { echo "Server directory not found!" ; exit 1; }
 npm install
-echo "Server dependencies installed."
-cd ..
+npx prisma db push
+npm run dev &
 
-echo "Starting client, server, and Docker (for database)..."
+# Wait for background processes
+echo "Setup complete. Services are running."
+wait
 
-gnome-terminal -- bash -c "sudo docker compose up; exec bash"
-gnome-terminal -- bash -c "cd client && npm run dev; exec bash"
-gnome-terminal -- bash -c "cd server && npm run dev; exec bash"
