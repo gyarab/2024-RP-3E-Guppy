@@ -6,6 +6,7 @@ import { useJoinOrganizationMutation } from "../../features/organization/organiz
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { isApiError } from "../utils/helpers";
+import { imageUrl } from "../utils/imageUrl";
 
 interface OrganizationCardProps {
   name?: string;
@@ -124,7 +125,7 @@ function OrganizationCard({
   };
 
   const imgSrc =
-    objectUrl || (typeof logo === "string" ? logo : "/images/default-logo.png");
+    objectUrl || (typeof logo === "string" ? imageUrl(logo) : "/images/default-logo.png");
 
   return (
     <>

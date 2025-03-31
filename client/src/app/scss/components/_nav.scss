@@ -1,23 +1,51 @@
 .nav {
   &__list {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 2.2rem;
   }
 
   &__item {
-    &::after {
-      display: block;
-      content: "";
-      height: 2px;
-      width: 0;
-      background-color: var(--secondary-color);
-      transition: width 0.3s ease-in-out;
+    position: relative;
+    padding: 0.5rem 0;
+  }
+
+  &__link {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    padding: 0.5rem 0;
+    position: relative;
+
+    &:hover {
+      color: var(--primary-color);
     }
 
-    &:hover::after {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary-color);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    &:hover::after,
+    &--active::after {
       width: 100%;
+    }
+
+    &--active {
+      color: var(--primary-color);
+      font-weight: 600;
     }
   }
 }

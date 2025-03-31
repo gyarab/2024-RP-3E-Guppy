@@ -3,15 +3,57 @@
 .sidebar {
   position: sticky;
   top: 1rem;
-  max-height: fit-content;
+  max-height: calc(100vh - 2rem);
   background-color: var(--background-color);
-  padding: 0 1rem;
+  padding: 1rem;
   width: max-content;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  
+  &.sidebar-closed {
+    padding: 1rem 0.5rem;
+    width: 56px;
+    transition: all 0.3s ease;
+    
+    .sidebar-divider {
+      margin: 8px 0 12px;
+    }
+    
+    .organizations {
+      align-items: center;
+    }
+  }
 
   .organizations {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
     align-items: flex-start;
+  }
+  
+  .sidebar-divider {
+    height: 1px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 4px 0 8px;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: rgba(231, 76, 60, 0.1);
+    margin-top: 8px;
   }
 }

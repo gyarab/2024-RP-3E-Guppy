@@ -1,20 +1,25 @@
 import { apiSlice } from "../../shared/api/apiSlice";
-import { Organization } from "../../shared/interfaces/Organization";
+import {
+  Organization,
+  OrganizationInfo,
+  OrgnizationWithJoin,
+} from "../../shared/interfaces/Organization";
 
 type GetOrganizationsResponse = {
-  organizations: Organization[];
-  count: number;
+  organizations: OrgnizationWithJoin[];
 };
 
 type GetOrganizationsParams = {
   page?: number;
   limit?: number;
+  searchType?: string;
+  query?: string;
 };
 
 export const organizationApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getOrganization: build.query<Organization, number>({
-      query: (id) => `/organizations/${id}`,
+    getOrganizationInfo: build.query<OrganizationInfo, number>({
+      query: (id) => `/organizations/${id}/info`,
     }),
     getOrganizations: build.query<
       GetOrganizationsResponse,
@@ -27,6 +32,7 @@ export const organizationApi = apiSlice.injectEndpoints({
       GetOrganizationsParams
     >({
       query: (params) => ({ url: "/organizations/user", params }),
+      providesTags: ["Organization"],
     }),
     createOrganization: build.mutation<Organization, Partial<Organization>>({
       query: (body) => ({
@@ -34,6 +40,7 @@ export const organizationApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Organization"],
     }),
     checkOrgName: build.mutation<{ available: boolean }, string>({
       query: (name) => ({
@@ -47,12 +54,13 @@ export const organizationApi = apiSlice.injectEndpoints({
         url: `/organizations/join/${joinCode}`,
         method: "PUT",
       }),
+      invalidatesTags: ["Organization"],
     }),
   }),
 });
 
 export const {
-  useGetOrganizationQuery,
+  useGetOrganizationInfoQuery,
   useGetOrganizationsQuery,
   useGetUserOrganizationsQuery,
   useCreateOrganizationMutation,

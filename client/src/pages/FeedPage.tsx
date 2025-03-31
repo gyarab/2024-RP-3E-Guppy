@@ -7,6 +7,7 @@ import Post from "../shared/ui/Post";
 import Loader from "../shared/ui/Loader";
 import { Post as IPost } from "../shared/interfaces/Post";
 import { FETCH_POSTS_LIMIT } from "../shared/constants/post";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 function FeedPage() {
   const [page, setPage] = useState(1);
@@ -24,15 +25,15 @@ function FeedPage() {
     setPage(1);
   }, [orgId]);
 
-  if (!orgId) {
-    return (
-      <div className="container feed-container">
-        <p>
-          No organization selected. Please select an organization to view posts.
-        </p>
-      </div>
-    );
-  }
+  // if (!orgId) {
+  //   return (
+  //     <div className="container feed-container">
+  //       <p>
+  //         No organization selected. Please select an organization to view posts.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   const parseSearchQuery = (query: string) => {
     if (!query) return {};
@@ -47,12 +48,14 @@ function FeedPage() {
   };
 
   const { data, isLoading } = useGetPostsQuery(
-    {
-      page,
-      limit: FETCH_POSTS_LIMIT,
-      ...parseSearchQuery(debouncedSearchQuery),
-      orgId,
-    },
+    orgId
+      ? {
+          page,
+          limit: FETCH_POSTS_LIMIT,
+          ...parseSearchQuery(debouncedSearchQuery),
+          orgId,
+        }
+      : skipToken,
     {
       skip: !!debouncedSearchQuery && page > 1,
     }
@@ -103,6 +106,16 @@ function FeedPage() {
     },
     [isLoading, hasMore]
   );
+
+  if (!orgId) {
+    return (
+      <div className="container feed-container">
+        <p>
+          No organization selected. Please select an organization to view posts.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="container feed-container">

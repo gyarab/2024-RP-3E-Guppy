@@ -1,0 +1,77 @@
+\newpage
+
+\section{Popis problému}
+
+
+\subsection{Historie sociálních sítí}
+
+
+
+\subsection{Volba technologie}  
+Při návrhu technologického stacku pro tento projekt jsme se zaměřili na moderní a osvědčené technologie, které umožňují efektivní vývoj. Zvolené technologie pokrývají jak frontendovou, tak backendovou část, včetně databázové vrstvy a kontejnerizace pro zajištění stabilního provozu.  
+
+Pro vývoj frontendové části jsme se rozhodli pro React.js, zatímco backendovou logiku spravuje NestJS. Pro práci s databází využíváme MySQL spolu s ORM nástrojem Prisma, což usnadňuje správu datového modelu, tedy nemusíme ručně psát SQL dotazy. K zajištění jednotného vývojového prostředí jsme zvolili Docker.  
+
+Následující podkapitoly podrobně popisuje důvody, které vedly k výběru těchto technologií.
+\subsubsection{React.js}
+React je v podstatě JavaScriptová knihovna vytvořená a spravovaná Facebookem. Podle tvůrce React.js Jordana Walke je React efektivní a flexibilní open-source JavaScript knihovna pro vytváření jednoduchých, rychlých a škálovatelných frontendů webových aplikací.
+
+Programovací jazyk JavaScript, na kterém je React postavený, je dynamicky typovaný stejně tak jako Python nebo PHP. To znamená, že může často docházet k chybám týkajících se špatného formátu proměnných či dat. Proto jsme si při vývoji projektu zvolili jeho staticky typovanou alternativu - \textbf{TypeScript}. Jelikož každý člen našeho týmu dobře ovládá JavaScript, nebyl problém s použitím této technologie.
+
+\textbf{React.js} jsem zvolili z několika důvodů. Prvním z nich je jeho snadná naučitelnost – React má jednoduchou syntaxi založenou na komponentách a využívá koncepty, které jsou intuitivní pro vývojáře se zkušenostmi s JavaScriptem. Dalším důvodem je široká adopce této technologie ve velkých firmách, jako jsou Meta, Netflix či Airbnb, to zajišťuje dlouhodobou podporu a bohatý ekosystém nástrojů a knihoven. Další výhodou Reactu je možnost znovu použít komponenty, což urychluje vývoj a zlepšuje udržování kódu.
+
+\subsubsection{NestJS}
+NestJS je open-source backendový framework Node.js založený na Express.js, který využívá jak TypeScript, tak JavaScript. Poprvé jej navrhl a spustil \textit{Kamil Myśliwiec} pro vývoj aplikací na straně serveru. V současné době má NestJS na GitHubu kolem 23 tisíc hvězdiček a průměrná míra týdenního stahování npm je asi 180 tisíc. \cite{nestjs_definition}
+
+Použili jsme ho v podstatě z podobných důvodů jako React.js. Nest nabízí snadné postupy pro řešení typických úloh, jako je například získávání dat z databáze nebo naopak jejich ukládání. Navíc NestJS stejně jako React využívá programovací jazyk TypeScript. To znamená, že celá logika naší aplikace je psaná v jednom jazyce a vývojáři se nemusí přepínat mezi různými technologiemi, což zjednodušuje údržbu i spolupráci v týmu. Dalším důvodem pro použití NestJS je jeho modulární architektura, díky které lze aplikaci snadno rozšiřovat a rozdělovat do samostatných modulů
+
+\subsubsection{MySQL + Prisma}
+Co se týče ukládání uživatelských dat, rozhodli jsme se pro relační databázi \textbf{MySQL}. Toto rozhodnutí nebylo výsledkem dlouhého zvažování, protože MySQL patří mezi nejpoužívanější databázové systémy. Je zvláště oblíbená a často preferovaná pro projekty menšího až středně velkého rozsahu. Dalším důvodem bylo totiž to, že jsme se tím již zabývali ve škole na hodinách programování, a proto jsme měli docela dobrou představa jak s ní zacházet.
+
+\subsubsection{Docker}
+Docker je otevřená platforma pro vývoj, odesílání a spouštění aplikací. Docker vám umožňuje oddělit vaše aplikace od vaší infrastruktury, abyste mohli rychle dodávat software. \cite{docker_docs}
+
+Ve stádiu vývoje samotného projektu se u nás Docker primárně používal pro spuštění databázového serveru, abychom si nemuseli stahovat jiné softwary. Zkusili jsme kontejnerizovat i celou aplikaci, nicméně průběh práce nebyl vyhovující, poněvadž se nedaly v reálném čase zobrazit provedené změny ve zdrojovém kódu a musel se kontejner pokaždé restartovat. Teď, když je projekt hotový, stačí jen spustit vytvořený kontejner a aplikace poběží plynule, aniž by se muselo provést cokoliv jiného.
+
+\subsection{Klient - Server komunikace}
+
+Většina moderních webových, mobilních i desktopových aplikací je postavena na architektuře klient-server, která umožňuje efektivní distribuci výpočetních zdrojů a centralizovanou správu dat. \\
+Server jako klíčový prvek komunikace lze chápat dvěma způsoby:
+\begin{itemize}
+    \item \textbf{Z hardwarového hlediska} je to fyzické zařízení, které poskytuje služby jiným zařízením v síti. Typicky se jedná o výkonnější počítač, optimalizovaný pro běh nepřetržitých úloh.
+    \item \textbf{Z softwarového hlediska} je server aplikační program, který naslouchá požadavkům klientů a poskytuje jim odpovídající služby prostřednictvím síťové komunikace.
+\end{itemize}
+Server je vždy \textbf{pasivní} – čeká na příchozí požadavky klientů a odpovídá na ně. Moderní servery jsou navrženy tak, aby zvládaly souběžnou obsluhu více klientů prostřednictvím \textbf{asynchronní komunikace} nebo \textbf{vícevláknového zpracování} požadavků.\\\\
+Klient jako iniciátor komunikace je oproti serveru \textbf{aktivní} – odesílá požadavky a očekává odpověď. Klient může komunikovat s více servery současně a využívat různé služby paralelně. V praxi klienti často implementují \textbf{kešování dat}, aby minimalizovali množství dotazů na server a zvýšili výkon aplikace.
+
+\subsubsection{Typy komunikace mezi klientem a serverem}
+V komunikaci mezi klientem a serverem existuje několik populárních metod: \cite{client_server_communication}
+\begin{itemize}
+    \item \textbf{HTTP REST API} – klient odesílá požadavek a čeká na odpověď. Tento model se často využívá v tradičních webových aplikacích. Zpravidla u tohoto typu komunikace odpovědí ze serveru bývají data ve formátu JSON. 
+    \item \textbf{Polling} – klient se v pravidelných intervalech dotazuje serveru, zda jsou dostupná nová data. Tato metoda je jednoduchá, ale méně efektivní, protože generuje zbytečnou síťovou zátěž.
+    \item \textbf{Long Polling} – klient odešle požadavek a server odpoví až ve chvíli, kdy má k dispozici nová data. Tento přístup redukuje zbytečné požadavky oproti běžnému pollingu.
+    \item \textbf{Push} – server aktivně zasílá data klientovi ve chvíli, kdy dojde ke změně. Tento přístup je efektivnější pro aplikace vyžadující \textbf{reálnou odezvu}, například chatovací aplikace nebo notifikační systémy.
+    \item \textbf{WebSockets} – umožňuje obousměrnou komunikaci mezi klientem a serverem v reálném čase. Používá se například u chatovacích aplikací, online her nebo finančních aplikací.
+    \item \textbf{Message Queue (MQ)} – zprostředkovaná komunikace pomocí zpráv, kde klienti a servery komunikují asynchronně skrze zprostředkovatele jako RabbitMQ nebo Kafka.
+\end{itemize}
+
+Tato architektura je základním kamenem většiny síťových aplikací a její správná implementace výrazně ovlivňuje výkon a škálovatelnost systému. V tomto projektu je zvoleno REST API, protože plně pokrývá všechny požadavky a komunikace v reálném čase není nutná.
+
+\subsubsection{Protokol HTTP}
+\textbf{HTTP (HyperText Transfer Protocol)} je základní protokol používaný pro komunikaci mezi klientem a serverem v rámci webových aplikací. Funguje na principu request-response – klient odešle požadavek a server na něj odpoví. HTTP pracuje nad protokolem TCP/IP a je bezstavový, což znamená, že každý požadavek je nezávislý a neuchovává informaci o předchozích požadavcích (pokud není použito např. cookies nebo tokeny). \\\\
+Základní metody HTTP: \cite{http_methods}
+\begin{itemize}
+    \item \textbf{GET} - Slouží k získání dat ze serveru. Používá se pro načítání webových stránek nebo získání informací z API.
+    \item \textbf{POST} - Slouží k odeslání dat na server, například při vytváření nového záznamu v databázi.
+    \item \textbf{PUT} - Aktualizuje existující zdroj na serveru nebo jej vytvoří, pokud neexistuje.
+    \item \textbf{PATCH} - Na rozdíl od PUT, částečně aktualizuje existující data.
+    \item \textbf{DELETE} - Slouží k odstranění zdroje na serveru.
+    \item \textbf{OPTIONS} - Vrací informace o tom, jaké metody a možnosti jsou na daném serveru dostupné.
+\end{itemize}
+Každá odpověď od serveru zahrnuje \textbf{stavový kód}, jenž popisuje výsledek požadavku: \cite{http_codes}
+\begin{itemize}
+    \item 2xx (Úspěch) - 200 OK, 201 Created
+    \item 3xx (Přesměrování) - 301 Moved Permanently, 304 Not Modified
+    \item 4xx (Chyba na klientu) - 400 Bad Request, 401 Unauthorized, 404 Not Found
+    \item 5xx (Chyba na serveru) - 500 Internal Server Error, 503 Service Unavailable
+\end{itemize}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
 import {
@@ -15,8 +16,13 @@ import Button from "./Button";
 import Loader from "./Loader";
 import RichTextEditor from "./RichTextEditor";
 import TagChip from "./TagChip";
+import CreatePoll from "./CreatePoll";
+
+import { imageUrl } from "../utils/imageUrl";
+import { PollOption } from "../interfaces/Post";
 
 function CreatePostForm() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageFiles, setImageFiles] = useState<Map<string, File>>(new Map());
@@ -25,6 +31,14 @@ function CreatePostForm() {
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isPollActive, setIsPollActive] = useState(false);
+  const [pollData, setPollData] = useState<{
+    options: PollOption[];
+  } | null>(null);
+
+  const handlePollCreate = (options: PollOption[]) => {
+    setPollData({ options });
+  };
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagInputRef = useRef<HTMLInputElement>(null);
@@ -166,11 +180,16 @@ function CreatePostForm() {
       return;
     }
 
+    if (isPollActive && !pollData) {
+      alert("Please click create a poll.");
+      return;
+    }
+
     const imageMap = new Map();
     for (const [placeholder, file] of imageFiles) {
       const { data: url } = await uploadImage({ file, type: "post" });
       if (url) {
-        imageMap.set(placeholder, `http://localhost:3000/${url}`);
+        imageMap.set(placeholder, imageUrl(url));
       }
     }
 
@@ -182,17 +201,26 @@ function CreatePostForm() {
       );
     }
 
-    await createPost({
+    const response = await createPost({
       title,
       content: updatedContent,
       tags,
       orgId: parseInt(orgId),
+      pollData,
     });
+    
+    if (response) {
+      navigate("/feed");
+    }
   };
 
   const handleEditClick = () => {
     setIsEditingTitle(true);
     titleInputRef.current?.focus();
+  };
+
+  const handlePollToggle = () => {
+    setIsPollActive((prev) => !prev);
   };
 
   return (
@@ -290,6 +318,31 @@ function CreatePostForm() {
           onChange={setContent}
           onImageFilesChange={setImageFiles}
         />
+
+        {isPollActive ? (
+          <>
+            <CreatePoll onPollCreate={handlePollCreate} />
+            <Button
+              type="button"
+              size="small"
+              additionalClasses="toggle-poll-button"
+              onClick={handlePollToggle}
+              noArrow
+            >
+              Remove Poll
+            </Button>
+          </>
+        ) : (
+          <Button
+            type="button"
+            size="small"
+            additionalClasses="toggle-poll-button"
+            onClick={handlePollToggle}
+            noArrow
+          >
+            Add Poll
+          </Button>
+        )}
         <Button type="submit">Create Post</Button>
       </form>
     </>

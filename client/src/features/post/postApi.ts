@@ -50,6 +50,18 @@ export const postApi = apiSlice.injectEndpoints({
     getAllTags: build.query<{ name: string }[], void>({
       query: () => "/posts/tags",
     }),
+    votePoll: build.mutation<Post, { postId: number; optionId: number }>({
+      query: ({ postId, optionId }) => ({
+        url: `/posts/${postId}/poll/${optionId}`,
+        method: "POST",
+      }),
+    }),
+    removeVote: build.mutation<Post, number>({
+      query: (postId) => ({
+        url: `/posts/${postId}/poll`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -60,4 +72,6 @@ export const {
   useDeletePostMutation,
   useLikePostMutation,
   useGetAllTagsQuery,
+  useVotePollMutation,
+  useRemoveVoteMutation,
 } = postApi;

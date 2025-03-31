@@ -40,13 +40,13 @@ function Footer() {
             <h3 className="footer__heading">Legal</h3>
             <ul className="footer__list">
               <li>
-                <a href="#">Terms of Service</a>
+                <a href="https://www.facebook.com/terms/">Terms of Service</a>
               </li>
               <li>
-                <a href="#">Privacy Policy</a>
+                <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>
               </li>
               <li>
-                <a href="#">Cookie Policy</a>
+                <a href="https://www.apetitonline.cz/recept/cookies">Cookie Policy</a>
               </li>
             </ul>
           </div>

@@ -5,9 +5,14 @@ import Avatar from "./Avatar";
 import Button from "./Button";
 import TagChip from "./TagChip";
 import CommentSection from "./CommentSection";
+import Poll from "./Poll";
 
 import { Post as IPost } from "../interfaces/Post";
-import { useLikePostMutation } from "../../features/post/postApi";
+import {
+  useLikePostMutation,
+  useRemoveVoteMutation,
+  useVotePollMutation,
+} from "../../features/post/postApi";
 import { formatRelativeDate } from "../utils/formatRelativeDate";
 import LikeIcon from "./LikeIcon";
 import { Link } from "react-router-dom";
@@ -30,6 +35,8 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [likePost] = useLikePostMutation();
+  const [votePoll] = useVotePollMutation();
+  const [removeVote] = useRemoveVoteMutation();
   const user = useSelector(selectUser);
 
   useEffect(() => {
@@ -74,6 +81,14 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
   };
 
   const timeAgo = formatRelativeDate(new Date(data.createdAt));
+
+  const handleVote = (optionId: number) => {
+    votePoll({ postId: data.id, optionId });
+  };
+
+  const handleRemoveVote = () => {
+    removeVote(data.id);
+  };
 
   return (
     <article className="post" ref={ref}>
@@ -126,6 +141,14 @@ const Post = forwardRef<HTMLDivElement, PostProps>(({ data }, ref) => {
           className="post__content"
           dangerouslySetInnerHTML={createMarkup(data.content)}
         />
+
+        {data.poll && (
+          <Poll
+            poll={data.poll}
+            onVote={handleVote}
+            onRemoveVote={handleRemoveVote}
+          />
+        )}
 
         {data.tags.length > 0 && (
           <div className="tags-list">

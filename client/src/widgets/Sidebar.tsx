@@ -19,9 +19,18 @@ function Sidebar() {
   const [organizationsWithColors, setOrganizationsWithColors] = useState<
     (Organization & { mainColor: string })[]
   >([]);
+  const [selectedOrgId, setSelectedOrgId] = useState<number | null>(null);
 
   const navigate = useNavigate();
   const toggleClass = isSidebarOpen ? "" : "sidebar-closed";
+
+  useEffect(() => {
+    
+    const storedOrgId = sessionStorage.getItem("orgId");
+    if (storedOrgId) {
+      setSelectedOrgId(parseInt(storedOrgId, 10));
+    }
+  }, []);
 
   useEffect(() => {
     if (data?.organizations) {
@@ -58,6 +67,7 @@ function Sidebar() {
   const hnadleOrgLogoClick = (orgId: number) => (e: React.MouseEvent) => {
     e.preventDefault();
     sessionStorage.setItem("orgId", orgId.toString());
+    setSelectedOrgId(orgId);
     navigate("/feed");
   };
 
@@ -65,6 +75,8 @@ function Sidebar() {
     <aside className={`${toggleClass} sidebar`}>
       <div className="organizations">
         <CreateOrgButton />
+        
+        <div className="sidebar-divider"></div>
 
         {isLoading && <Loader />}
 
@@ -78,9 +90,10 @@ function Sidebar() {
           <OrgLogo
             key={org.id}
             orgName={org.name}
-            orgLogo={org.logoUrl}
+            orgLogo={org.logoUrl || "/images/default-logo.png"}
             mainColor={org.mainColor}
             onClick={hnadleOrgLogoClick(org.id)}
+            isSelected={selectedOrgId === org.id}
           />
         ))}
       </div>

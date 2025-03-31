@@ -1,28 +1,54 @@
 .org-logo {
   background: transparent;
   position: relative;
-  padding: 5px 5px;
+  padding: 8px 12px;
   display: inline-flex;
   align-items: center;
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  border-radius: 25px;
+  border-radius: 12px;
   outline: none;
   overflow: hidden;
   color: var(--org-background-color);
-  transition: color 0.3s 0.1s ease-out;
+  transition: all 0.3s ease;
   text-align: center;
-
+  width: 100%;
+  
+  &.org-logo-selected {
+    background-color: rgba(var(--org-background-color-rgb, 74, 74, 74), 0.1);
+    box-shadow: 0 0 0 2px var(--org-background-color);
+    
+    img {
+      border: 2px solid var(--org-background-color);
+    }
+    
+    span {
+      font-weight: 700;
+    }
+    
+    &::before {
+      opacity: 0.05;
+    }
+  }
+  
   img {
-    width: 29px;
-    height: 29px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
   }
 
   span {
     margin: 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
   }
 
   &::before {
@@ -33,29 +59,68 @@
     bottom: 0;
     margin: auto;
     content: "";
-    border-radius: 50%;
+    border-radius: 12px;
     display: block;
-    width: 20em;
-    height: 20em;
-    left: -5em;
+    width: 100%;
+    height: 100%;
     text-align: center;
-    transition: box-shadow 0.4s ease-out;
+    transition: all 0.3s ease;
     z-index: -1;
+    opacity: 0;
+    background-color: var(--org-background-color);
   }
 
   &:hover {
     color: #fff;
+    transform: translateY(-2px);
+    
+    img {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
 
     &::before {
-      box-shadow: inset 0 0 0 10em var(--org-background-color);
+      opacity: 1;
     }
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
 }
 
+
 .sidebar-closed {
   .org-logo {
+    padding: 8px;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+    
+    img {
+      width: 28px;
+      height: 28px;
+      transition: all 0.3s ease;
+    }
+    
     span {
       display: none;
+    }
+    
+    &::before {
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    &.org-logo-selected {
+      box-shadow: 0 0 0 2px var(--org-background-color);
+      background-color: rgba(var(--org-background-color-rgb, 74, 74, 74), 0.1);
+      
+      &::before {
+        opacity: 0.05;
+      }
     }
   }
 }
